@@ -30,11 +30,12 @@ O **Big Day** é um aplicativo de produtividade desenvolvido em **Swift (UIKit)*
 
 ## 🛠️ Tecnologias
 
-- Swift + UIKit  
+- ViewCode + UIKit  
 - Arquitetura **MVVM**  
 - Firebase Auth + Firestore  
 - Auto Layout  
-- Swift Package Manager  
+- Swift Package Manager
+- CocoaPods 
 - Animações e interações dinâmicas
 
 ---
@@ -43,11 +44,3 @@ O **Big Day** é um aplicativo de produtividade desenvolvido em **Swift (UIKit)*
 
 Este projeto é parte da minha transição de carreira para **desenvolvedor iOS**, servindo como portfólio para demonstrar minhas habilidades técnicas e visão de produto.
 
----
-
-## 📲 Instalação
-
-```bash
-git clone https://github.com/seu-usuario/bigday-app.git
-cd bigday-app
-open BigDay.xcodeproj
