@@ -1,6 +1,13 @@
 import UIKit
 
+protocol FirstScreenDelegate: AnyObject {
+    func didTapCreate()
+    func didTapLogin()
+}
+
 class FirstScreen: UIView {
+    
+    weak var delegate: FirstScreenDelegate?
     
     private lazy var imageLogo: UIImageView = {
         let image = UIImageView(image: UIImage(named: "logo1"))
@@ -14,10 +21,13 @@ class FirstScreen: UIView {
         let text = UILabel()
         text.numberOfLines = 0
         text.textAlignment = .center
+        text.adjustsFontSizeToFitWidth = true
+        text.minimumScaleFactor = 0.9
+        text.baselineAdjustment = .alignCenters
 
         let fullText = "Transformando\ndias comuns em\nBig Day!"
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
-            .font: UIFont(name: "Montserrat-ExtraBold", size: 30)!,
+            .font: UIFont(name: "Montserrat-ExtraBold", size: 26)!,
             .foregroundColor: UIColor.black
         ])
 
@@ -45,9 +55,13 @@ class FirstScreen: UIView {
         button.backgroundColor = UIColor(hex: "#222222")
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         button.layer.cornerRadius = 41/2
+        button.addTarget(self, action: #selector(didTapButtonCreate), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    @objc private func didTapButtonCreate(){
+        delegate?.didTapCreate()
+    }
     
     private lazy var lognAccountButton: UIButton = {
         let button = UIButton(type: .system)
@@ -58,9 +72,13 @@ class FirstScreen: UIView {
         button.layer.borderWidth = 1.5
         button.layer.cornerRadius = 41/2
         button.layer.borderColor = UIColor(hex: "#00C853").cgColor
+        button.addTarget(self, action: #selector(didTapButtonLogin), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    @objc private func didTapButtonLogin(){
+        delegate?.didTapLogin()
+    }
     
     private lazy var stackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [createAccountButton, lognAccountButton])
@@ -96,12 +114,13 @@ extension FirstScreen : SetupLayout {
     func setupConstraints() {
         NSLayoutConstraint.activate([
             imageLogo.centerXAnchor.constraint(equalTo: centerXAnchor),
-            imageLogo.heightAnchor.constraint(equalToConstant: 54),
-            imageLogo.widthAnchor.constraint(equalToConstant: 140),
-            imageLogo.topAnchor.constraint(equalToSystemSpacingBelow: safeAreaLayoutGuide.topAnchor, multiplier: 4),
+            imageLogo.heightAnchor.constraint(equalToConstant: 44),
+            imageLogo.widthAnchor.constraint(equalToConstant: 114),
+            imageLogo.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             
             textUp.centerXAnchor.constraint(equalTo: centerXAnchor),
-            textUp.topAnchor.constraint(equalTo: imageLogo.bottomAnchor, constant: 30),
+            textUp.topAnchor.constraint(equalTo: imageLogo.bottomAnchor, constant: 15),
+            
             
             ImageCell.centerXAnchor.constraint(equalTo: centerXAnchor),
             ImageCell.heightAnchor.constraint(equalToConstant: 384),

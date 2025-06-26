@@ -1,14 +1,14 @@
 import UIKit
 import Foundation
 
-protocol CreateAccountScreenDelegate: AnyObject {
-    func didTapCreate()
+protocol LoginAccountScreenDelegate: AnyObject {
+    func didTapLogin()
 }
 
-class CreateAccount: UIView {
+class LoginAccount: UIView {
     
-    weak var delegate: CreateAccountScreenDelegate?
-
+    weak var delegate: LoginAccountScreenDelegate?
+    
     private lazy var imageLogo: UIImageView = {
         let image = UIImageView(image: UIImage(named: "logo1"))
         image.clipsToBounds = true
@@ -22,14 +22,14 @@ class CreateAccount: UIView {
         text.numberOfLines = 0
         text.textAlignment = .center
 
-        let fullText = "Comece agora…\nSeu Big Day tá te\nesperando."
+        let fullText = "A rotina te espera.\nMas dessa vez…\ndiferente."
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
             .font: UIFont(name: "Montserrat-ExtraBold", size: 27)!,
             .foregroundColor: UIColor.black
         ])
 
         let textColor = UIColor(hex: "#77D36A")
-        let range = (fullText as NSString).range(of: "Seu Big Day tá te\nesperando.")
+        let range = (fullText as NSString).range(of: "Mas dessa vez…\ndiferente.")
         attributedString.addAttribute(.foregroundColor, value: textColor, range: range)
 
         text.attributedText = attributedString
@@ -37,49 +37,27 @@ class CreateAccount: UIView {
         return text
     }()
     
-    private var createButton: UIButton = {
+    private var loginButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor(hex: "#77D36A")
         button.setTitleColor(UIColor(hex: "#222222"), for: .normal)
-        button.setTitle("Criar", for: .normal)
+        button.setTitle("Entrar", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         button.layer.cornerRadius = 41/2
-        button.addTarget(self, action: #selector(didTapButtonCreate), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapButtonLogin), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    @objc private func didTapButtonCreate(){
-        delegate?.didTapCreate()
+    @objc private func didTapButtonLogin(){
+        delegate?.didTapLogin()
     }
-    
-    public lazy var nickNameTextField: UITextField = {
-        let textField = UITextField()
-        textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
-        textField.backgroundColor = .white
-        textField.layer.cornerRadius = 41/2
-        textField.attributedPlaceholder = NSAttributedString(
-            string: "Apelido no app",
-            attributes: [
-                .foregroundColor: UIColor(hex: "#bebebd"),
-                .font: UIFont(name: "Montserrat-Regular", size: 15)!
-                ]
-            )
-        
-        textField.textColor = .black
-        textField.font = UIFont(name: "Montserrat-Regular", size: 15)
-        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-        textField.leftViewMode = .always
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
-    }()
     
     public lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
         textField.backgroundColor = .white
-        textField.layer.cornerRadius = 41/2
+        textField.layer.cornerRadius = 47/2
         textField.attributedPlaceholder = NSAttributedString(
             string: "E-mail",
             attributes: [
@@ -100,7 +78,7 @@ class CreateAccount: UIView {
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
         textField.backgroundColor = .white
-        textField.layer.cornerRadius = 41/2
+        textField.layer.cornerRadius = 47/2
         textField.attributedPlaceholder = NSAttributedString(
             string: "Senha",
             attributes: [
@@ -117,7 +95,7 @@ class CreateAccount: UIView {
     }()
     
     private lazy var stackViewLogin: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [nickNameTextField, emailTextField, passwordTextField])
+        let stack = UIStackView(arrangedSubviews: [emailTextField, passwordTextField])
         stack.spacing = 15
         stack.distribution = .fillEqually
         stack.axis = .vertical
@@ -136,11 +114,11 @@ class CreateAccount: UIView {
     
 }
 
-extension CreateAccount: SetupLayout {
+extension LoginAccount: SetupLayout {
     func addSubViews() {
         addSubview(imageLogo)
         addSubview(textUp)
-        addSubview(createButton)
+        addSubview(loginButton)
         addSubview(stackViewLogin)
     }
     
@@ -154,23 +132,22 @@ extension CreateAccount: SetupLayout {
             textUp.centerXAnchor.constraint(equalTo: centerXAnchor),
             textUp.topAnchor.constraint(equalTo: imageLogo.bottomAnchor, constant: 30),
             
-            createButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            createButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50),
-            createButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -50),
-            createButton.heightAnchor.constraint(equalToConstant: 41),
+            loginButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            loginButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50),
+            loginButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -50),
+            loginButton.heightAnchor.constraint(equalToConstant: 41),
             
             stackViewLogin.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 35),
             stackViewLogin.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -35),
-            stackViewLogin.heightAnchor.constraint(equalToConstant: 168),
+            stackViewLogin.heightAnchor.constraint(equalToConstant: 109),
             stackViewLogin.topAnchor.constraint(equalTo: textUp.bottomAnchor, constant: 30),
-            
         ])
     }
     
     func setupStyle() {
         
     }
-    
-    
 }
+
+
 
