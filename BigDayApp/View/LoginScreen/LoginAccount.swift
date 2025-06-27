@@ -54,6 +54,8 @@ class LoginAccount: UIView {
     
     public lazy var emailTextField: UITextField = {
         let textField = UITextField()
+        textField.text = "sousadavi543@gmail.com"
+        textField.keyboardType = .emailAddress
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
         textField.backgroundColor = .white
@@ -75,6 +77,8 @@ class LoginAccount: UIView {
     
     public lazy var passwordTextField: UITextField = {
         let textField = UITextField()
+        textField.text = "davybianca"
+        textField.isSecureTextEntry = true
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
         textField.backgroundColor = .white
@@ -91,8 +95,29 @@ class LoginAccount: UIView {
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
         textField.translatesAutoresizingMaskIntoConstraints = false
+        
+        let toggleButton = UIButton(type: .custom)
+        toggleButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        toggleButton.tintColor = .lightGray
+        toggleButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        
+        let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        toggleButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
+        toggleButton.center = rightPaddingView.center
+        rightPaddingView.addSubview(toggleButton)
+        textField.rightView = rightPaddingView
+        textField.rightViewMode = .always
+        
         return textField
+        
     }()
+    
+    @objc private func togglePasswordVisibility(_ sender: UIButton) {
+        passwordTextField.isSecureTextEntry.toggle()
+            
+        let imageName = passwordTextField.isSecureTextEntry ? "eye.slash" : "eye"
+        sender.setImage(UIImage(systemName: imageName), for: .normal)
+    }
     
     private lazy var stackViewLogin: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [emailTextField, passwordTextField])
