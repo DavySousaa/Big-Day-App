@@ -21,17 +21,17 @@ class LoginAccount: UIView {
         let text = UILabel()
         text.numberOfLines = 0
         text.textAlignment = .center
-
+        
         let fullText = "A rotina te espera.\nMas dessa vez…\ndiferente."
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
             .font: UIFont(name: "Montserrat-ExtraBold", size: 27)!,
             .foregroundColor: UIColor.black
         ])
-
+        
         let textColor = UIColor(hex: "#77D36A")
         let range = (fullText as NSString).range(of: "Mas dessa vez…\ndiferente.")
         attributedString.addAttribute(.foregroundColor, value: textColor, range: range)
-
+        
         text.attributedText = attributedString
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
@@ -65,8 +65,8 @@ class LoginAccount: UIView {
             attributes: [
                 .foregroundColor: UIColor(hex: "#bebebd"),
                 .font: UIFont(name: "Montserrat-Regular", size: 15)!
-                ]
-            )
+            ]
+        )
         textField.textColor = .black
         textField.font = UIFont(name: "Montserrat-Regular", size: 15)
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
@@ -88,8 +88,8 @@ class LoginAccount: UIView {
             attributes: [
                 .foregroundColor: UIColor(hex: "#bebebd"),
                 .font: UIFont(name: "Montserrat-Regular", size: 15)!
-                ]
-            )
+            ]
+        )
         textField.textColor = .black
         textField.font = UIFont(name: "Montserrat-Regular", size: 15)
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
@@ -114,7 +114,7 @@ class LoginAccount: UIView {
     
     @objc private func togglePasswordVisibility(_ sender: UIButton) {
         passwordTextField.isSecureTextEntry.toggle()
-            
+        
         let imageName = passwordTextField.isSecureTextEntry ? "eye.slash" : "eye"
         sender.setImage(UIImage(systemName: imageName), for: .normal)
     }

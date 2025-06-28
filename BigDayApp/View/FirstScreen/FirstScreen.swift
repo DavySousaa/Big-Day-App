@@ -24,22 +24,22 @@ class FirstScreen: UIView {
         text.adjustsFontSizeToFitWidth = true
         text.minimumScaleFactor = 0.9
         text.baselineAdjustment = .alignCenters
-
+        
         let fullText = "Transformando\ndias comuns em\nBig Day!"
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
             .font: UIFont(name: "Montserrat-ExtraBold", size: 26)!,
             .foregroundColor: UIColor.black
         ])
-
+        
         let bigDayColor = UIColor(hex: "#77D36A")
         let range = (fullText as NSString).range(of: "Big Day!")
         attributedString.addAttribute(.foregroundColor, value: bigDayColor, range: range)
-
+        
         text.attributedText = attributedString
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
     }()
-
+    
     private var ImageCell: UIImageView = {
         let image = UIImageView(image: UIImage(named: "IphoneImage"))
         image.clipsToBounds = true

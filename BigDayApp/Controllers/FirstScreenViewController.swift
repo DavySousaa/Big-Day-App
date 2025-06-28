@@ -19,7 +19,7 @@ class FirstScreenViewController: UIViewController,FirstScreenDelegate {
         navigationController?.pushViewController(createAccountVC, animated: true)
     }
     
-   var firstScreen = FirstScreen()
+    var firstScreen = FirstScreen()
     
     override func viewDidLoad() {
         super.viewDidLoad()
