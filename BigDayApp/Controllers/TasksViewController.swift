@@ -12,12 +12,14 @@ class TasksViewController: UIViewController, UITextFieldDelegate, CreateTaskDele
     
     func didTapCreate() {
         let sheetVC = NewTasksViewController()
+        sheetVC.taskController = self
         sheetVC.modalPresentationStyle = .overFullScreen
         present(sheetVC, animated: true)
     }
+    
     var selectedTaskID: UUID?
     var taskScreen = TaskScreen()
-    private var tasks: [Task] = [
+    var tasks: [Task] = [
         Task(id: UUID(), title: "Estudar Swift", time: "09:00"),
         Task(id: UUID(), title: "Ir à academia", time: "17:00"),
         Task(id: UUID(), title: "Fazer café", time: "07:30")
@@ -33,6 +35,8 @@ class TasksViewController: UIViewController, UITextFieldDelegate, CreateTaskDele
         taskScreen.tasksTableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
         taskScreen.tasksTableView.delegate = self
         taskScreen.tasksTableView.dataSource = self
+        
+        setupNavgatioBar()
     }
     
     private func redirectToLogin() {
@@ -46,6 +50,28 @@ class TasksViewController: UIViewController, UITextFieldDelegate, CreateTaskDele
     func saveTasks() {
         TaskSuportHelper().addTask(lista: tasks)
     }
+    
+    private  func setupNavgatioBar() {
+        
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.navigationBar.tintColor = .white
+        
+        let image = UIImage(named: "símbolo")
+        let imageView = UIImageView(image: image)
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 35, height: 35))
+        imageView.frame = logoContainer.bounds
+        logoContainer.addSubview(imageView)
+        
+        let logoItem = UIBarButtonItem(customView: logoContainer)
+
+        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        spacer.width = 14
+
+        navigationItem.leftBarButtonItems = [spacer, logoItem]
+    }
+    
 }
 
 extension TasksViewController: UITableViewDataSource {

@@ -16,7 +16,7 @@ protocol CreateTaskDelete: AnyObject {
 class TaskScreen: UIView {
     
     weak var delegate: CreateTaskDelete?
-
+    
     private lazy var labelUpUserName: UILabel = {
         let label = UILabel()
         label.text = "Big Day"
@@ -135,11 +135,11 @@ extension TaskScreen: SetupLayout {
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            profileUserStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            profileUserStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             profileUserStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             
             configButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            configButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 15),
+            configButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 25),
             
             dayLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             dayLabel.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
