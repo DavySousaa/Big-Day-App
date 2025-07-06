@@ -9,13 +9,14 @@ import UIKit
 import Foundation
 import FirebaseAuth
 
-protocol CreateTaskDelete: AnyObject {
+protocol TapButtonDelete: AnyObject {
     func didTapCreate()
+    func didTapConfig()
 }
 
 class TaskScreen: UIView {
     
-    weak var delegate: CreateTaskDelete?
+    weak var delegate: TapButtonDelete?
     
     private lazy var labelUpUserName: UILabel = {
         let label = UILabel()
@@ -26,9 +27,8 @@ class TaskScreen: UIView {
         return label
     }()
     
-    private lazy var nameUserLabel: UILabel = {
+    public lazy var nameUserLabel: UILabel = {
         let label = UILabel()
-        label.text = "Davy Sousa"
         label.textColor = ColorSuport.blackApp
         label.font = UIFont(name: "Montserrat-Regular", size: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -45,7 +45,7 @@ class TaskScreen: UIView {
         return stack
     }()
     
-    private lazy var imageUser: UIImageView = {
+    public lazy var imageUser: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "person.crop.circle"))
         image.tintColor = ColorSuport.blackApp
         image.widthAnchor.constraint(equalToConstant: 60).isActive = true
@@ -59,7 +59,7 @@ class TaskScreen: UIView {
     
     private lazy var profileUserStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [imageUser, stackViewLogin])
-        stack.spacing = 3
+        stack.spacing = 6
         stack.axis = .horizontal
         stack.distribution = .fill
         stack.alignment = .center
@@ -72,9 +72,13 @@ class TaskScreen: UIView {
         button.backgroundColor = .clear
         button.setImage(UIImage(systemName: "gearshape"), for: .normal)
         button.tintColor = ColorSuport.blackApp
+        button.addTarget(self, action: #selector(didTapButtonConfig), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    @objc private func didTapButtonConfig(){
+        delegate?.didTapConfig()
+    }
     
     private lazy var dayLabel: UILabel = {
         let label = UILabel()

@@ -8,22 +8,12 @@
 import UIKit
 import FirebaseAuth
 
-class TasksViewController: UIViewController, UITextFieldDelegate, CreateTaskDelete {
-    
-    func didTapCreate() {
-        let sheetVC = NewTasksViewController()
-        sheetVC.taskController = self
-        sheetVC.modalPresentationStyle = .overFullScreen
-        present(sheetVC, animated: true)
-    }
+class TasksViewController: UIViewController, UITextFieldDelegate {
     
     var selectedTaskID: UUID?
     var taskScreen = TaskScreen()
-    var tasks: [Task] = [
-        Task(id: UUID(), title: "Estudar Swift", time: "09:00"),
-        Task(id: UUID(), title: "Ir à academia", time: "17:00"),
-        Task(id: UUID(), title: "Fazer café", time: "07:30")
-    ]
+    var tasks: [Task] = []
+    var nickname = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +28,36 @@ class TasksViewController: UIViewController, UITextFieldDelegate, CreateTaskDele
         taskScreen.tasksTableView.delegate = self
         taskScreen.tasksTableView.dataSource = self
         
+        nickname = UserDefaults.standard.string(forKey: "nickname") ?? "Usuário"
+        if let savedImageData = UserDefaults.standard.data(forKey: "profileImageView"),
+            let savedImage = UIImage(data: savedImageData) {
+            taskScreen.imageUser.image = savedImage
+        }
+        
         setupNavgatioBar()
+        updateNickName()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let savedImageData = UserDefaults.standard.data(forKey: "profileImageView"),
+            let savedImage = UIImage(data: savedImageData) {
+            taskScreen.imageUser.image = savedImage
+        }
+        loadTasks()
+    }
+    
+    func updateNickName() {
+        taskScreen.nameUserLabel.text = nickname
+    }
+    
+    func loadTasks() {
+        self.tasks = TaskSuportHelper().getTask()
+        self.taskScreen.tasksTableView.reloadData()
+    }
+    
+    func saveTasks() {
+        TaskSuportHelper().addTask(lista: tasks)
     }
     
     private func redirectToLogin() {
@@ -49,11 +68,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, CreateTaskDele
         }
     }
     
-    func saveTasks() {
-        TaskSuportHelper().addTask(lista: tasks)
-    }
-    
-    private  func setupNavgatioBar() {
+    private func setupNavgatioBar() {
         
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = .white
@@ -73,19 +88,9 @@ class TasksViewController: UIViewController, UITextFieldDelegate, CreateTaskDele
         spacer.width = 14
         
         let customButton = taskScreen.configButton
-        customButton.translatesAutoresizingMaskIntoConstraints = false
-        let buttonContainer = UIView()
-        buttonContainer.addSubview(customButton)
-        
-        NSLayoutConstraint.activate([
-            customButton.heightAnchor.constraint(equalToConstant: 48),
-            customButton.widthAnchor.constraint(equalToConstant: 48),
-            customButton.centerYAnchor.constraint(equalTo: buttonContainer.centerYAnchor),
-            customButton.trailingAnchor.constraint(equalTo: buttonContainer.trailingAnchor)
-        ])
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: buttonContainer)
-        
+        customButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        let barButtonItem = UIBarButtonItem(customView: customButton)
+        navigationItem.rightBarButtonItem = barButtonItem
         
         navigationItem.leftBarButtonItems = [spacer, logoItem]
     }
@@ -173,5 +178,16 @@ extension TasksViewController: UITableViewDelegate {
     }
 }
 
-
-
+extension TasksViewController: TapButtonDelete {
+    func didTapConfig() {
+        let configVC = ConfigViewController()
+        navigationController?.pushViewController(configVC, animated: true)
+    }
+    
+    func didTapCreate() {
+        let sheetVC = NewTasksViewController()
+        sheetVC.taskController = self
+        sheetVC.modalPresentationStyle = .overFullScreen
+        present(sheetVC, animated: true)
+    }
+}

@@ -76,6 +76,7 @@ class CreateAccount: UIView {
     
     public lazy var emailTextField: UITextField = {
         let textField = UITextField()
+        textField.autocapitalizationType = .none
         textField.keyboardType = .emailAddress
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
@@ -98,6 +99,7 @@ class CreateAccount: UIView {
     
     public lazy var passwordTextField: UITextField = {
         let textField = UITextField()
+        textField.autocapitalizationType = .none
         textField.isSecureTextEntry = true
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor

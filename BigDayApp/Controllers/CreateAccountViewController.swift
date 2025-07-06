@@ -32,6 +32,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate, Create
     private func bindViewModel() {
         viewModel.onSuccess = { [weak self] in
             DispatchQueue.main.async {
+                UserDefaults.standard.set(self?.viewModel.nickname, forKey: "nickname")
                 let tasksVC = TasksViewController()
                 self?.navigationController?.pushViewController(tasksVC, animated: true)
             }

@@ -88,6 +88,7 @@ class NewTask: UIView {
         let picker = UIDatePicker()
         picker.datePickerMode = .time
         picker.tintColor = .black
+        picker.backgroundColor = .white
         picker.preferredDatePickerStyle = .wheels
         picker.translatesAutoresizingMaskIntoConstraints = false
         return picker
