@@ -28,7 +28,7 @@ class LoginAccount: UIView {
             .foregroundColor: UIColor.black
         ])
         
-        let textColor = UIColor(hex: "#77D36A")
+        let textColor = ColorSuport.greenApp
         let range = (fullText as NSString).range(of: "Mas dessa vez…\ndiferente.")
         attributedString.addAttribute(.foregroundColor, value: textColor, range: range)
         
@@ -39,8 +39,8 @@ class LoginAccount: UIView {
     
     private var loginButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = UIColor(hex: "#77D36A")
-        button.setTitleColor(UIColor(hex: "#222222"), for: .normal)
+        button.backgroundColor = ColorSuport.greenApp
+        button.setTitleColor(ColorSuport.blackApp, for: .normal)
         button.setTitle("Entrar", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         button.layer.cornerRadius = 41/2

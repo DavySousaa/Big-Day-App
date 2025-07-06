@@ -31,7 +31,7 @@ class NewTask: UIView {
             .foregroundColor: UIColor.black
         ])
         
-        let textColor = UIColor(hex: "#77D36A")
+        let textColor = ColorSuport.greenApp
         let range = (fullText as NSString).range(of: "para o Big Day.")
         attributedString.addAttribute(.foregroundColor, value: textColor, range: range)
         
@@ -66,7 +66,7 @@ class NewTask: UIView {
     private lazy var hourLabel: UILabel = {
         let label = UILabel()
         label.text = "Horário"
-        label.textColor = UIColor(hex: "#222222")
+        label.textColor = ColorSuport.blackApp
         label.font = UIFont(name: "Montserrat-Regular", size: 15)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -75,7 +75,7 @@ class NewTask: UIView {
     public lazy var switchPicker: UISwitch = {
         let toggle = UISwitch()
         toggle.isOn = true
-        toggle.onTintColor = UIColor(hex: "#77D36A")
+        toggle.onTintColor = ColorSuport.greenApp
         toggle.addTarget(self, action: #selector(switchToggled(_:)), for: .valueChanged)
         toggle.translatesAutoresizingMaskIntoConstraints = false
         return toggle
@@ -95,8 +95,8 @@ class NewTask: UIView {
     
     private var createTaskButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = UIColor(hex: "#77D36A")
-        button.setTitleColor(UIColor(hex: "#222222"), for: .normal)
+        button.backgroundColor = ColorSuport.greenApp
+        button.setTitleColor(ColorSuport.blackApp, for: .normal)
         button.setTitle("Criar", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         button.addTarget(self, action: #selector(methodCreatelButton), for: .touchUpInside)
@@ -110,7 +110,7 @@ class NewTask: UIView {
     
     private var cancelTaskButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = UIColor(hex: "#222222")
+        button.backgroundColor = ColorSuport.blackApp
         button.setTitleColor(UIColor(hex: "#ffffff"), for: .normal)
         button.setTitle("Cancelar", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)

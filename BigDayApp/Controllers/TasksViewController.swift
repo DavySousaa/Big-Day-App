@@ -31,6 +31,8 @@ class TasksViewController: UIViewController, UITextFieldDelegate, CreateTaskDele
         view.backgroundColor = .white
         navigationItem.hidesBackButton = true
         taskScreen.delegate = self
+        taskScreen.tasksTableView.tintColor = .white
+        taskScreen.tasksTableView.backgroundColor = .white
         
         taskScreen.tasksTableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
         taskScreen.tasksTableView.delegate = self
@@ -56,19 +58,35 @@ class TasksViewController: UIViewController, UITextFieldDelegate, CreateTaskDele
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = .white
         
-        let image = UIImage(named: "símbolo")
+        let image = UIImage(named: "logo1")
         let imageView = UIImageView(image: image)
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
-        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 35, height: 35))
+        
+        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 55, height: 55))
         imageView.frame = logoContainer.bounds
         logoContainer.addSubview(imageView)
         
         let logoItem = UIBarButtonItem(customView: logoContainer)
-
+        
         let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         spacer.width = 14
-
+        
+        let customButton = taskScreen.configButton
+        customButton.translatesAutoresizingMaskIntoConstraints = false
+        let buttonContainer = UIView()
+        buttonContainer.addSubview(customButton)
+        
+        NSLayoutConstraint.activate([
+            customButton.heightAnchor.constraint(equalToConstant: 48),
+            customButton.widthAnchor.constraint(equalToConstant: 48),
+            customButton.centerYAnchor.constraint(equalTo: buttonContainer.centerYAnchor),
+            customButton.trailingAnchor.constraint(equalTo: buttonContainer.trailingAnchor)
+        ])
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: buttonContainer)
+        
+        
         navigationItem.leftBarButtonItems = [spacer, logoItem]
     }
     
@@ -105,7 +123,7 @@ extension TasksViewController: UITableViewDataSource {
                 string: task.title,
                 attributes: [
                     .strikethroughStyle: 0,
-                    .foregroundColor: UIColor.label
+                    .foregroundColor: ColorSuport.blackApp
                 ]
             )
             cell.titleLabel.attributedText = attributedText

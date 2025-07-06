@@ -31,7 +31,7 @@ class FirstScreen: UIView {
             .foregroundColor: UIColor.black
         ])
         
-        let bigDayColor = UIColor(hex: "#77D36A")
+        let bigDayColor = ColorSuport.greenApp
         let range = (fullText as NSString).range(of: "Big Day!")
         attributedString.addAttribute(.foregroundColor, value: bigDayColor, range: range)
         

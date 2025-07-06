@@ -20,7 +20,7 @@ class TaskScreen: UIView {
     private lazy var labelUpUserName: UILabel = {
         let label = UILabel()
         label.text = "Big Day"
-        label.textColor = UIColor(hex: "#77D36A")
+        label.textColor = ColorSuport.greenApp
         label.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -29,7 +29,7 @@ class TaskScreen: UIView {
     private lazy var nameUserLabel: UILabel = {
         let label = UILabel()
         label.text = "Davy Sousa"
-        label.textColor = UIColor(hex: "#222222")
+        label.textColor = ColorSuport.blackApp
         label.font = UIFont(name: "Montserrat-Regular", size: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -47,7 +47,7 @@ class TaskScreen: UIView {
     
     private lazy var imageUser: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "person.crop.circle"))
-        image.tintColor = UIColor(hex: "#222222")
+        image.tintColor = ColorSuport.blackApp
         image.widthAnchor.constraint(equalToConstant: 60).isActive = true
         image.heightAnchor.constraint(equalToConstant: 60).isActive = true
         image.layer.cornerRadius = 60/2
@@ -67,11 +67,11 @@ class TaskScreen: UIView {
         return stack
     }()
     
-    private lazy var configButton: UIButton = {
+    public lazy var configButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .clear
         button.setImage(UIImage(systemName: "gearshape"), for: .normal)
-        button.tintColor = UIColor(hex: "#222222")
+        button.tintColor = ColorSuport.blackApp
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -79,7 +79,7 @@ class TaskScreen: UIView {
     private lazy var dayLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Montserrat-Regular", size: 14)
-        label.textColor = UIColor(hex: "#222222")
+        label.textColor = ColorSuport.blackApp
         label.translatesAutoresizingMaskIntoConstraints = false
         
         let date = Date()
@@ -89,6 +89,13 @@ class TaskScreen: UIView {
         let formattedDate = formatter.string(from: date)
         label.text = formattedDate.capitalized
         
+        label.backgroundColor = ColorSuport.greenApp
+        label.widthAnchor.constraint(equalToConstant: 220).isActive = true
+        label.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        label.layer.cornerRadius = 30/2
+        label.clipsToBounds = true
+        label.textAlignment = .center
+        
         return label
     }()
     
@@ -96,7 +103,7 @@ class TaskScreen: UIView {
         let button = UIButton(type: .system)
         button.backgroundColor = .clear
         button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.tintColor = UIColor(hex: "#222222")
+        button.tintColor = ColorSuport.blackApp
         button.addTarget(self, action: #selector(didTapButtonCreate), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -127,7 +134,6 @@ class TaskScreen: UIView {
 extension TaskScreen: SetupLayout {
     func addSubViews() {
         addSubview(profileUserStackView)
-        addSubview(configButton)
         addSubview(dayLabel)
         addSubview(newTaskButton)
         addSubview(tasksTableView)
@@ -137,9 +143,6 @@ extension TaskScreen: SetupLayout {
         NSLayoutConstraint.activate([
             profileUserStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             profileUserStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            
-            configButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            configButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 25),
             
             dayLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             dayLabel.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),

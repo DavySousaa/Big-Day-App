@@ -6,8 +6,9 @@ class TaskCell: UITableViewCell {
     
     public let titleLabel: UILabel = {
         let label = UILabel()
+        label.textColor = ColorSuport.blackApp
         label.font = UIFont(name: "Montserrat-Regular", size: 16)
-        label.textColor = UIColor(hex: "#222222")
+        label.textColor = ColorSuport.blackApp
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -22,7 +23,7 @@ class TaskCell: UITableViewCell {
     
     public let circleImage: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "circle"))
-        image.tintColor = UIColor(hex: "#222222")
+        image.tintColor = ColorSuport.blackApp
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
