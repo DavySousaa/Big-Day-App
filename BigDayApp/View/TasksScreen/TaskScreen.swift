@@ -80,6 +80,15 @@ class TaskScreen: UIView {
         delegate?.didTapConfig()
     }
     
+    private lazy var viewDayLabel: UIView = {
+        let view = UIView()
+        view.backgroundColor = ColorSuport.greenApp
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 30/2
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var dayLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Montserrat-Regular", size: 14)
@@ -92,13 +101,6 @@ class TaskScreen: UIView {
         formatter.dateFormat = "EEEE',' 'dia' d 'de' MMMM"
         let formattedDate = formatter.string(from: date)
         label.text = formattedDate.capitalized
-        
-        label.backgroundColor = ColorSuport.greenApp
-        label.widthAnchor.constraint(equalToConstant: 220).isActive = true
-        label.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        label.layer.cornerRadius = 30/2
-        label.clipsToBounds = true
-        label.textAlignment = .center
         
         return label
     }()
@@ -138,6 +140,7 @@ class TaskScreen: UIView {
 extension TaskScreen: SetupLayout {
     func addSubViews() {
         addSubview(profileUserStackView)
+        addSubview(viewDayLabel)
         addSubview(dayLabel)
         addSubview(newTaskButton)
         addSubview(tasksTableView)
@@ -148,9 +151,13 @@ extension TaskScreen: SetupLayout {
             profileUserStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             profileUserStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             
-            dayLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            dayLabel.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
-            
+            dayLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
+            dayLabel.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 16),
+            viewDayLabel.leadingAnchor.constraint(equalTo: dayLabel.leadingAnchor, constant: -20),
+            viewDayLabel.trailingAnchor.constraint(equalTo: dayLabel.trailingAnchor, constant: 20),
+            viewDayLabel.heightAnchor.constraint(equalToConstant: 30),
+            viewDayLabel.topAnchor.constraint(equalTo: dayLabel.topAnchor, constant: -7),
+
             newTaskButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             newTaskButton.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
             

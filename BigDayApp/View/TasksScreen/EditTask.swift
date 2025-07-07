@@ -1,14 +1,14 @@
 import UIKit
 import Foundation
 
-protocol NewTaskDelegate: AnyObject {
+protocol EditTaskDelegate: AnyObject {
     func tapCancelButton()
-    func tapCreateButton()
+    func tapSaveButton()
 }
 
-class NewTask: UIView {
+class EditTask: UIView {
     
-    weak var delegate: NewTaskDelegate?
+    weak var delegate: EditTaskDelegate?
     
     private let containerView: UIView = {
         let view = UIView()
@@ -25,14 +25,14 @@ class NewTask: UIView {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        let fullText = "Nova tearefa para o Big Day."
+        let fullText = "Edite sua tarefa."
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
             .font: UIFont(name: "Montserrat-ExtraBold", size: 18)!,
             .foregroundColor: UIColor.black
         ])
         
         let textColor = ColorSuport.greenApp
-        let range = (fullText as NSString).range(of: "para o Big Day.")
+        let range = (fullText as NSString).range(of: "tarefa.")
         attributedString.addAttribute(.foregroundColor, value: textColor, range: range)
         
         label.attributedText = attributedString
@@ -47,7 +47,7 @@ class NewTask: UIView {
         textField.backgroundColor = .white
         textField.layer.cornerRadius = 41/2
         textField.attributedPlaceholder = NSAttributedString(
-            string: "Nome da tarefa",
+            string: "",
             attributes: [
                 .foregroundColor: UIColor(hex: "#bebebd"),
                 .font: UIFont(name: "Montserrat-Regular", size: 15)!
@@ -97,19 +97,19 @@ class NewTask: UIView {
         return picker
     }()
     
-    private var createTaskButton: UIButton = {
+    private var saveTaskButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = ColorSuport.greenApp
         button.setTitleColor(ColorSuport.blackApp, for: .normal)
-        button.setTitle("Criar", for: .normal)
+        button.setTitle("Salvar", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
-        button.addTarget(self, action: #selector(methodCreatelButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(methodSaveButton), for: .touchUpInside)
         button.layer.cornerRadius = 44/2
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    @objc func methodCreatelButton() {
-        delegate?.tapCreateButton()
+    @objc func methodSaveButton() {
+        delegate?.tapSaveButton()
     }
     
     private var cancelTaskButton: UIButton = {
@@ -128,7 +128,7 @@ class NewTask: UIView {
     }
     
     private lazy var buttonStakcView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [createTaskButton, cancelTaskButton])
+        let stack = UIStackView(arrangedSubviews: [saveTaskButton, cancelTaskButton])
         stack.axis = .horizontal
         stack.alignment = .center
         stack.spacing = 4
@@ -148,14 +148,14 @@ class NewTask: UIView {
     }
 }
 
-extension NewTask: SetupLayout {
+extension EditTask: SetupLayout {
     func addSubViews() {
         addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(hourLabel)
         containerView.addSubview(newTaskTextField)
         containerView.addSubview(timePicker)
-        containerView.addSubview(createTaskButton)
+        containerView.addSubview(saveTaskButton)
         containerView.addSubview(buttonStakcView)
         containerView.addSubview(switchPicker)
     }
@@ -166,7 +166,7 @@ extension NewTask: SetupLayout {
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
             containerView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: 400),
+            containerView.heightAnchor.constraint(equalToConstant: 420),
             
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 25),
             titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
@@ -182,7 +182,7 @@ extension NewTask: SetupLayout {
             switchPicker.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             switchPicker.topAnchor.constraint(equalTo: newTaskTextField.bottomAnchor, constant: 25),
             
-            timePicker.bottomAnchor.constraint(equalTo: createTaskButton.topAnchor, constant: 10),
+            timePicker.bottomAnchor.constraint(equalTo: buttonStakcView.topAnchor, constant: 10),
             timePicker.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             
             buttonStakcView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20),

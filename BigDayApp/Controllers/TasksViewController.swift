@@ -78,7 +78,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
         
-        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 55, height: 55))
+        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         imageView.frame = logoContainer.bounds
         logoContainer.addSubview(imageView)
         
@@ -93,6 +93,14 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         navigationItem.rightBarButtonItem = barButtonItem
         
         navigationItem.leftBarButtonItems = [spacer, logoItem]
+    }
+    
+    func editButton() {
+        let sheetVC = EditTaskViewController()
+        sheetVC.delegate = self
+        sheetVC.taskController = self
+        sheetVC.modalPresentationStyle = .overFullScreen
+        present(sheetVC, animated: true)
     }
     
 }
@@ -165,8 +173,8 @@ extension TasksViewController: UITableViewDelegate {
         }
         
         let editAction = UIContextualAction(style: .normal, title: "Editar") { (action, view, completionHandler) in
-            let task = self.tasks[indexPath.row]
-            self.selectedTaskID = task.id
+            self.selectedTaskID = self.tasks[indexPath.row].id
+            self.editButton()
             completionHandler(true)
         }
         
@@ -189,5 +197,17 @@ extension TasksViewController: TapButtonDelete {
         sheetVC.taskController = self
         sheetVC.modalPresentationStyle = .overFullScreen
         present(sheetVC, animated: true)
+    }
+}
+
+extension TasksViewController: saveEditProcol {
+    func saveEditBt(titleEdit: String, selectedTime: String) {
+        guard let id = selectedTaskID else {return}
+        if let index = tasks.firstIndex(where: { $0.id == id}) {
+            tasks[index].title = titleEdit
+            tasks[index].time = selectedTime ?? ""
+            saveTasks()
+            taskScreen.tasksTableView.reloadData()
+        }
     }
 }
