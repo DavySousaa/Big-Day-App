@@ -21,6 +21,8 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
         configScreen.delegate = self
         view.backgroundColor = .white
         navigationItem.backBarButtonItem?.tintColor = ColorSuport.blackApp
+        
+        updateUserPhoto()
         placeholderOne()
         setupNavgatioBar()
     }
@@ -34,6 +36,16 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     //MARK - Funcions
+    
+    func updateUserPhoto() {
+        if let savedImageData = UserDefaults.standard.data(forKey: "profileImageView"),
+           let savedImage = UIImage(data: savedImageData) {
+            configScreen.userPhoto.image = savedImage
+            configScreen.userPhoto.layer.cornerRadius = 100 / 2
+            configScreen.userPhoto.clipsToBounds = true
+        }
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true

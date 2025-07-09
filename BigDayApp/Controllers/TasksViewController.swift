@@ -23,17 +23,11 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         taskScreen.delegate = self
         taskScreen.tasksTableView.tintColor = .white
         taskScreen.tasksTableView.backgroundColor = .white
-        
         taskScreen.tasksTableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
         taskScreen.tasksTableView.delegate = self
         taskScreen.tasksTableView.dataSource = self
-        
-        nickname = UserDefaults.standard.string(forKey: "nickname") ?? "Usuário"
-        if let savedImageData = UserDefaults.standard.data(forKey: "profileImageView"),
-            let savedImage = UIImage(data: savedImageData) {
-            taskScreen.imageUser.image = savedImage
-        }
-        
+                
+        updateNickNamePhotoUser()
         setupNavgatioBar()
         updateNickName()
     }
@@ -41,12 +35,20 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let savedImageData = UserDefaults.standard.data(forKey: "profileImageView"),
-            let savedImage = UIImage(data: savedImageData) {
+           let savedImage = UIImage(data: savedImageData) {
             taskScreen.imageUser.image = savedImage
         }
         loadTasks()
     }
     
+    func updateNickNamePhotoUser() {
+        nickname = UserDefaults.standard.string(forKey: "nickname") ?? "Usuário"
+        if let savedImageData = UserDefaults.standard.data(forKey: "profileImageView"),
+           let savedImage = UIImage(data: savedImageData) {
+            taskScreen.imageUser.image = savedImage
+        }
+    }
+
     func updateNickName() {
         taskScreen.nameUserLabel.text = nickname
     }
@@ -96,10 +98,13 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
     }
     
     func editButton() {
+        guard let id = selectedTaskID,
+                  let task = tasks.first(where: { $0.id == id }) else { return }
         let sheetVC = EditTaskViewController()
         sheetVC.delegate = self
         sheetVC.taskController = self
         sheetVC.modalPresentationStyle = .overFullScreen
+        sheetVC.editTask.newTaskTextField.placeholder = task.title
         present(sheetVC, animated: true)
     }
     
@@ -143,15 +148,6 @@ extension TasksViewController: UITableViewDataSource {
         }
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let movedTask = tasks.remove(at: sourceIndexPath.row)
-        tasks.insert(movedTask, at: destinationIndexPath.row)
-        saveTasks()
-    }
 }
 
 extension TasksViewController: UITableViewDelegate {
@@ -187,8 +183,15 @@ extension TasksViewController: UITableViewDelegate {
 }
 
 extension TasksViewController: TapButtonDelete {
+    func didTapShare() {
+        let shareVC = ShareTasksViewController()
+        navigationItem.backButtonTitle = "Voltar"
+        navigationController?.pushViewController(shareVC, animated: true)
+    }
+    
     func didTapConfig() {
         let configVC = ConfigViewController()
+        configVC.configScreen.nickNameTextField.placeholder = taskScreen.nameUserLabel.text
         navigationController?.pushViewController(configVC, animated: true)
     }
     

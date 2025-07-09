@@ -12,6 +12,7 @@ import FirebaseAuth
 protocol TapButtonDelete: AnyObject {
     func didTapCreate()
     func didTapConfig()
+    func didTapShare()
 }
 
 class TaskScreen: UIView {
@@ -118,6 +119,28 @@ class TaskScreen: UIView {
         delegate?.didTapCreate()
     }
     
+    private lazy var shareButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .clear
+        button.setImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
+        button.tintColor = ColorSuport.blackApp
+        button.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    @objc func didTapShareButton() {
+        delegate?.didTapShare()
+    }
+    
+    private lazy var buttonsStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [newTaskButton, shareButton])
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 8
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
     public lazy var tasksTableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -142,7 +165,7 @@ extension TaskScreen: SetupLayout {
         addSubview(profileUserStackView)
         addSubview(viewDayLabel)
         addSubview(dayLabel)
-        addSubview(newTaskButton)
+        addSubview(buttonsStackView)
         addSubview(tasksTableView)
     }
     
@@ -158,8 +181,8 @@ extension TaskScreen: SetupLayout {
             viewDayLabel.heightAnchor.constraint(equalToConstant: 30),
             viewDayLabel.topAnchor.constraint(equalTo: dayLabel.topAnchor, constant: -7),
 
-            newTaskButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            newTaskButton.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
+            buttonsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            buttonsStackView.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
             
             tasksTableView.centerXAnchor.constraint(equalTo: centerXAnchor),
             tasksTableView.leadingAnchor.constraint(equalTo: leadingAnchor),
