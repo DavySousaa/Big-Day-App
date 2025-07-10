@@ -191,9 +191,21 @@ extension TasksViewController: TapButtonDelete {
     
     func didTapConfig() {
         let configVC = ConfigViewController()
-        configVC.configScreen.nickNameTextField.placeholder = taskScreen.nameUserLabel.text
+        
+        let placeholderText = taskScreen.nameUserLabel.text ?? "Digite seu nome"
+        let placeholderColor = UIColor.gray
+        
+        configVC.configScreen.nickNameTextField.attributedPlaceholder = NSAttributedString(
+            string: placeholderText,
+            attributes: [
+                .foregroundColor: placeholderColor,
+                .font: UIFont(name: "Montserrat-Regular", size: 14) ?? UIFont.systemFont(ofSize: 14)
+            ]
+        )
+        
         navigationController?.pushViewController(configVC, animated: true)
     }
+
     
     func didTapCreate() {
         let sheetVC = NewTasksViewController()

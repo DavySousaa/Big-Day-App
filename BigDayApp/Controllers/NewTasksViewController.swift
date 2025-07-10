@@ -15,6 +15,10 @@ class NewTasksViewController: UIViewController {
         newTask.delegate = self
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     private func createTask() {
         var list:[Task] = TaskSuportHelper().getTask()
         let selectedTime = getTime()
@@ -54,6 +58,11 @@ class NewTasksViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Ok", style: .default))
         present(alert, animated: true)
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 
 extension NewTasksViewController: UITextFieldDelegate, NewTaskDelegate {
@@ -65,8 +74,4 @@ extension NewTasksViewController: UITextFieldDelegate, NewTaskDelegate {
         createTask()
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
 }

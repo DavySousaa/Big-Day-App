@@ -166,7 +166,7 @@ extension EditTask: SetupLayout {
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
             containerView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: 420),
+            containerView.heightAnchor.constraint(equalToConstant: 400),
             
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 25),
             titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),

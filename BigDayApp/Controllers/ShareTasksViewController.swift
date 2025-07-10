@@ -74,11 +74,11 @@ class ShareTasksViewController: UIViewController {
     }
     
     func createShareImage() -> UIImage? {
-        let backgroundImage = shareScreen.containerView.subviews.first(where: { $0 is UIImageView })
-        backgroundImage?.isHidden = true
+        let backgroundImage = shareScreen.backgroundContainerView
+        backgroundImage.isHidden = true
         shareScreen.containerView.layoutIfNeeded()
         let image = renderViewAsImage(view: shareScreen.containerView)
-        backgroundImage?.isHidden = false
+        backgroundImage.isHidden = false
         return image
     }
 }

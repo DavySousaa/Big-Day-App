@@ -26,6 +26,9 @@ class EditTaskViewController: UIViewController {
         navigationItem.backButtonTitle = ""
         editTask.delegate = self
     }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
     
     private func getEditTask() {
         guard let delegate = delegate else {return}
@@ -60,6 +63,11 @@ class EditTaskViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Ok", style: .default))
         present(alert, animated: true)
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 
 extension EditTaskViewController: UITextFieldDelegate, EditTaskDelegate {
@@ -71,8 +79,5 @@ extension EditTaskViewController: UITextFieldDelegate, EditTaskDelegate {
         getEditTask()
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
+    
 }

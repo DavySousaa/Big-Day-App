@@ -93,14 +93,15 @@ class ShareScreen: UIView {
     public lazy var containerView: UIView = {
         let view = UIView()
         view.clipsToBounds = true
+        view.backgroundColor = .clear
         view.layer.cornerRadius = 30
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private lazy var backgroundContainerView: UIImageView = {
+    public lazy var backgroundContainerView: UIImageView = {
         let image = UIImageView(image: UIImage(named: "ClearBackground"))
-        image.contentMode = .scaleAspectFill
+        image.contentMode = .scaleToFill
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -212,11 +213,18 @@ extension ShareScreen: SetupLayout {
             textUp.centerXAnchor.constraint(equalTo: centerXAnchor),
             textUp.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             
+            backgroundContainerView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            backgroundContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            backgroundContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            backgroundContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            containerView.heightAnchor.constraint(equalToConstant: 600),
             containerView.topAnchor.constraint(equalTo: textUp.bottomAnchor, constant: 10),
             containerView.bottomAnchor.constraint(equalTo: buttonsStackView.topAnchor, constant: -10),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            
             
             buttonsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             buttonsStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
@@ -239,7 +247,6 @@ extension ShareScreen: SetupLayout {
     
     func setupStyle() {
         if let bgImage = UIImage(named: "ClearBackground")?.cgImage {
-            containerView.layer.contents = bgImage
             containerView.layer.contentsGravity = .resizeAspectFill
         }
     }
