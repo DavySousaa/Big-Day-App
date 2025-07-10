@@ -30,7 +30,7 @@ class TaskScreen: UIView {
     
     public lazy var nameUserLabel: UILabel = {
         let label = UILabel()
-        label.textColor = ColorSuport.blackApp
+        label.textColor = .label
         label.font = UIFont(name: "Montserrat-Regular", size: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -48,7 +48,7 @@ class TaskScreen: UIView {
     
     public lazy var imageUser: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "person.crop.circle"))
-        image.tintColor = ColorSuport.blackApp
+        image.tintColor = UIColor(named: "PrimaryColor")
         image.widthAnchor.constraint(equalToConstant: 60).isActive = true
         image.heightAnchor.constraint(equalToConstant: 60).isActive = true
         image.layer.cornerRadius = 60/2
@@ -72,7 +72,7 @@ class TaskScreen: UIView {
         let button = UIButton(type: .system)
         button.backgroundColor = .clear
         button.setImage(UIImage(systemName: "gearshape"), for: .normal)
-        button.tintColor = ColorSuport.blackApp
+        button.tintColor = .label
         button.addTarget(self, action: #selector(didTapButtonConfig), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -110,7 +110,7 @@ class TaskScreen: UIView {
         let button = UIButton(type: .system)
         button.backgroundColor = .clear
         button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.tintColor = ColorSuport.blackApp
+        button.tintColor = .label
         button.addTarget(self, action: #selector(didTapButtonCreate), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -123,7 +123,7 @@ class TaskScreen: UIView {
         let button = UIButton(type: .system)
         button.backgroundColor = .clear
         button.setImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
-        button.tintColor = ColorSuport.blackApp
+        button.tintColor = .label
         button.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -146,7 +146,7 @@ class TaskScreen: UIView {
         table.translatesAutoresizingMaskIntoConstraints = false
         table.separatorStyle = .none
         table.showsVerticalScrollIndicator = false
-        table.backgroundColor = .clear
+        table.backgroundColor = UIColor(named: "PrimaryColor")
         return table
     }()
     

@@ -12,7 +12,7 @@ class EditTask: UIView {
     
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "PrimaryColor")
         view.layer.cornerRadius = 20
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOpacity = 0.1
@@ -28,7 +28,7 @@ class EditTask: UIView {
         let fullText = "Edite sua tarefa."
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
             .font: UIFont(name: "Montserrat-ExtraBold", size: 18)!,
-            .foregroundColor: UIColor.black
+            .foregroundColor: UIColor.label
         ])
         
         let textColor = ColorSuport.greenApp
@@ -43,8 +43,8 @@ class EditTask: UIView {
     public lazy var newTaskTextField: UITextField = {
         let textField = UITextField()
         textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
-        textField.backgroundColor = .white
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.backgroundColor = .clear
         textField.layer.cornerRadius = 41/2
         textField.attributedPlaceholder = NSAttributedString(
             string: "",
@@ -54,7 +54,7 @@ class EditTask: UIView {
             ]
         )
         
-        textField.textColor = .black
+        textField.textColor = .label
         textField.font = UIFont(name: "Montserrat-Regular", size: 15)
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
@@ -66,7 +66,7 @@ class EditTask: UIView {
     private lazy var hourLabel: UILabel = {
         let label = UILabel()
         label.text = "Horário"
-        label.textColor = ColorSuport.blackApp
+        label.textColor = .label
         label.font = UIFont(name: "Montserrat-Regular", size: 15)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -88,11 +88,8 @@ class EditTask: UIView {
         let picker = UIDatePicker()
         picker.datePickerMode = .time
         picker.preferredDatePickerStyle = .wheels
-        picker.backgroundColor = .white
-        picker.tintColor = .black
-        if #available(iOS 13.0, *) {
-            picker.overrideUserInterfaceStyle = .light
-        }
+        picker.backgroundColor = .clear
+        picker.tintColor = .label
         picker.translatesAutoresizingMaskIntoConstraints = false
         return picker
     }()
@@ -114,8 +111,8 @@ class EditTask: UIView {
     
     private var cancelTaskButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = ColorSuport.blackApp
-        button.setTitleColor(UIColor(hex: "#ffffff"), for: .normal)
+        button.backgroundColor = .clear
+        button.setTitleColor(ColorSuport.greenApp, for: .normal)
         button.setTitle("Cancelar", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         button.layer.cornerRadius = 44/2
@@ -166,7 +163,7 @@ extension EditTask: SetupLayout {
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
             containerView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: 400),
+            containerView.heightAnchor.constraint(equalToConstant: 420),
             
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 25),
             titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),

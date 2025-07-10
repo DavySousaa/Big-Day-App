@@ -16,8 +16,8 @@ class ShareTasksViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = shareScreen
-        view.backgroundColor = .white
-        navigationController?.navigationBar.tintColor = ColorSuport.blackApp
+        view.backgroundColor = UIColor(named: "PrimaryColor")
+        navigationController?.navigationBar.tintColor = .label
         
         shareScreen.delegate = self
         shareScreen.tasksTableView.tintColor = .white
@@ -41,7 +41,7 @@ class ShareTasksViewController: UIViewController {
     }
     
     private func setupNavgatioBar() {
-        navigationController?.navigationBar.tintColor = ColorSuport.blackApp
+        navigationController?.navigationBar.tintColor = .label
         navigationItem.title = "Compartilhar Tarefas"
     }
     
@@ -101,7 +101,7 @@ extension ShareTasksViewController: UITableViewDataSource {
                 string: task.title,
                 attributes: [
                     .strikethroughStyle: NSUnderlineStyle.single.rawValue,
-                    .foregroundColor: UIColor.white
+                    .foregroundColor: UIColor.label
                 ]
             )
             cell.titleLabel.attributedText = attributedText
@@ -111,7 +111,7 @@ extension ShareTasksViewController: UITableViewDataSource {
                 string: task.title,
                 attributes: [
                     .strikethroughStyle: 0,
-                    .foregroundColor: UIColor.white
+                    .foregroundColor: UIColor.label
                 ]
             )
             cell.titleLabel.attributedText = attributedText

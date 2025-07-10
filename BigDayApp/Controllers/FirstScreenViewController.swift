@@ -25,9 +25,12 @@ class FirstScreenViewController: UIViewController,FirstScreenDelegate {
         super.viewDidLoad()
         self.view = firstScreen
         firstScreen.delegate = self
-        navigationItem.backButtonTitle = ""
-        view.backgroundColor = .white
+        navigationItem.backButtonTitle = "Voltar"
+        view.backgroundColor = UIColor(named: "PrimaryColor")
+        
+        let logoImage = traitCollection.userInterfaceStyle == .dark
+            ? UIImage(named: "logo2")
+            : UIImage(named: "logo1")
+        firstScreen.imageLogo.image = logoImage
     }
-    
-    
 }

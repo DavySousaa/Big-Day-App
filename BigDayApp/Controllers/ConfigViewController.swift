@@ -19,8 +19,8 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
         super.viewDidLoad()
         self.view = configScreen
         configScreen.delegate = self
-        view.backgroundColor = .white
-        navigationItem.backBarButtonItem?.tintColor = ColorSuport.blackApp
+        navigationItem.hidesBackButton = true
+        view.backgroundColor = UIColor(named: "PrimaryColor")
         
         updateUserPhoto()
         placeholderOne()

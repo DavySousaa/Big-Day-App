@@ -9,8 +9,8 @@ class LoginAccount: UIView {
     
     weak var delegate: LoginAccountScreenDelegate?
     
-    private lazy var imageLogo: UIImageView = {
-        let image = UIImageView(image: UIImage(named: "logo1"))
+    public lazy var imageLogo: UIImageView = {
+        let image = UIImageView()
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFill
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -25,7 +25,7 @@ class LoginAccount: UIView {
         let fullText = "A rotina te espera.\nMas dessa vez…\ndiferente."
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
             .font: UIFont(name: "Montserrat-ExtraBold", size: 27)!,
-            .foregroundColor: UIColor.black
+            .foregroundColor: UIColor.label
         ])
         
         let textColor = ColorSuport.greenApp
@@ -57,8 +57,8 @@ class LoginAccount: UIView {
         textField.autocapitalizationType = .none
         textField.keyboardType = .emailAddress
         textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
-        textField.backgroundColor = .white
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.backgroundColor = .clear
         textField.layer.cornerRadius = 47/2
         textField.attributedPlaceholder = NSAttributedString(
             string: "E-mail",
@@ -67,7 +67,7 @@ class LoginAccount: UIView {
                 .font: UIFont(name: "Montserrat-Regular", size: 15)!
             ]
         )
-        textField.textColor = .black
+        textField.textColor = .label
         textField.font = UIFont(name: "Montserrat-Regular", size: 15)
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
@@ -80,8 +80,8 @@ class LoginAccount: UIView {
         textField.autocapitalizationType = .none
         textField.isSecureTextEntry = true
         textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
-        textField.backgroundColor = .white
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.backgroundColor = .clear
         textField.layer.cornerRadius = 47/2
         textField.attributedPlaceholder = NSAttributedString(
             string: "Senha",
@@ -90,7 +90,7 @@ class LoginAccount: UIView {
                 .font: UIFont(name: "Montserrat-Regular", size: 15)!
             ]
         )
-        textField.textColor = .black
+        textField.textColor = .label
         textField.font = UIFont(name: "Montserrat-Regular", size: 15)
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always

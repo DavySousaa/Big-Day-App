@@ -18,11 +18,12 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = taskScreen
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationItem.hidesBackButton = true
+        
         taskScreen.delegate = self
         taskScreen.tasksTableView.tintColor = .white
-        taskScreen.tasksTableView.backgroundColor = .white
+        
         taskScreen.tasksTableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
         taskScreen.tasksTableView.delegate = self
         taskScreen.tasksTableView.dataSource = self
@@ -39,6 +40,15 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
             taskScreen.imageUser.image = savedImage
         }
         loadTasks()
+        setupNavgatioBar()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
+            setupNavgatioBar()
+        }
     }
     
     func updateNickNamePhotoUser() {
@@ -71,12 +81,14 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func setupNavgatioBar() {
-        
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = .white
+
+        let logoImage = traitCollection.userInterfaceStyle == .dark
+            ? UIImage(named: "logo2")
+            : UIImage(named: "logo1")
         
-        let image = UIImage(named: "logo1")
-        let imageView = UIImageView(image: image)
+        let imageView = UIImageView(image: logoImage)
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
         
@@ -85,15 +97,14 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         logoContainer.addSubview(imageView)
         
         let logoItem = UIBarButtonItem(customView: logoContainer)
-        
         let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         spacer.width = 14
         
         let customButton = taskScreen.configButton
         customButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
         let barButtonItem = UIBarButtonItem(customView: customButton)
-        navigationItem.rightBarButtonItem = barButtonItem
         
+        navigationItem.rightBarButtonItem = barButtonItem
         navigationItem.leftBarButtonItems = [spacer, logoItem]
     }
     
@@ -104,7 +115,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         sheetVC.delegate = self
         sheetVC.taskController = self
         sheetVC.modalPresentationStyle = .overFullScreen
-        sheetVC.editTask.newTaskTextField.placeholder = task.title
+        sheetVC.editTask.newTaskTextField.text = task.title
         present(sheetVC, animated: true)
     }
     
@@ -121,16 +132,15 @@ extension TasksViewController: UITableViewDataSource {
         }
         let task = tasks[indexPath.row]
         cell.configure(with: task)
-        cell.backgroundColor = .white
+        cell.backgroundColor = UIColor(named: "PrimaryColor")
         
         if task.isCompleted {
             cell.circleImage.image = UIImage(systemName: "checkmark.circle.fill")
-            
             let attributedText = NSAttributedString(
                 string: task.title,
                 attributes: [
                     .strikethroughStyle: NSUnderlineStyle.single.rawValue,
-                    .foregroundColor: UIColor.darkGray
+                    .foregroundColor: UIColor.label
                 ]
             )
             cell.titleLabel.attributedText = attributedText
@@ -141,7 +151,7 @@ extension TasksViewController: UITableViewDataSource {
                 string: task.title,
                 attributes: [
                     .strikethroughStyle: 0,
-                    .foregroundColor: ColorSuport.blackApp
+                    .foregroundColor: UIColor.label
                 ]
             )
             cell.titleLabel.attributedText = attributedText
@@ -176,8 +186,9 @@ extension TasksViewController: UITableViewDelegate {
         
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .red
-        editAction.image = UIImage(systemName: "square.and.pencil")
-        editAction.backgroundColor = .black
+        let editIcon = UIImage(systemName: "square.and.pencil")?.withTintColor(ColorSuport.greenApp, renderingMode: .alwaysOriginal)
+        editAction.image = editIcon
+        editAction.backgroundColor = .label
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
 }

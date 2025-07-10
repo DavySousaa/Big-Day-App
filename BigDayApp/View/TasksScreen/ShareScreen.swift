@@ -20,7 +20,7 @@ class ShareScreen: UIView {
         let label = UILabel()
         label.text = "Salve ou copie um screenshot da sua lista\nde tarefa e compartilhe em suas redes sociais."
         label.font = UIFont(name: "Montserrat-Regular", size: 12) ?? UIFont.systemFont(ofSize: 12)
-        label.textColor = ColorSuport.blackApp
+        label.textColor = .label
         label.textAlignment = .center
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -120,7 +120,7 @@ class ShareScreen: UIView {
     
     public lazy var nameUserLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = .label
         label.font = UIFont(name: "Montserrat-Regular", size: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -138,7 +138,7 @@ class ShareScreen: UIView {
     
     public lazy var imageUser: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "person.crop.circle"))
-        image.tintColor = ColorSuport.blackApp
+        image.tintColor = UIColor(named: "PrimaryColor")
         image.widthAnchor.constraint(equalToConstant: 60).isActive = true
         image.heightAnchor.constraint(equalToConstant: 60).isActive = true
         image.layer.cornerRadius = 60/2
@@ -161,7 +161,7 @@ class ShareScreen: UIView {
     private lazy var dayLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Montserrat-Regular", size: 14)
-        label.textColor = .white
+        label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         
         let date = Date()

@@ -16,8 +16,8 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate, Create
         super.viewDidLoad()
         self.view = createAccount
         createAccount.delegate = self
-        view.backgroundColor = .white
-        navigationController?.navigationBar.tintColor = .black
+        view.backgroundColor = UIColor(named: "PrimaryColor")
+        navigationController?.navigationBar.tintColor = .label
         
         createAccount.emailTextField.delegate = self
         createAccount.nickNameTextField.delegate = self
@@ -25,6 +25,11 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate, Create
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
+        
+        let logoImage = traitCollection.userInterfaceStyle == .dark
+            ? UIImage(named: "logo2")
+            : UIImage(named: "logo1")
+        createAccount.imageLogo.image = logoImage
         
         bindViewModel()
     }

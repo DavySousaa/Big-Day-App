@@ -20,7 +20,7 @@ class ConfigScreen: UIView {
     
     public lazy var userPhoto: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "person.crop.circle"))
-        image.tintColor = ColorSuport.blackApp
+        image.tintColor = UIColor(named: "PrimaryColor")
         image.layer.cornerRadius = 60/2
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFill
@@ -30,7 +30,7 @@ class ConfigScreen: UIView {
     
     public lazy var editPhotoUser: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitleColor(ColorSuport.blackApp, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.setTitle("Editar foto", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         button.addTarget(self, action: #selector(didTapEditPhotoButton), for: .touchUpInside)
@@ -45,9 +45,8 @@ class ConfigScreen: UIView {
         let textField = UITextField()
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
-        textField.backgroundColor = .white
         textField.layer.cornerRadius = 45/2
-        textField.textColor = .black
+        textField.textColor = UIColor(named: "PrimaryColor")
         textField.font = UIFont(name: "Montserrat-Regular", size: 15)
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
@@ -60,7 +59,7 @@ class ConfigScreen: UIView {
         button.setTitle("Automático", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-Regular", size: 16)
         button.backgroundColor = .clear
-        button.setTitleColor(ColorSuport.blackApp, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.contentHorizontalAlignment = .left
         button.translatesAutoresizingMaskIntoConstraints = true
         return button
@@ -71,18 +70,18 @@ class ConfigScreen: UIView {
         button.setTitle("Claro", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-Regular", size: 16)
         button.backgroundColor = .clear
-        button.setTitleColor(ColorSuport.blackApp, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.contentHorizontalAlignment = .left
         button.translatesAutoresizingMaskIntoConstraints = true
         return button
     }()
     
     public lazy var darkModeButotn: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton(type: .custom)
         button.setTitle("Escuro", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-Regular", size: 16)
         button.backgroundColor = .clear
-        button.setTitleColor(ColorSuport.blackApp, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.contentHorizontalAlignment = .left
         button.translatesAutoresizingMaskIntoConstraints = true
         return button
@@ -100,7 +99,7 @@ class ConfigScreen: UIView {
     
     private var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = ColorSuport.greenApp
+        button.backgroundColor = UIColor(named: "SecudaryColor")
         button.setTitleColor(ColorSuport.blackApp, for: .normal)
         button.setTitle("Salvar alterações", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
@@ -116,7 +115,7 @@ class ConfigScreen: UIView {
     private var logoutButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .clear
-        button.setTitleColor(ColorSuport.blackApp, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.setTitle("Sair da conta", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-Regular", size: 16)
         button.layer.cornerRadius = 41/2
@@ -132,7 +131,7 @@ class ConfigScreen: UIView {
         let button = UIButton(type: .system)
         button.backgroundColor = .clear
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
-        button.tintColor = ColorSuport.blackApp
+        button.tintColor = .label
         button.addTarget(self, action: #selector(didTapButtonCancel), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button

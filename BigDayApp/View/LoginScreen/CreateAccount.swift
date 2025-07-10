@@ -9,8 +9,8 @@ class CreateAccount: UIView {
     
     weak var delegate: CreateAccountScreenDelegate?
     
-    private lazy var imageLogo: UIImageView = {
-        let image = UIImageView(image: UIImage(named: "logo1"))
+    public lazy var imageLogo: UIImageView = {
+        let image = UIImageView()
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFill
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -25,7 +25,7 @@ class CreateAccount: UIView {
         let fullText = "Comece agora…\nSeu Big Day tá te\nesperando."
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
             .font: UIFont(name: "Montserrat-ExtraBold", size: 27)!,
-            .foregroundColor: UIColor.black
+            .foregroundColor: UIColor.label
         ])
         
         let textColor = ColorSuport.greenApp
@@ -55,8 +55,8 @@ class CreateAccount: UIView {
     public lazy var nickNameTextField: UITextField = {
         let textField = UITextField()
         textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
-        textField.backgroundColor = .white
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.backgroundColor = .clear
         textField.layer.cornerRadius = 41/2
         textField.attributedPlaceholder = NSAttributedString(
             string: "Apelido no app",
@@ -66,7 +66,7 @@ class CreateAccount: UIView {
             ]
         )
         
-        textField.textColor = .black
+        textField.textColor = .label
         textField.font = UIFont(name: "Montserrat-Regular", size: 15)
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
@@ -79,8 +79,8 @@ class CreateAccount: UIView {
         textField.autocapitalizationType = .none
         textField.keyboardType = .emailAddress
         textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
-        textField.backgroundColor = .white
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.backgroundColor = .clear
         textField.layer.cornerRadius = 41/2
         textField.attributedPlaceholder = NSAttributedString(
             string: "E-mail",
@@ -89,7 +89,7 @@ class CreateAccount: UIView {
                 .font: UIFont(name: "Montserrat-Regular", size: 15)!
             ]
         )
-        textField.textColor = .black
+        textField.textColor = .label
         textField.font = UIFont(name: "Montserrat-Regular", size: 15)
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
@@ -102,8 +102,8 @@ class CreateAccount: UIView {
         textField.autocapitalizationType = .none
         textField.isSecureTextEntry = true
         textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor(hex: "#bebebd").cgColor
-        textField.backgroundColor = .white
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.backgroundColor = .clear
         textField.layer.cornerRadius = 41/2
         textField.attributedPlaceholder = NSAttributedString(
             string: "Senha",
@@ -112,7 +112,7 @@ class CreateAccount: UIView {
                 .font: UIFont(name: "Montserrat-Regular", size: 15)!
             ]
         )
-        textField.textColor = .black
+        textField.textColor = .label
         textField.font = UIFont(name: "Montserrat-Regular", size: 15)
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
@@ -120,7 +120,7 @@ class CreateAccount: UIView {
         
         let toggleButton = UIButton(type: .custom)
         toggleButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-        toggleButton.tintColor = .lightGray
+        toggleButton.tintColor = .label
         toggleButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         
         let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))

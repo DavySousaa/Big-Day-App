@@ -9,8 +9,8 @@ class FirstScreen: UIView {
     
     weak var delegate: FirstScreenDelegate?
     
-    private lazy var imageLogo: UIImageView = {
-        let image = UIImageView(image: UIImage(named: "logo1"))
+    public lazy var imageLogo: UIImageView = {
+        let image = UIImageView()
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFill
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -28,7 +28,7 @@ class FirstScreen: UIView {
         let fullText = "Transformando\ndias comuns em\nBig Day!"
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
             .font: UIFont(name: "Montserrat-ExtraBold", size: 26)!,
-            .foregroundColor: UIColor.black
+            .foregroundColor: UIColor.label
         ])
         
         let bigDayColor = ColorSuport.greenApp
@@ -51,8 +51,8 @@ class FirstScreen: UIView {
     private lazy var createAccountButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Criar conta", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor(hex: "#222222")
+        button.setTitleColor(ColorSuport.blackApp, for: .normal)
+        button.backgroundColor = ColorSuport.greenApp
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         button.layer.cornerRadius = 41/2
         button.addTarget(self, action: #selector(didTapButtonCreate), for: .touchUpInside)
@@ -66,10 +66,11 @@ class FirstScreen: UIView {
     private lazy var lognAccountButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Já tem conta? Acesse aqui", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .white
+        button.setTitleColor(.label, for: .normal)
+        button.backgroundColor = .clear
         button.titleLabel?.font = UIFont(name: "Montserrat-Regular", size: 12)
-        button.layer.borderWidth = 1.5
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.white.cgColor
         button.layer.cornerRadius = 41/2
         button.layer.borderColor = UIColor(hex: "#00C853").cgColor
         button.addTarget(self, action: #selector(didTapButtonLogin), for: .touchUpInside)

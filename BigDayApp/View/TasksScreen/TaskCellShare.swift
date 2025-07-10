@@ -13,7 +13,7 @@ class TaskCellShare: UITableViewCell {
     
     public let titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = ColorSuport.blackApp
+        label.textColor = .label
         label.font = UIFont(name: "Montserrat-Regular", size: 16)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -23,7 +23,7 @@ class TaskCellShare: UITableViewCell {
     public let hourLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Montserrat-Regular", size: 16)
-        label.textColor = .white
+        label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
