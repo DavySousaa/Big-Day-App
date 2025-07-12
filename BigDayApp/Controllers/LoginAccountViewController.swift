@@ -36,8 +36,11 @@ class LoginAccountViewController: UIViewController, UITextFieldDelegate, LoginAc
     private func bindViewModel() {
         viewModel.onSuccess = { [weak self] in
             DispatchQueue.main.async {
-                let tasksVC = TasksViewController()
-                self?.navigationController?.pushViewController(tasksVC, animated: true)
+                let tabBarVC = MainTabBarController()
+                if let sceneDelegate = UIApplication.shared.connectedScenes
+                    .first?.delegate as? SceneDelegate {
+                    sceneDelegate.window?.rootViewController = tabBarVC
+                }
             }
         }
         

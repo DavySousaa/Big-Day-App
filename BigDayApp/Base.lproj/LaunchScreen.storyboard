@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina6_12" orientation="portrait" appearance="dark"/>
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,7 +15,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ImageLogoSet" translatesAutoresizingMaskIntoConstraints="NO" id="pc7-dc-G4Q">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo3" translatesAutoresizingMaskIntoConstraints="NO" id="pc7-dc-G4Q">
                                 <rect key="frame" x="96.666666666666686" y="391" width="200" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="0Ma-E4-eyD"/>
@@ -25,7 +24,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" name="PrimaryColor"/>
+                        <color key="backgroundColor" red="0.1742278337" green="0.83160084489999997" blue="0.3821316957" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="pc7-dc-G4Q" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="KKf-ai-b89"/>
                             <constraint firstItem="pc7-dc-G4Q" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="aSS-xW-34G"/>
@@ -41,9 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ImageLogoSet" width="676.15997314453125" height="258.54000854492188"/>
-        <namedColor name="PrimaryColor">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <image name="logo3" width="676.15997314453125" height="258.54000854492188"/>
     </resources>
 </document>

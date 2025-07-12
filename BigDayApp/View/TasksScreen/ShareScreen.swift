@@ -138,7 +138,7 @@ class ShareScreen: UIView {
     
     public lazy var imageUser: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "person.crop.circle"))
-        image.tintColor = UIColor(named: "PrimaryColor")
+        image.tintColor = ColorSuport.greenApp
         image.widthAnchor.constraint(equalToConstant: 60).isActive = true
         image.heightAnchor.constraint(equalToConstant: 60).isActive = true
         image.layer.cornerRadius = 60/2
@@ -211,7 +211,7 @@ extension ShareScreen: SetupLayout {
     func setupConstraints() {
         NSLayoutConstraint.activate([
             textUp.centerXAnchor.constraint(equalTo: centerXAnchor),
-            textUp.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
+            textUp.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             
             backgroundContainerView.topAnchor.constraint(equalTo: containerView.topAnchor),
             backgroundContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
@@ -219,12 +219,12 @@ extension ShareScreen: SetupLayout {
             backgroundContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: 600),
+            
             containerView.topAnchor.constraint(equalTo: textUp.bottomAnchor, constant: 10),
             containerView.bottomAnchor.constraint(equalTo: buttonsStackView.topAnchor, constant: -10),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            
+            containerView.heightAnchor.constraint(equalToConstant: 500),
             
             buttonsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             buttonsStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),

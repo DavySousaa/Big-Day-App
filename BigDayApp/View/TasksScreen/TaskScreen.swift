@@ -11,8 +11,6 @@ import FirebaseAuth
 
 protocol TapButtonDelete: AnyObject {
     func didTapCreate()
-    func didTapConfig()
-    func didTapShare()
 }
 
 class TaskScreen: UIView {
@@ -48,7 +46,7 @@ class TaskScreen: UIView {
     
     public lazy var imageUser: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "person.crop.circle"))
-        image.tintColor = UIColor(named: "PrimaryColor")
+        image.tintColor = ColorSuport.greenApp
         image.widthAnchor.constraint(equalToConstant: 60).isActive = true
         image.heightAnchor.constraint(equalToConstant: 60).isActive = true
         image.layer.cornerRadius = 60/2
@@ -67,19 +65,6 @@ class TaskScreen: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
-    public lazy var configButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.backgroundColor = .clear
-        button.setImage(UIImage(systemName: "gearshape"), for: .normal)
-        button.tintColor = .label
-        button.addTarget(self, action: #selector(didTapButtonConfig), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    @objc private func didTapButtonConfig(){
-        delegate?.didTapConfig()
-    }
     
     private lazy var viewDayLabel: UIView = {
         let view = UIView()
@@ -118,29 +103,7 @@ class TaskScreen: UIView {
     @objc private func didTapButtonCreate(){
         delegate?.didTapCreate()
     }
-    
-    private lazy var shareButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.backgroundColor = .clear
-        button.setImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
-        button.tintColor = .label
-        button.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    @objc func didTapShareButton() {
-        delegate?.didTapShare()
-    }
-    
-    private lazy var buttonsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [newTaskButton, shareButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 8
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-    
+
     public lazy var tasksTableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -165,7 +128,7 @@ extension TaskScreen: SetupLayout {
         addSubview(profileUserStackView)
         addSubview(viewDayLabel)
         addSubview(dayLabel)
-        addSubview(buttonsStackView)
+        addSubview(newTaskButton)
         addSubview(tasksTableView)
     }
     
@@ -181,8 +144,8 @@ extension TaskScreen: SetupLayout {
             viewDayLabel.heightAnchor.constraint(equalToConstant: 30),
             viewDayLabel.topAnchor.constraint(equalTo: dayLabel.topAnchor, constant: -5),
 
-            buttonsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            buttonsStackView.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
+            newTaskButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            newTaskButton.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
             
             tasksTableView.centerXAnchor.constraint(equalTo: centerXAnchor),
             tasksTableView.leadingAnchor.constraint(equalTo: leadingAnchor),

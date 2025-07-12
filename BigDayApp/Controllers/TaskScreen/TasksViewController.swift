@@ -41,11 +41,12 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         }
         loadTasks()
         setupNavgatioBar()
+        updateNickNamePhotoUser()
+        updateNickName()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
         if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
             setupNavgatioBar()
         }
@@ -60,6 +61,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
     }
 
     func updateNickName() {
+        nickname = UserDefaults.standard.string(forKey: "nickname") ?? "Usuário"
         taskScreen.nameUserLabel.text = nickname
     }
     
@@ -83,7 +85,9 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
     private func setupNavgatioBar() {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = .white
-
+        navigationController?.navigationBar.tintColor = .label
+        navigationItem.title = "Tarefas"
+        
         let logoImage = traitCollection.userInterfaceStyle == .dark
             ? UIImage(named: "logo2")
             : UIImage(named: "logo1")
@@ -100,11 +104,6 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         spacer.width = 14
         
-        let customButton = taskScreen.configButton
-        customButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-        let barButtonItem = UIBarButtonItem(customView: customButton)
-        
-        navigationItem.rightBarButtonItem = barButtonItem
         navigationItem.leftBarButtonItems = [spacer, logoItem]
     }
     
@@ -194,30 +193,6 @@ extension TasksViewController: UITableViewDelegate {
 }
 
 extension TasksViewController: TapButtonDelete {
-    func didTapShare() {
-        let shareVC = ShareTasksViewController()
-        navigationItem.backButtonTitle = "Voltar"
-        navigationController?.pushViewController(shareVC, animated: true)
-    }
-    
-    func didTapConfig() {
-        let configVC = ConfigViewController()
-        
-        let placeholderText = taskScreen.nameUserLabel.text ?? "Digite seu nome"
-        let placeholderColor = UIColor.gray
-        
-        configVC.configScreen.nickNameTextField.attributedPlaceholder = NSAttributedString(
-            string: placeholderText,
-            attributes: [
-                .foregroundColor: placeholderColor,
-                .font: UIFont(name: "Montserrat-Regular", size: 14) ?? UIFont.systemFont(ofSize: 14)
-            ]
-        )
-        
-        navigationController?.pushViewController(configVC, animated: true)
-    }
-
-    
     func didTapCreate() {
         let sheetVC = NewTasksViewController()
         sheetVC.taskController = self

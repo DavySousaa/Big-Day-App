@@ -11,17 +11,36 @@ import FirebaseAuth
 
 class ConfigViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, TOCropViewControllerDelegate {
     
+    var editNickName = EditNickName()
     var configScreen = ConfigScreen()
     var createAccount = CreateAccount()
     var taskController: TasksViewController?
+    var configs: [Config] = [
+        Config(title: "Editar apelido", iconName: "pencil", action: .editNickname),
+        Config(title: "Alterar senha", iconName: "lock.rotation", action: .changePassword),
+        Config(title: "Notificações", iconName: "bell.badge", action: .openNotifications),
+        Config(title: "Feedback", iconName: "bubble.left.and.bubble.right", action: .sendFeedback),
+        Config(title: "Sobre o app", iconName: "info.circle", action: .showAbout),
+        Config(title: "Sair da conta", iconName: "rectangle.portrait.and.arrow.right", action: .logout)
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = configScreen
+        configScreen.configViewController = self
+        configScreen.updateTableHeight(rows: configs.count)
+        configScreen.configTableView.rowHeight = 60
+        
         configScreen.delegate = self
-        navigationItem.hidesBackButton = true
         view.backgroundColor = UIColor(named: "PrimaryColor")
         
+        configScreen.configTableView.tintColor = .white
+        
+        configScreen.configTableView.register(ConfigCell.self, forCellReuseIdentifier: ConfigCell.identifier)
+        configScreen.configTableView.delegate = self
+        configScreen.configTableView.dataSource = self
+        configScreen.configTableView.isScrollEnabled = false
+
         updateUserPhoto()
         placeholderOne()
         setupNavgatioBar()
@@ -33,6 +52,13 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
+            setupNavgatioBar()
+        }
     }
     
     //MARK - Funcions
@@ -54,12 +80,12 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     // Método para abrir a galeria
     func loadPhoto(for imageView: UIImageView) {
         self.configScreen.userPhoto = imageView
-        
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
         present(picker, animated: true, completion: nil)
     }
+    
     
     // Quando o usuário seleciona a imagem
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -87,6 +113,16 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
         configScreen.userPhoto.image = image
         configScreen.userPhoto.layer.cornerRadius = configScreen.userPhoto.frame.size.width / 2
         configScreen.userPhoto.clipsToBounds = true
+        
+        if let data = image.jpegData(compressionQuality: 0.8) {
+            UserDefaults.standard.set(data, forKey: "profileImageView")
+        }
+        
+        if let tasksVC = navigationController?.viewControllers.first(where: { $0 is TasksViewController }) as? TasksViewController {
+            tasksVC.updateNickNamePhotoUser()
+            tasksVC.updateNickName()
+        }
+        
         cropViewController.dismiss(animated: true, completion: nil)
     }
     
@@ -108,63 +144,32 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     private func setupNavgatioBar() {
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.tintColor = .white
-        let customButton = configScreen.cancelButton
-        customButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-        let barButtonItem = UIBarButtonItem(customView: customButton)
-        navigationItem.rightBarButtonItem = barButtonItem
+        navigationController?.navigationBar.tintColor = .label
+        navigationItem.title = "Configurações"
+        navigationItem.backButtonTitle = "Voltar"
+        let logoImage = traitCollection.userInterfaceStyle == .dark
+            ? UIImage(named: "logo2")
+            : UIImage(named: "logo1")
+        
+        let imageView = UIImageView(image: logoImage)
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        
+        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
+        imageView.frame = logoContainer.bounds
+        logoContainer.addSubview(imageView)
+        
+        let logoItem = UIBarButtonItem(customView: logoContainer)
+        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        spacer.width = 14
+        
+        navigationItem.leftBarButtonItems = [spacer, logoItem]
     }
     
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Atenção", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default))
         present(alert, animated: true)
-    }
-}
-
-
-extension ConfigViewController: tapButtonConfigDelete {
-    
-    func didTapCancel() {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    func didTapSaveButton() {
-        if let vc = self.navigationController?.viewControllers.first(where: { $0 is TasksViewController }) as? TasksViewController {
-            
-            guard !configScreen.nickNameTextField.text!.isEmpty else {
-                showAlert(message: "Digite o apelido novo.")
-                return
-            }
-            
-            let newNickname = configScreen.nickNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-            if let previousNickname = UserDefaults.standard.string(forKey: "nickname"), newNickname?.isEmpty ?? true {
-                configScreen.nickNameTextField.text = previousNickname
-            }
-            
-            let finalNickname = configScreen.nickNameTextField.text ?? ""
-            let newPhotoProfile = configScreen.userPhoto.image
-            
-            vc.nickname = finalNickname
-            vc.taskScreen.nameUserLabel.text = newNickname
-            vc.taskScreen.imageUser.image = newPhotoProfile
-            
-            if let newPhotoProfile = configScreen.userPhoto.image,
-               let imageData = newPhotoProfile.jpegData(compressionQuality: 0.8) {
-                UserDefaults.standard.set(imageData, forKey: "profileImageView")
-                UserDefaults.standard.synchronize()
-            }
-            
-            UserDefaults.standard.set(finalNickname, forKey: "nickname")
-            UserDefaults.standard.synchronize()
-            
-            navigationController?.popViewController(animated: true)
-        }
-    }
-    
-    func didTapEditPhoto() {
-        self.loadPhoto(for: configScreen.userPhoto)
     }
     
     func tapLogoutButton() {
@@ -181,6 +186,56 @@ extension ConfigViewController: tapButtonConfigDelete {
             }
         } catch let error {
             print("Erro ao deslogar: \(error.localizedDescription)")
+        }
+    }
+}
+
+
+extension ConfigViewController: tapButtonConfigDelete {
+    func didTapEditPhoto() {
+        self.loadPhoto(for: configScreen.userPhoto)
+    }
+}
+
+extension ConfigViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return configs.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ConfigCell.identifier, for: indexPath) as? ConfigCell else {
+            return UITableViewCell()
+        }
+        let config = configs[indexPath.row]
+        cell.configure(with: config)
+        cell.backgroundColor = .secondarySystemGroupedBackground
+        
+        return cell
+    }
+}
+
+extension ConfigViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? ConfigCell {
+            let config = configs[indexPath.row]
+            
+            switch config.action {
+            case .editNickname:
+                let editVC = EditNicknameViewController()
+                editVC.tasksVC = self.taskController
+                navigationController?.pushViewController(editVC, animated: true)
+            case .changePassword:
+                navigationController?.pushViewController(ChangePasswordViewController(), animated: true)
+            case .openNotifications:
+                navigationController?.pushViewController(NotificationsViewController(), animated: true)
+            case .sendFeedback:
+                navigationController?.pushViewController(FeedbackViewController(), animated: true)
+            case .showAbout:
+                navigationController?.pushViewController(AboutViewController(), animated: true)
+            case .logout:
+                tapLogoutButton()
+            }
         }
     }
 }

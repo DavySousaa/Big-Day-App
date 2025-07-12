@@ -15,9 +15,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         if Auth.auth().currentUser != nil {
-            window.rootViewController = UINavigationController(rootViewController: TasksViewController())
+            window.rootViewController = MainTabBarController()
            } else {
-               window.rootViewController = UINavigationController(rootViewController: FirstScreenViewController())
+               let firstVC = FirstScreenViewController()
+               window.rootViewController = UINavigationController(rootViewController: firstVC)
            }
         self.window = window
         window.makeKeyAndVisible()
