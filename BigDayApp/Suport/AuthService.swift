@@ -44,6 +44,7 @@ final class AuthService {
             }
         }
     }
+
     
     func fetchCurrentUser(completion: @escaping (Result<UserModel, Error>) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {

@@ -20,6 +20,15 @@ class EditNicknameViewController: UIViewController {
         editNickName.delegate = self
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     private func setupNavgatioBar() {
         navigationController?.navigationBar.tintColor = .label
         navigationItem.title = "Alterar apelido"

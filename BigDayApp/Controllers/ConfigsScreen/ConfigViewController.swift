@@ -166,9 +166,15 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
         navigationItem.leftBarButtonItems = [spacer, logoItem]
     }
     
-    private func showAlert(message: String) {
-        let alert = UIAlertController(title: "Atenção", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default))
+    private func showAlertConfirmation() {
+        let alert = UIAlertController(title: "Tem Certeza?", message: "Você realmente deseja sair da sua conta?", preferredStyle: .alert)
+        let cancelButton = UIAlertAction(title: "Cancelar", style: .cancel)
+        let confirmButton = UIAlertAction(title: "Sim", style: .destructive) { _ in
+            self.tapLogoutButton()
+        }
+        
+        alert.addAction(cancelButton)
+        alert.addAction(confirmButton)
         present(alert, animated: true)
     }
     
@@ -234,7 +240,7 @@ extension ConfigViewController: UITableViewDelegate {
             case .showAbout:
                 navigationController?.pushViewController(AboutViewController(), animated: true)
             case .logout:
-                tapLogoutButton()
+                showAlertConfirmation()
             }
         }
     }

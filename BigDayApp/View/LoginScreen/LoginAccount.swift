@@ -3,6 +3,7 @@ import Foundation
 
 protocol LoginAccountScreenDelegate: AnyObject {
     func didTapLogin()
+    func didTapResetButton()
 }
 
 class LoginAccount: UIView {
@@ -119,6 +120,22 @@ class LoginAccount: UIView {
         sender.setImage(UIImage(systemName: imageName), for: .normal)
     }
     
+    public lazy var forgotPassWord: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .clear
+        button.setTitle("Esqueceu a senha?", for: .normal)
+        button.setTitleColor(ColorSuport.greenApp, for: .normal)
+        button.titleLabel?.font = UIFont(name: "Montserrat-Regular", size: 16)
+        button.titleLabel?.textAlignment = .left
+        button.addTarget(self, action: #selector(didTapButtonReset), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    @objc func didTapButtonReset() {
+        delegate?.didTapResetButton()
+    }
+    
     private lazy var stackViewLogin: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [emailTextField, passwordTextField])
         stack.spacing = 15
@@ -145,6 +162,7 @@ extension LoginAccount: SetupLayout {
         addSubview(textUp)
         addSubview(loginButton)
         addSubview(stackViewLogin)
+        addSubview(forgotPassWord)
     }
     
     func setupConstraints() {
@@ -166,6 +184,10 @@ extension LoginAccount: SetupLayout {
             stackViewLogin.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -35),
             stackViewLogin.heightAnchor.constraint(equalToConstant: 109),
             stackViewLogin.topAnchor.constraint(equalTo: textUp.bottomAnchor, constant: 30),
+            
+            forgotPassWord.centerXAnchor.constraint(equalTo: centerXAnchor),
+            forgotPassWord.topAnchor.constraint(equalTo: stackViewLogin.bottomAnchor, constant: 10),
+            forgotPassWord.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 35),
         ])
     }
     

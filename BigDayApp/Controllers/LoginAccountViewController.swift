@@ -9,6 +9,12 @@ import UIKit
 
 class LoginAccountViewController: UIViewController, UITextFieldDelegate, LoginAccountScreenDelegate {
     
+    func didTapResetButton() {
+        let vc = ForgotPasswordViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
     var loginAccount = LoginAccount()
     var viewModel = LoginAccountViewModel()
     
@@ -18,6 +24,9 @@ class LoginAccountViewController: UIViewController, UITextFieldDelegate, LoginAc
         loginAccount.delegate = self
         view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationController?.navigationBar.tintColor = .label
+        navigationController?.navigationBar.tintColor = .label
+        
+        navigationItem.backButtonTitle = "Voltar"
         
         loginAccount.emailTextField.delegate = self
         loginAccount.passwordTextField.delegate = self

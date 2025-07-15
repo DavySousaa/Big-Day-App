@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import UserNotifications
 
 class TasksViewController: UIViewController, UITextFieldDelegate {
     
@@ -43,6 +44,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         setupNavgatioBar()
         updateNickNamePhotoUser()
         updateNickName()
+        showNotificationPermition()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -81,6 +83,36 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
             sceneDelegate.window?.rootViewController = navController
         }
     }
+    
+    func showNotificationPermition() {
+        let aceptedNotifications = UserDefaults.standard.bool(forKey: "aceptedNotifications")
+        guard !aceptedNotifications else { return }
+        
+        let alert = UIAlertController(title: "Ativar notificações?", message: "Com as notificações ativadas, o Big Day te ajuda a manter o ritmo e a motivação. Tudo no tempo certo. ⏰✨", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Agora não", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Ativar", style: .default) { _ in
+            self.pedirPermissaoNotificacao()
+            UserDefaults.standard.set(true, forKey: "aceptedNotifications")
+        })
+        present(alert, animated: true)
+    }
+    
+    func pedirPermissaoNotificacao() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            DispatchQueue.main.async {
+                if granted {
+                    print("✅ Permissão concedida")
+                } else {
+                    print("❌ Usuário recusou")
+                }
+                
+                if let error = error {
+                    print("Erro: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
     
     private func setupNavgatioBar() {
         navigationController?.navigationBar.prefersLargeTitles = false

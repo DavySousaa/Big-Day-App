@@ -16,11 +16,48 @@ class NotificationsViewController: UIViewController {
         setupNavgatioBar()
         self.view = notifications
         view.backgroundColor = UIColor(named: "PrimaryColor")
-        
+        notifications.delegate = self
     }
     
     private func setupNavgatioBar() {
         navigationController?.navigationBar.tintColor = .label
         navigationItem.title = "Notificações"
+    }
+    
+    func mostrarAlertaIrParaAjustes() {
+        let alert = UIAlertController(
+            title: "Notificações desativadas",
+            message: "Se quiser desativar completamente, vá até os Ajustes do sistema.",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Cancelar", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Abrir Ajustes", style: .default, handler: { _ in
+            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsURL)
+            }
+        }))
+        
+        self.present(alert, animated: true)
+    }
+}
+
+extension NotificationsViewController: NotificationDelete {
+    func switchOff(_ sender: UISwitch) {
+        if sender.isOn {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                DispatchQueue.main.async {
+                    if granted {
+                        print("✅ Notificações ativadas")
+                    } else {
+                        print("❌ Usuário recusou")
+                        sender.setOn(false, animated: true)
+                        self.mostrarAlertaIrParaAjustes()
+                    }
+                }
+            }
+        } else {
+            mostrarAlertaIrParaAjustes()
+        }
     }
 }

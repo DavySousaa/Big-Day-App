@@ -19,6 +19,11 @@ class NewTasksViewController: UIViewController {
         view.endEditing(true)
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     private func createTask() {
         var list:[Task] = TaskSuportHelper().getTask()
         let selectedTime = getTime()
@@ -57,11 +62,6 @@ class NewTasksViewController: UIViewController {
         let alert = UIAlertController(title: "Atenção", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default))
         present(alert, animated: true)
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
 }
 
