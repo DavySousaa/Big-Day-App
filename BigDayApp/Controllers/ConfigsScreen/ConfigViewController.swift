@@ -17,7 +17,6 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     var taskController: TasksViewController?
     var configs: [Config] = [
         Config(title: "Editar apelido", iconName: "pencil", action: .editNickname),
-        Config(title: "Alterar senha", iconName: "lock.rotation", action: .changePassword),
         Config(title: "Notificações", iconName: "bell.badge", action: .openNotifications),
         Config(title: "Feedback", iconName: "bubble.left.and.bubble.right", action: .sendFeedback),
         Config(title: "Sobre o app", iconName: "info.circle", action: .showAbout),
@@ -194,6 +193,13 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
             print("Erro ao deslogar: \(error.localizedDescription)")
         }
     }
+    
+    func didTapFeedback() {
+        if let url = URL(string: "https://apps.apple.com/app/id497799835?action=write-review") {
+            UIApplication.shared.open(url)
+        }
+    }
+    
 }
 
 
@@ -231,14 +237,12 @@ extension ConfigViewController: UITableViewDelegate {
                 let editVC = EditNicknameViewController()
                 editVC.tasksVC = self.taskController
                 navigationController?.pushViewController(editVC, animated: true)
-            case .changePassword:
-                navigationController?.pushViewController(ChangePasswordViewController(), animated: true)
             case .openNotifications:
                 navigationController?.pushViewController(NotificationsViewController(), animated: true)
             case .sendFeedback:
-                navigationController?.pushViewController(FeedbackViewController(), animated: true)
+                didTapFeedback()
             case .showAbout:
-                navigationController?.pushViewController(AboutViewController(), animated: true)
+                navigationController?.pushViewController(AboutAppViewController(), animated: true)
             case .logout:
                 showAlertConfirmation()
             }

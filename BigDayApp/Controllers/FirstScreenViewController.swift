@@ -32,5 +32,9 @@ class FirstScreenViewController: UIViewController,FirstScreenDelegate {
             ? UIImage(named: "logo2")
             : UIImage(named: "logo1")
         firstScreen.imageLogo.image = logoImage
+        
+        let tarefaImage = UIImage(named: "imageView1")!
+        let compartilharImage = UIImage(named: "imageView2")!
+        firstScreen.setImages([tarefaImage, compartilharImage])
     }
 }

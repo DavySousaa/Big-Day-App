@@ -160,28 +160,12 @@ extension ShareTasksViewController: UITableViewDelegate {
 }
 
 extension ShareTasksViewController: TapButtonShareDelete {
-    func didTapStoryBtn() {
-        guard let image = createShareImage(),
-              let urlScheme = URL(string: "instagram-stories://share"),
-              UIApplication.shared.canOpenURL(urlScheme) else {
-            print("Instagram não disponível.")
-            return
-        }
+    func didTapWhiteColor() {
         
-        let pasteboardItems: [String: Any] = [
-            "com.instagram.sharedSticker.backgroundImage": image
-        ]
-        let pasteboardOptions = [
-            UIPasteboard.OptionsKey.expirationDate: Date().addingTimeInterval(300)
-        ]
-        
-        UIPasteboard.general.setItems([pasteboardItems], options: pasteboardOptions)
-        UIApplication.shared.open(urlScheme, options: [:], completionHandler: nil)
     }
     
-    func didTapSaveBtn() {
-        guard let image = createShareImage() else { return }
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+    func didTapBlackColor() {
+        <#code#>
     }
     
     func didTapCopyBtn() {

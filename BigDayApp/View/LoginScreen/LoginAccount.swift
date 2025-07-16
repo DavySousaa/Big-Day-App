@@ -187,7 +187,7 @@ extension LoginAccount: SetupLayout {
             
             forgotPassWord.centerXAnchor.constraint(equalTo: centerXAnchor),
             forgotPassWord.topAnchor.constraint(equalTo: stackViewLogin.bottomAnchor, constant: 10),
-            forgotPassWord.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 35),
+            
         ])
     }
     

@@ -7,9 +7,9 @@
 import UIKit
 
 protocol TapButtonShareDelete: AnyObject {
-    func didTapStoryBtn()
-    func didTapSaveBtn()
     func didTapCopyBtn()
+    func didTapWhiteColor()
+    func didTapBlackColor()
 }
 
 class ShareScreen: UIView {
@@ -26,42 +26,6 @@ class ShareScreen: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    public lazy var storyButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Story", for: .normal)
-        button.setImage(UIImage(systemName: "camera"), for: .normal)
-        button.tintColor = ColorSuport.blackApp
-        button.semanticContentAttribute = .forceLeftToRight
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 0)
-        button.backgroundColor = ColorSuport.greenApp
-        button.clipsToBounds = true
-        button.layer.cornerRadius = 45/2
-        button.addTarget(self, action: #selector(didTapStoryButton), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    @objc private func didTapStoryButton() {
-        delegate?.didTapStoryBtn()
-    }
-    
-    public lazy var savePhotoButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Salvar", for: .normal)
-        button.setImage(UIImage(systemName: "photo"), for: .normal)
-        button.tintColor = ColorSuport.blackApp
-        button.semanticContentAttribute = .forceLeftToRight
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 0)
-        button.backgroundColor = ColorSuport.greenApp
-        button.clipsToBounds = true
-        button.layer.cornerRadius = 45/2
-        button.addTarget(self, action: #selector(didTapSaveButton), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    @objc private func didTapSaveButton() {
-        delegate?.didTapSaveBtn()
-    }
     
     public lazy var copyPhotoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -81,11 +45,40 @@ class ShareScreen: UIView {
         delegate?.didTapCopyBtn()
     }
     
+    private lazy var colorWhiteButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .white
+        button.layer.borderWidth = 1
+        button.layer.borderColor = ColorSuport.greenApp.cgColor
+        button.layer.cornerRadius = 45/2
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(didTapColorWhiteBtn), for: .touchUpInside)
+        return button
+    }()
+    @objc func didTapColorWhiteBtn() {
+        delegate?.didTapWhiteColor()
+    }
+    
+    private lazy var colorBlackButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .black
+        button.layer.borderWidth = 1
+        button.layer.borderColor = ColorSuport.greenApp.cgColor
+        button.layer.cornerRadius = 45/2
+        button.addTarget(self, action: #selector(didTapColorBlackBtn), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    @objc func didTapColorBlackBtn() {
+        delegate?.didTapBlackColor()
+    }
+    
     private lazy var buttonsStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [storyButton,savePhotoButton,copyPhotoButton])
+        let stack = UIStackView(arrangedSubviews: [copyPhotoButton, colorWhiteButton, colorBlackButton])
         stack.axis = .horizontal
-        stack.spacing = 8
-        stack.distribution = .fillEqually
+        stack.spacing = 5
+        stack.distribution = .equalCentering
+        stack.alignment = .center
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -113,7 +106,7 @@ class ShareScreen: UIView {
         let label = UILabel()
         label.text = "Big Day"
         label.textColor = ColorSuport.greenApp
-        label.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
+        label.font = UIFont(name: "Montserrat-ExtraBold", size: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -121,7 +114,7 @@ class ShareScreen: UIView {
     public lazy var nameUserLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
-        label.font = UIFont(name: "Montserrat-Regular", size: 20)
+        label.font = UIFont(name: "Montserrat-Regular", size: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -129,7 +122,7 @@ class ShareScreen: UIView {
     
     private lazy var stackViewLogin: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [labelUpUserName, nameUserLabel])
-        stack.spacing = 5
+        stack.spacing = 3
         stack.alignment = .leading
         stack.axis = .vertical
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -139,9 +132,9 @@ class ShareScreen: UIView {
     public lazy var imageUser: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "person.crop.circle"))
         image.tintColor = ColorSuport.greenApp
-        image.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        image.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        image.layer.cornerRadius = 60/2
+        image.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        image.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        image.layer.cornerRadius = 50/2
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFill
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -160,7 +153,7 @@ class ShareScreen: UIView {
 
     private lazy var dayLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Montserrat-Regular", size: 14)
+        label.font = UIFont(name: "Montserrat-Regular", size: 12)
         label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -232,6 +225,14 @@ extension ShareScreen: SetupLayout {
             buttonsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             buttonsStackView.heightAnchor.constraint(equalToConstant: 45),
             
+            copyPhotoButton.widthAnchor.constraint(equalToConstant: 300),
+            copyPhotoButton.heightAnchor.constraint(equalToConstant: 45),
+            
+            colorWhiteButton.widthAnchor.constraint(equalToConstant: 45),
+            colorWhiteButton.heightAnchor.constraint(equalToConstant: 45),
+            colorBlackButton.widthAnchor.constraint(equalToConstant: 45),
+            colorBlackButton.heightAnchor.constraint(equalToConstant: 45),
+                    
             profileUserStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
             profileUserStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
             

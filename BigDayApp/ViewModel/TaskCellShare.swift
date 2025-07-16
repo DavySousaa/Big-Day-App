@@ -14,7 +14,7 @@ class TaskCellShare: UITableViewCell {
     public let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
-        label.font = UIFont(name: "Montserrat-Regular", size: 16)
+        label.font = UIFont(name: "Montserrat-Regular", size: 15)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -22,7 +22,7 @@ class TaskCellShare: UITableViewCell {
     
     public let hourLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Montserrat-Regular", size: 16)
+        label.font = UIFont(name: "Montserrat-Regular", size: 15)
         label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -63,8 +63,8 @@ class TaskCellShare: UITableViewCell {
         NSLayoutConstraint.activate([
             circleImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 20),
             circleImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            circleImage.widthAnchor.constraint(equalToConstant: 24),
-            circleImage.heightAnchor.constraint(equalToConstant: 24),
+            circleImage.widthAnchor.constraint(equalToConstant: 22),
+            circleImage.heightAnchor.constraint(equalToConstant: 22),
             
             titleLabel.leadingAnchor.constraint(equalTo: circleImage.trailingAnchor, constant: 8),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),

@@ -21,14 +21,14 @@ class ForgotPassWord: UIView {
         text.numberOfLines = 0
         text.textAlignment = .center
         
-        let fullText = "Digite seu e-mail\npara o envio do\nlink de redefinição"
+        let fullText = "Digite seu e-mail\npara o envio do\nlink de redefinição."
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
             .font: UIFont(name: "Montserrat-ExtraBold", size: 27)!,
             .foregroundColor: UIColor.label
         ])
         
         let textColor = ColorSuport.greenApp
-        let range = (fullText as NSString).range(of: "link de redefinição.")
+        let range = (fullText as NSString).range(of: "para o envio do\nlink de redefinição.")
         attributedString.addAttribute(.foregroundColor, value: textColor, range: range)
         
         text.attributedText = attributedString

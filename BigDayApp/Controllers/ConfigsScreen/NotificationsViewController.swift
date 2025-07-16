@@ -26,12 +26,14 @@ class NotificationsViewController: UIViewController {
     
     func mostrarAlertaIrParaAjustes() {
         let alert = UIAlertController(
-            title: "Notificações desativadas",
+            title: "Tem certeza?",
             message: "Se quiser desativar completamente, vá até os Ajustes do sistema.",
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: "Cancelar", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Cancelar", style: .cancel, handler: { _ in
+            self.notifications.switchPicker.isOn = true
+        }))
         alert.addAction(UIAlertAction(title: "Abrir Ajustes", style: .default, handler: { _ in
             if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(settingsURL)
