@@ -30,7 +30,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         taskScreen.tasksTableView.dataSource = self
                 
         updateNickNamePhotoUser()
-        setupNavgatioBar()
+        navigationSetupWithLogo(title: "Tarefas")
         updateNickName()
     }
     
@@ -41,7 +41,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
             taskScreen.imageUser.image = savedImage
         }
         loadTasks()
-        setupNavgatioBar()
+        navigationSetupWithLogo(title: "Tarefas")
         updateNickNamePhotoUser()
         updateNickName()
         showNotificationPermition()
@@ -50,7 +50,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
-            setupNavgatioBar()
+            navigationSetupWithLogo(title: "Tarefas")
         }
     }
     
@@ -111,32 +111,6 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
                 }
             }
         }
-    }
-    
-    
-    private func setupNavgatioBar() {
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.tintColor = .label
-        navigationItem.title = "Tarefas"
-        
-        let logoImage = traitCollection.userInterfaceStyle == .dark
-            ? UIImage(named: "logo2")
-            : UIImage(named: "logo1")
-        
-        let imageView = UIImageView(image: logoImage)
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        
-        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
-        imageView.frame = logoContainer.bounds
-        logoContainer.addSubview(imageView)
-        
-        let logoItem = UIBarButtonItem(customView: logoContainer)
-        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        spacer.width = 14
-        
-        navigationItem.leftBarButtonItems = [spacer, logoItem]
     }
     
     func editButton() {

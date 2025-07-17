@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-class ForgotPasswordViewController: UIViewController, ForgotPasswordDelegate {
+class ForgotPasswordViewController: UIViewController, ForgotPasswordDelegate, UITextFieldDelegate {
     
     func didTapSend() {
         guard let email = forgotPassword.emailTextField.text, !email.isEmpty else {
@@ -32,7 +32,8 @@ class ForgotPasswordViewController: UIViewController, ForgotPasswordDelegate {
         self.view = forgotPassword
         view.backgroundColor = UIColor(named: "PrimaryColor")
         forgotPassword.delegate = self
-        setupNavgatioBar()
+        forgotPassword.emailTextField.delegate = self
+        navigationSetup(title: "Redefinir senha")
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -42,11 +43,6 @@ class ForgotPasswordViewController: UIViewController, ForgotPasswordDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
-    }
-    
-    private func setupNavgatioBar() {
-        navigationController?.navigationBar.tintColor = .label
-        navigationItem.title = "Redefinir senha"
     }
     
     func showAlert(title: String, message: String) {

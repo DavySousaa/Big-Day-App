@@ -13,15 +13,10 @@ class NotificationsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavgatioBar()
+        navigationSetup(title: "Notificações")
         self.view = notifications
         view.backgroundColor = UIColor(named: "PrimaryColor")
         notifications.delegate = self
-    }
-    
-    private func setupNavgatioBar() {
-        navigationController?.navigationBar.tintColor = .label
-        navigationItem.title = "Notificações"
     }
     
     func mostrarAlertaIrParaAjustes() {

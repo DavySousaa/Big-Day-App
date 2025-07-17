@@ -15,28 +15,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo3" translatesAutoresizingMaskIntoConstraints="NO" id="pc7-dc-G4Q">
-                                <rect key="frame" x="96.666666666666686" y="391" width="200" height="70"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="0Ma-E4-eyD"/>
-                                    <constraint firstAttribute="height" constant="70" id="cYK-I6-AaU"/>
-                                </constraints>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo3" translatesAutoresizingMaskIntoConstraints="NO" id="tBi-FY-1pJ">
+                                <rect key="frame" x="104" y="377" width="185" height="98"/>
                             </imageView>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" red="0.1742278337" green="0.83160084489999997" blue="0.3821316957" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="pc7-dc-G4Q" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="KKf-ai-b89"/>
-                            <constraint firstItem="pc7-dc-G4Q" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="aSS-xW-34G"/>
+                            <constraint firstItem="tBi-FY-1pJ" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="259" id="0Ri-oG-yHm"/>
+                            <constraint firstItem="tBi-FY-1pJ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="6Kg-Uz-jfl"/>
+                            <constraint firstItem="tBi-FY-1pJ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Ppy-sJ-3WR"/>
+                            <constraint firstItem="tBi-FY-1pJ" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="104" id="iIo-rv-RmF"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <outlet property="imageLogo" destination="pc7-dc-G4Q" id="Qng-wl-PnD"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52.671755725190835" y="374.64788732394368"/>
         </scene>
     </scenes>
     <resources>

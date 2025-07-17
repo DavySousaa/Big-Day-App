@@ -12,6 +12,7 @@ class ShareTasksViewController: UIViewController {
     var nickname = ""
     var tasks: [Task] = []
     var selectedTaskID: UUID?
+    var currentColor: UIColor = .white
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +27,7 @@ class ShareTasksViewController: UIViewController {
         shareScreen.tasksTableView.delegate = self
         shareScreen.tasksTableView.dataSource = self
         
-        setupNavgatioBar()
+        navigationSetupWithLogo(title: "Compartilhar tarefas")
         updateNickNamePhotoUser()
         updateNickName()
     }
@@ -45,7 +46,7 @@ class ShareTasksViewController: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
-            setupNavgatioBar()
+            navigationSetupWithLogo(title: "Compartilhar tarefas")
         }
     }
     
@@ -60,29 +61,6 @@ class ShareTasksViewController: UIViewController {
     func updateNickName() {
         nickname = UserDefaults.standard.string(forKey: "nickname") ?? "Usuário"
         shareScreen.nameUserLabel.text = nickname
-    }
-    
-    
-    private func setupNavgatioBar() {
-        navigationController?.navigationBar.tintColor = .label
-        navigationItem.title = "Compartilhar Tarefas"
-        let logoImage = traitCollection.userInterfaceStyle == .dark
-            ? UIImage(named: "logo2")
-            : UIImage(named: "logo1")
-        
-        let imageView = UIImageView(image: logoImage)
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        
-        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
-        imageView.frame = logoContainer.bounds
-        logoContainer.addSubview(imageView)
-        
-        let logoItem = UIBarButtonItem(customView: logoContainer)
-        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        spacer.width = 14
-        
-        navigationItem.leftBarButtonItems = [spacer, logoItem]
     }
     
     func loadTasks() {
@@ -102,13 +80,32 @@ class ShareTasksViewController: UIViewController {
     }
     
     func createShareImage() -> UIImage? {
-        let backgroundImage = shareScreen.backgroundContainerView
-        backgroundImage.isHidden = true
+        // Atualiza o layout da tabela
+        shareScreen.tasksTableView.layoutIfNeeded()
+
+        // Captura a altura real da tabela
+        let height = shareScreen.tasksTableView.contentSize.height
+
+        // Aplica o constraint com a altura correta
+        let heightConstraint = shareScreen.tasksTableView.heightAnchor.constraint(equalToConstant: height)
+        heightConstraint.isActive = true
+
+        // Oculta fundo temporariamente
+        
+
+        // Atualiza o layout todo antes do print
         shareScreen.containerView.layoutIfNeeded()
+
+        // Gera imagem
         let image = renderViewAsImage(view: shareScreen.containerView)
-        backgroundImage.isHidden = false
+
+        // Restaura tudo
+        heightConstraint.isActive = false
+        
+
         return image
     }
+
 }
 
 extension ShareTasksViewController: UITableViewDataSource {
@@ -122,6 +119,7 @@ extension ShareTasksViewController: UITableViewDataSource {
         }
         let task = tasks[indexPath.row]
         cell.configure(with: task)
+        cell.hourLabel.textColor = currentColor
         
         if task.isCompleted {
             cell.circleImage.image = UIImage(systemName: "checkmark.circle.fill")
@@ -129,7 +127,7 @@ extension ShareTasksViewController: UITableViewDataSource {
                 string: task.title,
                 attributes: [
                     .strikethroughStyle: NSUnderlineStyle.single.rawValue,
-                    .foregroundColor: UIColor.label
+                    .foregroundColor: currentColor
                 ]
             )
             cell.titleLabel.attributedText = attributedText
@@ -139,7 +137,7 @@ extension ShareTasksViewController: UITableViewDataSource {
                 string: task.title,
                 attributes: [
                     .strikethroughStyle: 0,
-                    .foregroundColor: UIColor.label
+                    .foregroundColor: currentColor
                 ]
             )
             cell.titleLabel.attributedText = attributedText
@@ -161,11 +159,17 @@ extension ShareTasksViewController: UITableViewDelegate {
 
 extension ShareTasksViewController: TapButtonShareDelete {
     func didTapWhiteColor() {
-        
+        currentColor = .white
+        shareScreen.nameUserLabel.textColor = .white
+        shareScreen.dayLabel.textColor = .white
+        shareScreen.tasksTableView.reloadData()
     }
     
     func didTapBlackColor() {
-        <#code#>
+        currentColor = .black
+        shareScreen.nameUserLabel.textColor = .black
+        shareScreen.dayLabel.textColor = .black
+        shareScreen.tasksTableView.reloadData()
     }
     
     func didTapCopyBtn() {

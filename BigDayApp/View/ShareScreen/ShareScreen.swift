@@ -18,11 +18,11 @@ class ShareScreen: UIView {
     
     private lazy var textUp: UILabel = {
         let label = UILabel()
-        label.text = "Salve ou copie um screenshot da sua lista\nde tarefa e compartilhe em suas redes sociais."
+        label.text = "Copie um screenshot da sua lista de tarefaS!"
         label.font = UIFont(name: "Montserrat-Regular", size: 12) ?? UIFont.systemFont(ofSize: 12)
         label.textColor = .label
         label.textAlignment = .center
-        label.numberOfLines = 2
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -45,7 +45,7 @@ class ShareScreen: UIView {
         delegate?.didTapCopyBtn()
     }
     
-    private lazy var colorWhiteButton: UIButton = {
+    public lazy var colorWhiteButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
         button.layer.borderWidth = 1
@@ -59,7 +59,7 @@ class ShareScreen: UIView {
         delegate?.didTapWhiteColor()
     }
     
-    private lazy var colorBlackButton: UIButton = {
+    public lazy var colorBlackButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .black
         button.layer.borderWidth = 1
@@ -86,19 +86,20 @@ class ShareScreen: UIView {
     public lazy var containerView: UIView = {
         let view = UIView()
         view.clipsToBounds = true
-        view.backgroundColor = .clear
-        view.layer.cornerRadius = 30
+        view.layer.cornerRadius = 20
+        view.backgroundColor = .secondarySystemBackground
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    public lazy var backgroundContainerView: UIImageView = {
-        let image = UIImageView(image: UIImage(named: "ClearBackground"))
-        image.contentMode = .scaleToFill
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
+    private lazy var stackViewItems: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [containerView, textUp, buttonsStackView])
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.spacing = 10
+        return stack
     }()
-    
+
     
     // Tela de compartilhar
     
@@ -151,7 +152,7 @@ class ShareScreen: UIView {
         return stack
     }()
 
-    private lazy var dayLabel: UILabel = {
+    public lazy var dayLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Montserrat-Regular", size: 12)
         label.textColor = .label
@@ -178,6 +179,11 @@ class ShareScreen: UIView {
         table.backgroundColor = .clear
         return table
     }()
+    func adjustTableViewHeight() {
+        tasksTableView.layoutIfNeeded()
+        let height = tasksTableView.contentSize.height
+        tasksTableView.heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
     
     init() {
         super.init(frame: .zero)
@@ -194,8 +200,7 @@ extension ShareScreen: SetupLayout {
     func addSubViews() {
         addSubview(textUp)
         addSubview(buttonsStackView)
-        addSubview(containerView)
-        containerView.addSubview(backgroundContainerView)
+        addSubview(stackViewItems)
         containerView.addSubview(profileUserStackView)
         containerView.addSubview(dayLabel)
         containerView.addSubview(tasksTableView)
@@ -203,27 +208,16 @@ extension ShareScreen: SetupLayout {
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            textUp.centerXAnchor.constraint(equalTo: centerXAnchor),
-            textUp.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            
-            backgroundContainerView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            backgroundContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            backgroundContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            backgroundContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            
-            containerView.topAnchor.constraint(equalTo: textUp.bottomAnchor, constant: 10),
-            containerView.bottomAnchor.constraint(equalTo: buttonsStackView.topAnchor, constant: -10),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            containerView.heightAnchor.constraint(equalToConstant: 500),
             
-            buttonsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            buttonsStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            buttonsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            buttonsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            buttonsStackView.heightAnchor.constraint(equalToConstant: 45),
+            stackViewItems.centerXAnchor.constraint(equalTo: centerXAnchor),
+            stackViewItems.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor,constant: 10),
+            stackViewItems.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor,constant: -10),
+            stackViewItems.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            stackViewItems.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
             copyPhotoButton.widthAnchor.constraint(equalToConstant: 300),
             copyPhotoButton.heightAnchor.constraint(equalToConstant: 45),
@@ -247,9 +241,7 @@ extension ShareScreen: SetupLayout {
     }
     
     func setupStyle() {
-        if let bgImage = UIImage(named: "ClearBackground")?.cgImage {
-            containerView.layer.contentsGravity = .resizeAspectFill
-        }
+        
     }
     
     

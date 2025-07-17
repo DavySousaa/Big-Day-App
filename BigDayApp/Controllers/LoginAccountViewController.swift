@@ -31,15 +31,21 @@ class LoginAccountViewController: UIViewController, UITextFieldDelegate, LoginAc
         loginAccount.emailTextField.delegate = self
         loginAccount.passwordTextField.delegate = self
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-        
         let logoImage = traitCollection.userInterfaceStyle == .dark
             ? UIImage(named: "logo2")
             : UIImage(named: "logo1")
         loginAccount.imageLogo.image = logoImage
         
         bindViewModel()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     private func bindViewModel() {
@@ -68,11 +74,6 @@ class LoginAccountViewController: UIViewController, UITextFieldDelegate, LoginAc
     
     @objc private func dismissKeyboard() {
         view.endEditing(true)
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
     
     private func showAlert(title: String, message: String) {

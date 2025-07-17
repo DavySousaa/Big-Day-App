@@ -20,7 +20,7 @@ class TaskCellShare: UITableViewCell {
         return label
     }()
     
-    public let hourLabel: UILabel = {
+    public var hourLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Montserrat-Regular", size: 15)
         label.textColor = .label

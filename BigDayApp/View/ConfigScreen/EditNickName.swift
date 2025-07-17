@@ -13,7 +13,8 @@ protocol tapButtonNickNameDelete: AnyObject {
 class EditNickName: UIView {
     
     var delegate: tapButtonNickNameDelete?
-    
+    public var saveButtonBottomConstraint: NSLayoutConstraint!
+
     public lazy var nickNameTextField: UITextField = {
         let textField = UITextField()
         textField.layer.borderWidth = 1
@@ -68,6 +69,8 @@ extension EditNickName: SetupLayout {
     }
     
     func setupConstraints() {
+        saveButtonBottomConstraint = saveButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        saveButtonBottomConstraint.isActive = true
         
         NSLayoutConstraint.activate([
             nickNameTextField.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -75,8 +78,7 @@ extension EditNickName: SetupLayout {
             nickNameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
             nickNameTextField.heightAnchor.constraint(equalToConstant: 45),
             nickNameTextField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
-            
-            saveButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
+        
             saveButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50),
             saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -50),
             saveButton.heightAnchor.constraint(equalToConstant: 41),

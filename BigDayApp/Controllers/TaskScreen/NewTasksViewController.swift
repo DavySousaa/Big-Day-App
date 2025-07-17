@@ -1,7 +1,7 @@
 
 import UIKit
 
-class NewTasksViewController: UIViewController {
+class NewTasksViewController: UIViewController, UITextFieldDelegate {
     
     var newTask = NewTask()
     var taskController: TasksViewController?
@@ -13,6 +13,7 @@ class NewTasksViewController: UIViewController {
         view.backgroundColor = .clear
         navigationItem.backButtonTitle = ""
         newTask.delegate = self
+        newTask.newTaskTextField.delegate = self
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -65,7 +66,7 @@ class NewTasksViewController: UIViewController {
     }
 }
 
-extension NewTasksViewController: UITextFieldDelegate, NewTaskDelegate {
+extension NewTasksViewController: NewTaskDelegate {
     func tapCancelButton() {
         dismiss(animated: true, completion: nil)
     }

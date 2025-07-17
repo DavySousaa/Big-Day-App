@@ -12,7 +12,7 @@ protocol saveEditProcol: AnyObject {
     func saveEditBt(titleEdit: String, selectedTime: String)
 }
 
-class EditTaskViewController: UIViewController {
+class EditTaskViewController: UIViewController, UITextFieldDelegate {
     
     var editTask = EditTask()
     var taskController: TasksViewController?
@@ -25,9 +25,16 @@ class EditTaskViewController: UIViewController {
         view.backgroundColor = .clear
         navigationItem.backButtonTitle = ""
         editTask.delegate = self
+        editTask.newTaskTextField.delegate = self
     }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     private func getEditTask() {
@@ -63,14 +70,10 @@ class EditTaskViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Ok", style: .default))
         present(alert, animated: true)
     }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
+ 
 }
 
-extension EditTaskViewController: UITextFieldDelegate, EditTaskDelegate {
+extension EditTaskViewController: EditTaskDelegate {
     func tapCancelButton() {
         dismiss(animated: true, completion: nil)
     }

@@ -42,7 +42,8 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
 
         updateUserPhoto()
         placeholderOne()
-        setupNavgatioBar()
+        navigationSetupWithLogo(title: "Configurações")
+        navigationItem.backButtonTitle = "Voltar"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,7 +57,7 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
-            setupNavgatioBar()
+            navigationSetupWithLogo(title: "Configurações")
         }
     }
     
@@ -140,29 +141,6 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
         if let vc = self.navigationController?.viewControllers.first(where: { $0 is TasksViewController }) as? TaskScreen {
             createAccount.nickNameTextField.placeholder = vc.nameUserLabel.text
         }
-    }
-    
-    private func setupNavgatioBar() {
-        navigationController?.navigationBar.tintColor = .label
-        navigationItem.title = "Configurações"
-        navigationItem.backButtonTitle = "Voltar"
-        let logoImage = traitCollection.userInterfaceStyle == .dark
-            ? UIImage(named: "logo2")
-            : UIImage(named: "logo1")
-        
-        let imageView = UIImageView(image: logoImage)
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        
-        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
-        imageView.frame = logoContainer.bounds
-        logoContainer.addSubview(imageView)
-        
-        let logoItem = UIBarButtonItem(customView: logoContainer)
-        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        spacer.width = 14
-        
-        navigationItem.leftBarButtonItems = [spacer, logoItem]
     }
     
     private func showAlertConfirmation() {

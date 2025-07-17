@@ -23,15 +23,21 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate, Create
         createAccount.nickNameTextField.delegate = self
         createAccount.passwordTextField.delegate = self
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-        
         let logoImage = traitCollection.userInterfaceStyle == .dark
             ? UIImage(named: "logo2")
             : UIImage(named: "logo1")
         createAccount.imageLogo.image = logoImage
         
         bindViewModel()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     private func bindViewModel() {
@@ -57,15 +63,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate, Create
         viewModel.email = createAccount.emailTextField.text ?? ""
         viewModel.password = createAccount.passwordTextField.text ?? ""
         viewModel.register()
-    }
-    
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
     
     private func showAlert(title: String, message: String) {
