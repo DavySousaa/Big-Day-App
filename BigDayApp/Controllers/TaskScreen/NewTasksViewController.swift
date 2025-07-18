@@ -1,5 +1,6 @@
 
 import UIKit
+import UserNotifications
 
 class NewTasksViewController: UIViewController, UITextFieldDelegate {
     
@@ -38,6 +39,9 @@ class NewTasksViewController: UIViewController, UITextFieldDelegate {
         list.append(task)
         TaskSuportHelper().addTask(lista: list)
         
+        let title = newTask.newTaskTextField.text ?? "Nova tarefa"
+        NotificationManager.shared.scheduleTaskReminder(title: title, date: newTask.timePicker.date)
+
         self.tasks = list
         taskController?.tasks = self.tasks
         taskController?.taskScreen.tasksTableView.reloadData()

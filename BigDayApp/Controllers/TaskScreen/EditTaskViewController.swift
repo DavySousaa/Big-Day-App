@@ -48,6 +48,9 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
         }
         
         delegate.saveEditBt(titleEdit: editedNickName, selectedTime: selectedTime)
+        
+        NotificationManager.shared.scheduleTaskReminder(title: editedNickName, date: editTask.timePicker.date)
+        
         self.dismiss(animated: true)
     }
     

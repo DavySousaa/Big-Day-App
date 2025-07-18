@@ -32,6 +32,10 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
         updateNickName()
+        
+        let manager = NotificationManager()
+        manager.scheduleDailyMorningNotification()
+        manager.scheduleDailyNightNotification()
     }
     
     override func viewWillAppear(_ animated: Bool) {
