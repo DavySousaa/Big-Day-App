@@ -80,29 +80,11 @@ class ShareTasksViewController: UIViewController {
     }
     
     func createShareImage() -> UIImage? {
-        // Atualiza o layout da tabela
         shareScreen.tasksTableView.layoutIfNeeded()
-
-        // Captura a altura real da tabela
-        let height = shareScreen.tasksTableView.contentSize.height
-
-        // Aplica o constraint com a altura correta
-        let heightConstraint = shareScreen.tasksTableView.heightAnchor.constraint(equalToConstant: height)
-        heightConstraint.isActive = true
-
-        // Oculta fundo temporariamente
-        
-
-        // Atualiza o layout todo antes do print
+        shareScreen.containerView.backgroundColor = .clear
         shareScreen.containerView.layoutIfNeeded()
-
-        // Gera imagem
         let image = renderViewAsImage(view: shareScreen.containerView)
-
-        // Restaura tudo
-        heightConstraint.isActive = false
-        
-
+        shareScreen.containerView.backgroundColor = .secondarySystemBackground
         return image
     }
 

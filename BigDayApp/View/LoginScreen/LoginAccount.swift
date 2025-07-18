@@ -72,6 +72,8 @@ class LoginAccount: UIView {
         textField.font = UIFont(name: "Montserrat-Regular", size: 15)
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
+        textField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
+        textField.rightViewMode = .always
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -95,6 +97,8 @@ class LoginAccount: UIView {
         textField.font = UIFont(name: "Montserrat-Regular", size: 15)
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
+        textField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
+        textField.rightViewMode = .always
         textField.translatesAutoresizingMaskIntoConstraints = false
         
         let toggleButton = UIButton(type: .custom)

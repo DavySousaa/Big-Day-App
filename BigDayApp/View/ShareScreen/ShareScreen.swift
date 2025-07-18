@@ -18,7 +18,7 @@ class ShareScreen: UIView {
     
     private lazy var textUp: UILabel = {
         let label = UILabel()
-        label.text = "Copie um screenshot da sua lista de tarefaS!"
+        label.text = "Copie um screenshot da sua lista de tarefas!"
         label.font = UIFont(name: "Montserrat-Regular", size: 12) ?? UIFont.systemFont(ofSize: 12)
         label.textColor = .label
         label.textAlignment = .center
