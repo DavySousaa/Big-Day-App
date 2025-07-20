@@ -8,8 +8,18 @@
 import UIKit
 import TOCropViewController
 import FirebaseAuth
+import FirebaseStorage
+import FirebaseFirestore
 
-class ConfigViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, TOCropViewControllerDelegate {
+
+class ConfigViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, TOCropViewControllerDelegate, UserProfileUpdatable {
+    
+    var nameUserLabel: UILabel? {nil}
+    var imageUserView: UIImageView {configScreen.userPhoto}
+    var nicknameProperty: String? {
+        get { return nil }
+        set { }
+    }
     
     var editNickName = EditNickName()
     var configScreen = ConfigScreen()
@@ -40,7 +50,7 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
         configScreen.configTableView.dataSource = self
         configScreen.configTableView.isScrollEnabled = false
 
-        updateUserPhoto()
+        updateNickNamePhotoUser()
         placeholderOne()
         navigationSetupWithLogo(title: "Configurações")
         navigationItem.backButtonTitle = "Voltar"
@@ -48,6 +58,7 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     
     override func viewWillAppear(_ animated: Bool) {
         placeholderTwo()
+        updateNickNamePhotoUser()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -62,15 +73,6 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     //MARK - Funcions
-    
-    func updateUserPhoto() {
-        if let savedImageData = UserDefaults.standard.data(forKey: "profileImageView"),
-           let savedImage = UIImage(data: savedImageData) {
-            configScreen.userPhoto.image = savedImage
-            configScreen.userPhoto.layer.cornerRadius = 100 / 2
-            configScreen.userPhoto.clipsToBounds = true
-        }
-    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -110,22 +112,47 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     
     // Quando o usuário termina de recortar a imagem
     func cropViewController(_ cropViewController: TOCropViewController, didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
+
+        // Atualiza a imagem localmente na tela de configurações
         configScreen.userPhoto.image = image
-        configScreen.userPhoto.layer.cornerRadius = configScreen.userPhoto.frame.size.width / 2
+        configScreen.userPhoto.layer.cornerRadius = 60 / 2
         configScreen.userPhoto.clipsToBounds = true
         
-        if let data = image.jpegData(compressionQuality: 0.8) {
-            UserDefaults.standard.set(data, forKey: "profileImageView")
-        }
+        LocalUserDefaults.saveProfileImageData(image)
         
-        if let tasksVC = navigationController?.viewControllers.first(where: { $0 is TasksViewController }) as? TasksViewController {
-            tasksVC.updateNickNamePhotoUser()
-            tasksVC.updateNickName()
-        }
         
+        if let user = Auth.auth().currentUser {
+            print("✅ Usuário autenticado:", user.uid)
+        } else {
+            print("❌ Usuário NÃO autenticado")
+        }
+
+        
+        // Faz o upload da imagem pro Firebase Storage
+        StorageSupport.shared.uploadProfileImageToFirebase(image) { success, downloadURL in
+            guard success, let url = downloadURL else {
+                print("❌ Falha no upload ou sem URL.")
+                return
+            }
+
+            // Salva a URL da imagem no Firestore usando o helper
+            DatabaseSupport.shared.savePhotoURL(url) { saveSuccess in
+                if saveSuccess {
+                    print("✅ Foto salva no banco!")
+
+                    // Atualiza a imagem do usuário na TasksViewController, se ela estiver na stack
+                    if let tasksVC = self.navigationController?.viewControllers.first(where: { $0 is TasksViewController }) as? TasksViewController {
+                        tasksVC.updateNickNamePhotoUser()
+                    }
+
+                } else {
+                    print("⚠️ Foto enviada mas não salva no banco.")
+                }
+            }
+        }
         cropViewController.dismiss(animated: true, completion: nil)
     }
-    
+
     // Se o usuário cancelar o recorte
     func cropViewController(_ cropViewController: TOCropViewController, didFinishCancelled cancelled: Bool) {
         cropViewController.dismiss(animated: true, completion: nil)
@@ -158,17 +185,22 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     func tapLogoutButton() {
         do {
             try Auth.auth().signOut()
+
+            // limpa dados locais
             UserDefaults.standard.removeObject(forKey: "nickname")
-            UserDefaults.standard.removeObject(forKey: "profileImageView")
-            
+            UserDefaults.standard.removeObject(forKey: "photoURL")
+
+            // limpa imagem da tela (se necessário)
+            configScreen.userPhoto.image = nil
+
             let loginVC = FirstScreenViewController()
             let navVC = UINavigationController(rootViewController: loginVC)
-            
+
             if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
                 sceneDelegate.window?.rootViewController = navVC
             }
         } catch let error {
-            print("Erro ao deslogar: \(error.localizedDescription)")
+            print("❌ Erro ao deslogar: \(error.localizedDescription)")
         }
     }
     
@@ -179,7 +211,6 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
 }
-
 
 extension ConfigViewController: tapButtonConfigDelete {
     func didTapEditPhoto() {

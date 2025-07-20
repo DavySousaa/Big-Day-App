@@ -25,7 +25,7 @@ class NewTask: UIView {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        let fullText = "Nova tearefa para o Big Day."
+        let fullText = "Nova tarefa para o Big Day."
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
             .font: UIFont(name: "Montserrat-ExtraBold", size: 18)!,
             .foregroundColor: UIColor.label

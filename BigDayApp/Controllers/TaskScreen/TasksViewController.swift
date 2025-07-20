@@ -8,13 +8,28 @@
 import UIKit
 import FirebaseAuth
 import UserNotifications
+import FirebaseFirestore
 
-class TasksViewController: UIViewController, UITextFieldDelegate {
+
+class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpdatable {
     
     var selectedTaskID: UUID?
     var taskScreen = TaskScreen()
     var tasks: [Task] = []
     var nickname = ""
+    var nicknameProperty: String? {
+        get { return nickname }
+        set { nickname = newValue ?? "" }
+    }
+    
+    var nameUserLabel: UILabel? {
+        return taskScreen.nameUserLabel
+    }
+    
+    var imageUserView: UIImageView {
+        return taskScreen.imageUser
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,10 +43,10 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         taskScreen.tasksTableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
         taskScreen.tasksTableView.delegate = self
         taskScreen.tasksTableView.dataSource = self
-                
+        
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-        updateNickName()
+        
         
         let manager = NotificationManager()
         manager.scheduleDailyMorningNotification()
@@ -40,16 +55,12 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let savedImageData = UserDefaults.standard.data(forKey: "profileImageView"),
-           let savedImage = UIImage(data: savedImageData) {
-            taskScreen.imageUser.image = savedImage
-        }
         loadTasks()
-        navigationSetupWithLogo(title: "Tarefas")
         updateNickNamePhotoUser()
-        updateNickName()
+        navigationSetupWithLogo(title: "Tarefas")
         showNotificationPermition()
     }
+    
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -58,18 +69,6 @@ class TasksViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func updateNickNamePhotoUser() {
-        nickname = UserDefaults.standard.string(forKey: "nickname") ?? "Usuário"
-        if let savedImageData = UserDefaults.standard.data(forKey: "profileImageView"),
-           let savedImage = UIImage(data: savedImageData) {
-            taskScreen.imageUser.image = savedImage
-        }
-    }
-
-    func updateNickName() {
-        nickname = UserDefaults.standard.string(forKey: "nickname") ?? "Usuário"
-        taskScreen.nameUserLabel.text = nickname
-    }
     
     func loadTasks() {
         self.tasks = TaskSuportHelper().getTask()

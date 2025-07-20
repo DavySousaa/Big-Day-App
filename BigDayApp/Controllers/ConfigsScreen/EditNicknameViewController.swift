@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseStorage
+import FirebaseFirestore
 
 class EditNicknameViewController: UIViewController, UITextFieldDelegate {
     
@@ -80,11 +83,26 @@ extension EditNicknameViewController: tapButtonNickNameDelete {
             return
         }
         
+        // 1. Atualiza local (opcional, se quiser mostrar instantaneamente)
         UserDefaults.standard.set(newNickname, forKey: "nickname")
-        UserDefaults.standard.synchronize()
         
-        navigationController?.popViewController(animated: true)
+        // 2. Atualiza no Firestore (ESSENCIAL!)
+        if let uid = Auth.auth().currentUser?.uid {
+            Firestore.firestore().collection("users").document(uid).updateData([
+                "nickname": newNickname
+            ]) { error in
+                if let error = error {
+                    print("❌ Erro ao salvar no Firestore:", error.localizedDescription)
+                } else {
+                    print("✅ Apelido atualizado no Firestore")
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                }
+            }
+        }
     }
+
 }
 
 

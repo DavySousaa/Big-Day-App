@@ -13,6 +13,8 @@
 		F3074F0B2E0F455600BBE549 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F3074F0A2E0F455600BBE549 /* FirebaseStorage */; };
 		F337DB8E2E1AD9E80044E9B2 /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = F337DB8D2E1AD9E80044E9B2 /* CropViewController */; };
 		F337DB902E1AD9E80044E9B2 /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = F337DB8F2E1AD9E80044E9B2 /* TOCropViewController */; };
+		F3F58C5A2E2BFBE9001F78CE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = F3F58C592E2BFBE9001F78CE /* SDWebImage */; };
+		F3F58C5C2E2BFBE9001F78CE /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F3F58C5B2E2BFBE9001F78CE /* SDWebImageMapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,8 +50,10 @@
 				F3074F072E0F455600BBE549 /* FirebaseDatabase in Frameworks */,
 				F3074F0B2E0F455600BBE549 /* FirebaseStorage in Frameworks */,
 				F3074F052E0F455600BBE549 /* FirebaseAuth in Frameworks */,
+				F3F58C5A2E2BFBE9001F78CE /* SDWebImage in Frameworks */,
 				F337DB8E2E1AD9E80044E9B2 /* CropViewController in Frameworks */,
 				F337DB902E1AD9E80044E9B2 /* TOCropViewController in Frameworks */,
+				F3F58C5C2E2BFBE9001F78CE /* SDWebImageMapKit in Frameworks */,
 				F3074F092E0F455600BBE549 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -99,6 +103,8 @@
 				F3074F0A2E0F455600BBE549 /* FirebaseStorage */,
 				F337DB8D2E1AD9E80044E9B2 /* CropViewController */,
 				F337DB8F2E1AD9E80044E9B2 /* TOCropViewController */,
+				F3F58C592E2BFBE9001F78CE /* SDWebImage */,
+				F3F58C5B2E2BFBE9001F78CE /* SDWebImageMapKit */,
 			);
 			productName = BigDayApp;
 			productReference = F3CBE2842DEE58D500D5BF2E /* BigDayApp.app */;
@@ -131,6 +137,7 @@
 			packageReferences = (
 				F3074F032E0F455600BBE549 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				F337DB8C2E1AD9E80044E9B2 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
+				F3F58C582E2BFBE9001F78CE /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F3CBE2852DEE58D500D5BF2E /* Products */;
@@ -380,6 +387,14 @@
 				minimumVersion = 2.7.4;
 			};
 		};
+		F3F58C582E2BFBE9001F78CE /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.21.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -412,6 +427,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F337DB8C2E1AD9E80044E9B2 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
 			productName = TOCropViewController;
+		};
+		F3F58C592E2BFBE9001F78CE /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F3F58C582E2BFBE9001F78CE /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+		F3F58C5B2E2BFBE9001F78CE /* SDWebImageMapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F3F58C582E2BFBE9001F78CE /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImageMapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

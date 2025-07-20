@@ -6,8 +6,20 @@
 //
 import UIKit
 
-class ShareTasksViewController: UIViewController {
+class ShareTasksViewController: UIViewController, UserProfileUpdatable {
     
+    var nicknameProperty: String? {
+        get { return nickname }
+        set { nickname = newValue ?? "" }
+    }
+    
+    var nameUserLabel: UILabel? {
+        return shareScreen.nameUserLabel
+    }
+    
+    var imageUserView: UIImageView {
+        return shareScreen.imageUser
+    }
     var shareScreen = ShareScreen()
     var nickname = ""
     var tasks: [Task] = []
@@ -29,17 +41,11 @@ class ShareTasksViewController: UIViewController {
         
         navigationSetupWithLogo(title: "Compartilhar tarefas")
         updateNickNamePhotoUser()
-        updateNickName()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let savedImageData = UserDefaults.standard.data(forKey: "profileImageView"),
-           let savedImage = UIImage(data: savedImageData) {
-            shareScreen.imageUser.image = savedImage
-        }
         updateNickNamePhotoUser()
-        updateNickName()
         loadTasks()
     }
     
@@ -48,19 +54,6 @@ class ShareTasksViewController: UIViewController {
         if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
             navigationSetupWithLogo(title: "Compartilhar tarefas")
         }
-    }
-    
-    func updateNickNamePhotoUser() {
-        nickname = UserDefaults.standard.string(forKey: "nickname") ?? "Usuário"
-        if let savedImageData = UserDefaults.standard.data(forKey: "profileImageView"),
-           let savedImage = UIImage(data: savedImageData) {
-            shareScreen.imageUser.image = savedImage
-        }
-    }
-
-    func updateNickName() {
-        nickname = UserDefaults.standard.string(forKey: "nickname") ?? "Usuário"
-        shareScreen.nameUserLabel.text = nickname
     }
     
     func loadTasks() {

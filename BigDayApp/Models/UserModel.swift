@@ -11,7 +11,8 @@ struct UserModel {
     let uid: String
     let nickname: String
     let email: String
-
+    let photoURL: String?
+    
     init?(document: [String: Any], uid: String) {
         guard let nickname = document["nickname"] as? String,
               let email = document["email"] as? String else {
@@ -20,6 +21,7 @@ struct UserModel {
         self.uid = uid
         self.nickname = nickname
         self.email = email
+        self.photoURL = document["photoURL"] as? String
     }
 }
 
