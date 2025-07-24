@@ -22,10 +22,8 @@ extension DatabaseSupport {
             "photoURL": url.absoluteString
         ]) { error in
             if let error = error {
-                print("❌ Erro ao salvar URL da imagem no Firestore:", error.localizedDescription)
                 completion(false)
             } else {
-                print("✅ URL da imagem salva com sucesso no Firestore!")
                 completion(true)
             }
         }
@@ -42,10 +40,8 @@ extension DatabaseSupport {
             "nickname": nickname
         ]) { error in
             if let error = error {
-                print("❌ Erro ao salvar apelido:", error.localizedDescription)
                 completion(false)
             } else {
-                print("✅ Apelido salvo com sucesso!")
                 completion(true)
             }
         }

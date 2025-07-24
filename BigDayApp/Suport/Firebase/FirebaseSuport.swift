@@ -14,17 +14,14 @@ extension UserProfileUpdatable where Self: UIViewController {
     func updateNickNamePhotoUser() {
         // 🔹 Mostra o que vem do UserDefaults primeiro
         if let nickname = LocalUserDefaults.getNickname() {
-            print("🟡 Nickname do cache: \(nickname)")
             self.nicknameProperty = nickname
             self.nameUserLabel?.text = nickname
         }
 
         if let cachedImage = LocalUserDefaults.getCachedProfileImage() {
-            print("🟡 Foto direto do cache (UIImage)")
             self.imageUserView.image = cachedImage
         } else if let photoURL = LocalUserDefaults.getPhotoURL(),
                   let imageUrl = URL(string: photoURL) {
-            print("🟡 Foto do cache (URL): \(photoURL)")
             self.loadProfileImage(from: imageUrl)
         }
 
@@ -33,8 +30,6 @@ extension UserProfileUpdatable where Self: UIViewController {
             switch result {
             case .success(let user):
                 DispatchQueue.main.async {
-                    print("🔵 Dados do Firebase: \(user.nickname) | \(user.photoURL ?? "sem URL")")
-
                     self.nicknameProperty = user.nickname
                     self.nameUserLabel?.text = user.nickname
                     LocalUserDefaults.saveNickname(user.nickname)
@@ -42,7 +37,6 @@ extension UserProfileUpdatable where Self: UIViewController {
                     // ✅ Salva a photoURL no cache, mas NÃO força o download de novo
                     if let photoURL = user.photoURL {
                         LocalUserDefaults.savePhotoURL(photoURL)
-                        print("✅ photoURL atualizada no cache, mas sem novo download.")
                     }
                 }
             case .failure(let error):

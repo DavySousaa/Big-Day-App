@@ -23,6 +23,10 @@ class EditNicknameViewController: UIViewController, UITextFieldDelegate {
         editNickName.delegate = self
         editNickName.nickNameTextField.delegate = self
         
+        if let nickname = UserDefaults.standard.string(forKey: "nickname") {
+            editNickName.nickNameTextField.text = nickname
+        }
+
         buttonChangePosition()
     }
     

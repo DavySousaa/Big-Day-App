@@ -15,7 +15,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
     
     var selectedTaskID: UUID?
     var taskScreen = TaskScreen()
-    var tasks: [Task] = []
+    var tasks: [Task] = [Task(id: UUID(), title: "Arraste para excluir", time: nil)]
     var nickname = ""
     var nicknameProperty: String? {
         get { return nickname }
@@ -69,7 +69,6 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         }
     }
     
-    
     func loadTasks() {
         self.tasks = TaskSuportHelper().getTask()
         self.taskScreen.tasksTableView.reloadData()
@@ -118,12 +117,20 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
     
     func editButton() {
         guard let id = selectedTaskID,
-                  let task = tasks.first(where: { $0.id == id }) else { return }
+              let task = tasks.first(where: { $0.id == id }) else { return }
         let sheetVC = EditTaskViewController()
         sheetVC.delegate = self
         sheetVC.taskController = self
         sheetVC.modalPresentationStyle = .overFullScreen
         sheetVC.editTask.newTaskTextField.text = task.title
+        if let timeString = task.time {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm"
+            
+            if let date = formatter.date(from: timeString) {
+                sheetVC.editTask.timePicker.date = date
+            }
+        }
         present(sheetVC, animated: true)
     }
     
@@ -194,9 +201,9 @@ extension TasksViewController: UITableViewDelegate {
         
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .red
-        let editIcon = UIImage(systemName: "square.and.pencil")?.withTintColor(ColorSuport.greenApp, renderingMode: .alwaysOriginal)
+        let editIcon = UIImage(systemName: "square.and.pencil")?.withTintColor(ColorSuport.blackApp, renderingMode: .alwaysOriginal)
         editAction.image = editIcon
-        editAction.backgroundColor = .label
+        editAction.backgroundColor = ColorSuport.greenApp
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
 }

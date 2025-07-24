@@ -41,6 +41,9 @@ class TaskCellShare: UITableViewCell {
         backgroundColor = .clear
         contentView.backgroundColor = .clear
         self.isOpaque = false
+        titleLabel.numberOfLines = 1
+        titleLabel.lineBreakMode = .byWordWrapping // ou .byWordWrapping se quiser quebrar linha
+        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
     
     required init?(coder: NSCoder) {
@@ -69,7 +72,8 @@ class TaskCellShare: UITableViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: circleImage.trailingAnchor, constant: 8),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: hourLabel.leadingAnchor, constant: -10),
-            
+            hourLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+
             hourLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             hourLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])

@@ -113,9 +113,8 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     // Quando o usuário termina de recortar a imagem
     func cropViewController(_ cropViewController: TOCropViewController, didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
 
-        // Atualiza a imagem localmente na tela de configurações
         configScreen.userPhoto.image = image
-        configScreen.userPhoto.layer.cornerRadius = 60 / 2
+        configScreen.userPhoto.layer.cornerRadius = configScreen.userPhoto.frame.size.width / 2
         configScreen.userPhoto.clipsToBounds = true
         
         LocalUserDefaults.saveProfileImageData(image)
@@ -134,17 +133,17 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
                 print("❌ Falha no upload ou sem URL.")
                 return
             }
-
+            
             // Salva a URL da imagem no Firestore usando o helper
             DatabaseSupport.shared.savePhotoURL(url) { saveSuccess in
                 if saveSuccess {
                     print("✅ Foto salva no banco!")
-
+                    
                     // Atualiza a imagem do usuário na TasksViewController, se ela estiver na stack
                     if let tasksVC = self.navigationController?.viewControllers.first(where: { $0 is TasksViewController }) as? TasksViewController {
                         tasksVC.updateNickNamePhotoUser()
                     }
-
+                    
                 } else {
                     print("⚠️ Foto enviada mas não salva no banco.")
                 }

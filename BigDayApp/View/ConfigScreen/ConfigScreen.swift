@@ -85,6 +85,11 @@ class ConfigScreen: UIView {
         configTableView.heightAnchor.constraint(equalToConstant: height).isActive = true
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        userPhoto.layer.cornerRadius = userPhoto.frame.height / 2
+    }
+
     
     init() {
         super.init(frame: .zero)
