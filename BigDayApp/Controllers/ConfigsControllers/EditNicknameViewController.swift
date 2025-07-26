@@ -14,6 +14,7 @@ class EditNicknameViewController: UIViewController, UITextFieldDelegate {
     
     var editNickName = EditNickName()
     var tasksVC: TasksViewController?
+    var viewModel = EditNicknameViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +27,7 @@ class EditNicknameViewController: UIViewController, UITextFieldDelegate {
         if let nickname = UserDefaults.standard.string(forKey: "nickname") {
             editNickName.nickNameTextField.text = nickname
         }
-
+        blindViewModel()
         buttonChangePosition()
     }
     
@@ -70,43 +71,27 @@ class EditNicknameViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    private func showAlert(message: String) {
-        let alert = UIAlertController(title: "Atenção", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default))
+    private func blindViewModel() {
+        viewModel.onSucess = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
+        viewModel.onError = { [weak self] message in
+            self?.showAlert(title: "Erro", message: message)
+        }
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
 }
 
 extension EditNicknameViewController: tapButtonNickNameDelete {
     func didTapSaveButton() {
-        print("✅ Botão salvar foi tocado")
-        
-        guard let newNickname = editNickName.nickNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
-              !newNickname.isEmpty else {
-            showAlert(message: "Digite o apelido novo.")
-            return
-        }
-        
-        // 1. Atualiza local (opcional, se quiser mostrar instantaneamente)
-        UserDefaults.standard.set(newNickname, forKey: "nickname")
-        
-        // 2. Atualiza no Firestore (ESSENCIAL!)
-        if let uid = Auth.auth().currentUser?.uid {
-            Firestore.firestore().collection("users").document(uid).updateData([
-                "nickname": newNickname
-            ]) { error in
-                if let error = error {
-                    print("❌ Erro ao salvar no Firestore:", error.localizedDescription)
-                } else {
-                    print("✅ Apelido atualizado no Firestore")
-                    DispatchQueue.main.async {
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                }
-            }
-        }
+        viewModel.newNickname = editNickName.nickNameTextField.text ?? ""
+        viewModel.saveNickname()
     }
-
 }
 
 

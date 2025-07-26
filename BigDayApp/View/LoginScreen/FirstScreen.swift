@@ -27,7 +27,7 @@ class FirstScreen: UIView {
         
         let fullText = "Transformando\ndias comuns em\nBig Day!"
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
-            .font: UIFont(name: "Montserrat-ExtraBold", size: 26)!,
+            .font: UIFont(name: "Montserrat-ExtraBold", size: 32)!,
             .foregroundColor: UIColor.label
         ])
         
@@ -102,12 +102,22 @@ class FirstScreen: UIView {
     
     private lazy var pageControl: UIPageControl = {
         let pc = UIPageControl()
-        pc.numberOfPages = 2 // ou quantas imagens você tiver
+        pc.numberOfPages = 2
         pc.currentPage = 0
         pc.currentPageIndicatorTintColor = ColorSuport.greenApp
         pc.pageIndicatorTintColor = .systemGray4
         pc.translatesAutoresizingMaskIntoConstraints = false
         return pc
+    }()
+    
+    private lazy var stackViewElementsScreen: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [imageLogo, textUp, scrollView, pageControl, stackViewButtons])
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.spacing = 10
+        stack.alignment = .center
+        stack.distribution = .fill
+        return stack
     }()
     
     init() {
@@ -123,61 +133,56 @@ class FirstScreen: UIView {
         for image in images {
             let imageView = UIImageView(image: image)
             imageView.contentMode = .scaleAspectFit
-            imageView.translatesAutoresizingMaskIntoConstraints = true
+            imageView.translatesAutoresizingMaskIntoConstraints = false
             
-            stackView.addArrangedSubview(imageView)          // 1️⃣ entra na hierarquia
+            stackView.addArrangedSubview(imageView)
             imageView.widthAnchor
                 .constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
-                .isActive = true                             // 2️⃣ agora é seguro
+                .isActive = true
         }
     }
 }
 
 extension FirstScreen : SetupLayout {
     func addSubViews() {
-        addSubview(imageLogo)
-        addSubview(textUp)
-        addSubview(createAccountButton)
-        addSubview(lognAccountButton)
-        addSubview(stackViewButtons)
-        addSubview(scrollView)
+        addSubview(stackViewElementsScreen)
         scrollView.addSubview(stackView)
-        addSubview(pageControl)
+        stackViewElementsScreen.addSubview(pageControl)
     }
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            imageLogo.centerXAnchor.constraint(equalTo: centerXAnchor),
-            imageLogo.heightAnchor.constraint(equalToConstant: 32),
-            imageLogo.widthAnchor.constraint(equalToConstant: 83),
-            imageLogo.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             
-            textUp.centerXAnchor.constraint(equalTo: centerXAnchor),
-            textUp.topAnchor.constraint(equalTo: imageLogo.bottomAnchor, constant: 15),
+            stackViewElementsScreen.centerXAnchor.constraint(equalTo: centerXAnchor),
+            stackViewElementsScreen.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            stackViewElementsScreen.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
+            stackViewElementsScreen.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
+            stackViewElementsScreen.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
             
-            scrollView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageLogo.heightAnchor.constraint(equalToConstant: 48),
+            imageLogo.widthAnchor.constraint(equalToConstant: 124),
+            
             scrollView.heightAnchor.constraint(equalToConstant: 384),
             scrollView.widthAnchor.constraint(equalToConstant: 326),
-            scrollView.topAnchor.constraint(equalTo: textUp.bottomAnchor, constant: 20),
             
-            // StackView presa ao CONTENT da ScrollView
             stackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             
-            // Altura igual pra não rolar verticalmente
+            
             stackView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
-            pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
             pageControl.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 10),
             
-            stackViewButtons.centerXAnchor.constraint(equalTo: centerXAnchor),
-            stackViewButtons.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 35),
             stackViewButtons.heightAnchor.constraint(equalToConstant: 87),
-            stackViewButtons.widthAnchor.constraint(equalToConstant: 290),
-            stackViewButtons.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            
             createAccountButton.heightAnchor.constraint(equalToConstant: 41),
+            createAccountButton.leadingAnchor.constraint(equalTo: stackViewElementsScreen.leadingAnchor),
+            createAccountButton.trailingAnchor.constraint(equalTo: stackViewElementsScreen.trailingAnchor),
+            
             lognAccountButton.heightAnchor.constraint(equalTo: createAccountButton.heightAnchor),
+            lognAccountButton.leadingAnchor.constraint(equalTo: stackViewElementsScreen.leadingAnchor),
+            lognAccountButton.trailingAnchor.constraint(equalTo: stackViewElementsScreen.trailingAnchor),
         ])
     }
     

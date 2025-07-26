@@ -22,9 +22,9 @@ class ShareTasksViewController: UIViewController, UserProfileUpdatable {
     }
     var shareScreen = ShareScreen()
     var nickname = ""
-    var tasks: [Task] = []
     var selectedTaskID: UUID?
     var currentColor: UIColor = .white
+    var viewModel = TaskShareViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,12 +41,14 @@ class ShareTasksViewController: UIViewController, UserProfileUpdatable {
         
         navigationSetupWithLogo(title: "Compartilhar tarefas")
         updateNickNamePhotoUser()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateNickNamePhotoUser()
-        loadTasks()
+        bindViewModel()
+        viewModel.loadTasks()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -56,43 +58,23 @@ class ShareTasksViewController: UIViewController, UserProfileUpdatable {
         }
     }
     
-    func loadTasks() {
-        self.tasks = TaskSuportHelper().getTask()
-        self.shareScreen.tasksTableView.reloadData()
-    }
-    
-    func saveTasks() {
-        TaskSuportHelper().addTask(lista: tasks)
-    }
-    
-    func renderViewAsImage(view: UIView) -> UIImage? {
-        let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
-        return renderer.image { _ in
-            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+    func bindViewModel() {
+        viewModel.onSucess = {[weak self] in
+            self?.shareScreen.tasksTableView.reloadData()
         }
     }
-    
-    func createShareImage() -> UIImage? {
-        shareScreen.tasksTableView.layoutIfNeeded()
-        shareScreen.containerView.backgroundColor = .clear
-        shareScreen.containerView.layoutIfNeeded()
-        let image = renderViewAsImage(view: shareScreen.containerView)
-        shareScreen.containerView.backgroundColor = .secondarySystemBackground
-        return image
-    }
-
 }
 
 extension ShareTasksViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tasks.count
+        return viewModel.tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TaskCellShare.identifier, for: indexPath) as? TaskCellShare else {
             return UITableViewCell()
         }
-        let task = tasks[indexPath.row]
+        let task = viewModel.tasks[indexPath.row]
         cell.configure(with: task)
         cell.hourLabel.textColor = currentColor
         
@@ -124,9 +106,8 @@ extension ShareTasksViewController: UITableViewDataSource {
 extension ShareTasksViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? TaskCell {
-            tasks[indexPath.row].isCompleted.toggle()
-            saveTasks()
+        if let cell = tableView.cellForRow(at: indexPath) as? TaskCellShare {
+            viewModel.toggleTask(at: indexPath.row)
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
@@ -148,7 +129,12 @@ extension ShareTasksViewController: TapButtonShareDelete {
     }
     
     func didTapCopyBtn() {
-        guard let image = createShareImage() else { return }
+        let imageHelper = RenderImageHelper()
+        guard let image = imageHelper.createShareImage(
+            from: shareScreen.containerView,
+            tableView: shareScreen.tasksTableView
+        ) else { return }
+        
         UIPasteboard.general.image = image
     }
 }

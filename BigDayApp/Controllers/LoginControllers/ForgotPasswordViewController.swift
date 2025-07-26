@@ -8,24 +8,10 @@
 import UIKit
 import FirebaseAuth
 
-class ForgotPasswordViewController: UIViewController, ForgotPasswordDelegate, UITextFieldDelegate {
-    
-    func didTapSend() {
-        guard let email = forgotPassword.emailTextField.text, !email.isEmpty else {
-            showAlert(title: "Erro", message: "Por favor, digite seu e-mail.")
-            return
-        }
-        
-        Auth.auth().sendPasswordReset(withEmail: email) { error in
-            if let error = error {
-                self.showAlert(title: "Erro", message: error.localizedDescription)
-            } else {
-                self.showAlert(title: "Tudo certo!", message: "Enviamos um e-mail com instruções para redefinir sua senha.")
-            }
-        }
-    }
+class ForgotPasswordViewController: UIViewController, UITextFieldDelegate {
 
     var forgotPassword = ForgotPassWord()
+    var viewModel = ForgotPasswordViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +20,16 @@ class ForgotPasswordViewController: UIViewController, ForgotPasswordDelegate, UI
         forgotPassword.delegate = self
         forgotPassword.emailTextField.delegate = self
         navigationSetup(title: "Redefinir senha")
+        blindViewModel()
+    }
+    
+    private func blindViewModel() {
+        viewModel.onSucess = { [weak self] message in
+            self?.showAlert(title: "Sucesso", message: message)
+        }
+        viewModel.onError = { [weak self] message in
+            self?.showAlert(title: "Erro", message: message)
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -45,10 +41,16 @@ class ForgotPasswordViewController: UIViewController, ForgotPasswordDelegate, UI
         return true
     }
     
-    func showAlert(title: String, message: String) {
+    private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
+}
 
+extension ForgotPasswordViewController: ForgotPasswordDelegate {
+    func didTapSend() {
+        viewModel.email = forgotPassword.emailTextField.text ?? ""
+        viewModel.sendResetEmail()
+    }
 }

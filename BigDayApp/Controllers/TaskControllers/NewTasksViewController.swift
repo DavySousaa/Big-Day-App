@@ -7,6 +7,7 @@ class NewTasksViewController: UIViewController, UITextFieldDelegate {
     var newTask = NewTask()
     var taskController: TasksViewController?
     var tasks: [Task] = []
+    var viewModel = NewTaskViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,6 +16,7 @@ class NewTasksViewController: UIViewController, UITextFieldDelegate {
         navigationItem.backButtonTitle = ""
         newTask.delegate = self
         newTask.newTaskTextField.delegate = self
+        blindViewModel()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -26,41 +28,15 @@ class NewTasksViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    private func createTask() {
-        var list:[Task] = TaskSuportHelper().getTask()
-        let selectedTime = getTime()
+    func blindViewModel() {
         
-        guard !newTask.newTaskTextField.text!.isEmpty else {
-            showAlert(message: "Digite uma tarefa para ser adicionada!")
-            return
+        viewModel.onSucess = { [weak self] in
+            self?.taskController?.viewModel.loadTasks()
+            self?.dismiss(animated: true)
         }
-        var task: Task = Task(id: UUID(), title: newTask.newTaskTextField.text ?? "Nova tarefa", time: selectedTime, isCompleted: false)
-        
-        list.append(task)
-        TaskSuportHelper().addTask(lista: list)
-        
-        let title = newTask.newTaskTextField.text ?? "Nova tarefa"
-        NotificationManager.shared.scheduleTaskReminder(title: title, date: newTask.timePicker.date)
-
-        self.tasks = list
-        taskController?.tasks = self.tasks
-        taskController?.taskScreen.tasksTableView.reloadData()
-
-        self.dismiss(animated: true)
-    }
-    
-    @objc func getTime() -> String {
-        
-        if !newTask.switchPicker.isOn {
-            return ""
+        viewModel.onError = { [weak self] message in
+            self?.showAlert(message: message)
         }
-        
-        let selectedTime = newTask.timePicker.date
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        
-        let timeString = formatter.string(from: selectedTime)
-        return timeString
     }
     
     private func showAlert(message: String) {
@@ -76,7 +52,11 @@ extension NewTasksViewController: NewTaskDelegate {
     }
     
     func tapCreateButton() {
-        createTask()
+        let title = newTask.newTaskTextField.text ?? ""
+        let shouldSchedule = newTask.switchPicker.isOn
+        let selectedDate = shouldSchedule ? newTask.timePicker.date : nil
+        
+        viewModel.createTask(title: title, shouldSchedule: shouldSchedule, selectedDate: selectedDate)
     }
-    
 }
+

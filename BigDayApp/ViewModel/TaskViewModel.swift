@@ -3,14 +3,49 @@ import Foundation
 final class TaskViewModel {
     
     var nameTask: String = ""
-    var onSuccess: (() -> Void)?
+    var onSucess: (() -> Void)?
     var onError: ((String) -> Void)?
+    
+    private(set) var tasks: [Task] = [] {
+        didSet {
+            tasksChanged?()
+        }
+    }
+    
+    var tasksChanged: (() -> Void)?
     
     func validateTask() {
         if nameTask.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             onError?("Dê um nome para sua tarefa.")
         } else {
-            onSuccess?()
+            onSucess?()
+        }
+    }
+    
+    func loadTasks() {
+        self.tasks = TaskSuportHelper().getTask()
+        self.onSucess?()
+    }
+    
+    func saveTasks() {
+        TaskSuportHelper().addTask(lista: tasks)
+    }
+    
+    func toggleTask(at index: Int) {
+        tasks[index].isCompleted.toggle()
+        saveTasks()
+    }
+    
+    func deleteTask(at index: Int) {
+        tasks.remove(at: index)
+        saveTasks()
+    }
+    
+    func updateTask(id: UUID, title: String, time: String) {
+        if let index = tasks.firstIndex(where: { $0.id == id }) {
+            tasks[index].title = title
+            tasks[index].time = time
+            saveTasks()
         }
     }
 }

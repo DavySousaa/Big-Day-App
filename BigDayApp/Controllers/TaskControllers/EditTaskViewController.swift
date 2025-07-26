@@ -18,6 +18,7 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
     var taskController: TasksViewController?
     var tasks: [Task] = []
     var delegate: saveEditProcol?
+    var viewModel = EditTaskViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,8 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
         navigationItem.backButtonTitle = ""
         editTask.delegate = self
         editTask.newTaskTextField.delegate = self
+        fillTaskIfNeeded() 
+        blindViewModel()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -37,36 +40,33 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    private func getEditTask() {
-        guard let delegate = delegate else {return}
-        let editedNickName = editTask.newTaskTextField.text ?? "Nova terefa"
-        let selectedTime = getTime()
-        
-        guard !editTask.newTaskTextField.text!.isEmpty else {
-            showAlert(message: "Digite uma tarefa para ser adicionada!")
-            return
+    func blindViewModel() {
+        viewModel.onSucess = { [weak self] in
+            self?.taskController?.viewModel.loadTasks()
+            self?.dismiss(animated: true)
         }
-        
-        delegate.saveEditBt(titleEdit: editedNickName, selectedTime: selectedTime)
-        
-        NotificationManager.shared.scheduleTaskReminder(title: editedNickName, date: editTask.timePicker.date)
-        
-        self.dismiss(animated: true)
+        viewModel.onError = { [weak self] message in
+            self?.showAlert(message: message)
+        }
     }
     
-    @objc func getTime() -> String {
+    func fillTaskIfNeeded() {
+        guard let task = viewModel.taskToEdit else { return }
+        editTask.newTaskTextField.text = task.title
         
-        if !editTask.switchPicker.isOn {
-            return ""
+        if let timeString = task.time, !timeString.isEmpty {
+            editTask.switchPicker.isOn = true
+            // Converte timeString ("HH:mm") para Date
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm"
+            if let date = formatter.date(from: timeString) {
+                editTask.timePicker.date = date
+            }
+        } else {
+            editTask.switchPicker.isOn = false
         }
-        
-        let selectedTime = editTask.timePicker.date
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        
-        let timeString = formatter.string(from: selectedTime)
-        return timeString
     }
+
     
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Atenção", message: message, preferredStyle: .alert)
@@ -82,7 +82,11 @@ extension EditTaskViewController: EditTaskDelegate {
     }
     
     func tapSaveButton() {
-        getEditTask()
+        let title = editTask.newTaskTextField.text ?? ""
+        let shouldSchedule = editTask.switchPicker.isOn
+        let selectedDate = shouldSchedule ? editTask.timePicker.date : nil
+        
+        viewModel.saveEditTask(title: title, shouldSchedule: shouldSchedule, selectedDate: selectedDate)
     }
     
     

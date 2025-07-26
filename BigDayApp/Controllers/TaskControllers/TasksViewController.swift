@@ -13,23 +13,20 @@ import FirebaseFirestore
 
 class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpdatable {
     
+    var viewModel = TaskViewModel()
     var selectedTaskID: UUID?
     var taskScreen = TaskScreen()
-    var tasks: [Task] = [Task(id: UUID(), title: "Arraste para excluir", time: nil)]
     var nickname = ""
     var nicknameProperty: String? {
         get { return nickname }
         set { nickname = newValue ?? "" }
     }
-    
     var nameUserLabel: UILabel? {
         return taskScreen.nameUserLabel
     }
-    
     var imageUserView: UIImageView {
         return taskScreen.imageUser
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,12 +52,12 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadTasks()
+        bindViewModel()
+        viewModel.loadTasks()
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
         showNotificationPermition()
     }
-    
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -69,13 +66,10 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         }
     }
     
-    func loadTasks() {
-        self.tasks = TaskSuportHelper().getTask()
-        self.taskScreen.tasksTableView.reloadData()
-    }
-    
-    func saveTasks() {
-        TaskSuportHelper().addTask(lista: tasks)
+    func bindViewModel() {
+        viewModel.onSucess = {[weak self] in
+            self?.taskScreen.tasksTableView.reloadData()
+        }
     }
     
     private func redirectToLogin() {
@@ -117,35 +111,31 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
     
     func editButton() {
         guard let id = selectedTaskID,
-              let task = tasks.first(where: { $0.id == id }) else { return }
+              let task = viewModel.tasks.first(where: { $0.id == id }) else { return }
         let sheetVC = EditTaskViewController()
         sheetVC.delegate = self
         sheetVC.taskController = self
         sheetVC.modalPresentationStyle = .overFullScreen
         sheetVC.editTask.newTaskTextField.text = task.title
-        if let timeString = task.time {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:mm"
-            
-            if let date = formatter.date(from: timeString) {
-                sheetVC.editTask.timePicker.date = date
-            }
+        sheetVC.viewModel.taskToEdit = task
+        if let timeString = task.time,
+           let date = DateFormatHelper.dateFromFormattedTime(timeString) {
+            sheetVC.editTask.timePicker.date = date
         }
         present(sheetVC, animated: true)
     }
-    
 }
 
 extension TasksViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tasks.count
+        return viewModel.tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TaskCell.identifier, for: indexPath) as? TaskCell else {
             return UITableViewCell()
         }
-        let task = tasks[indexPath.row]
+        let task = viewModel.tasks[indexPath.row]
         cell.configure(with: task)
         cell.backgroundColor = UIColor(named: "PrimaryColor")
         
@@ -179,22 +169,21 @@ extension TasksViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? TaskCell {
-            tasks[indexPath.row].isCompleted.toggle()
-            saveTasks()
+            viewModel.tasks[indexPath.row].isCompleted.toggle()
+            viewModel.saveTasks()
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
-            self.tasks.remove(at: indexPath.row)
-            TaskSuportHelper().addTask(lista: self.tasks)
+            self.viewModel.deleteTask(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             completionHandler(true)
         }
         
         let editAction = UIContextualAction(style: .normal, title: "Editar") { (action, view, completionHandler) in
-            self.selectedTaskID = self.tasks[indexPath.row].id
+            self.selectedTaskID = self.viewModel.tasks[indexPath.row].id
             self.editButton()
             completionHandler(true)
         }
@@ -220,10 +209,10 @@ extension TasksViewController: TapButtonDelete {
 extension TasksViewController: saveEditProcol {
     func saveEditBt(titleEdit: String, selectedTime: String) {
         guard let id = selectedTaskID else {return}
-        if let index = tasks.firstIndex(where: { $0.id == id}) {
-            tasks[index].title = titleEdit
-            tasks[index].time = selectedTime ?? ""
-            saveTasks()
+        if let index = viewModel.tasks.firstIndex(where: { $0.id == id}) {
+            viewModel.tasks[index].title = titleEdit
+            viewModel.tasks[index].time = selectedTime ?? ""
+            viewModel.saveTasks()
             taskScreen.tasksTableView.reloadData()
         }
     }

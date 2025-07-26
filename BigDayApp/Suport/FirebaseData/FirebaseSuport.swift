@@ -12,7 +12,7 @@ protocol UserProfileUpdatable: AnyObject {
 extension UserProfileUpdatable where Self: UIViewController {
     
     func updateNickNamePhotoUser() {
-        // 🔹 Mostra o que vem do UserDefaults primeiro
+    
         if let nickname = LocalUserDefaults.getNickname() {
             self.nicknameProperty = nickname
             self.nameUserLabel?.text = nickname
@@ -24,8 +24,7 @@ extension UserProfileUpdatable where Self: UIViewController {
                   let imageUrl = URL(string: photoURL) {
             self.loadProfileImage(from: imageUrl)
         }
-
-        // 🔄 Depois atualiza os dados do Firebase
+       
         AuthService.shared.fetchCurrentUser { result in
             switch result {
             case .success(let user):
@@ -34,7 +33,7 @@ extension UserProfileUpdatable where Self: UIViewController {
                     self.nameUserLabel?.text = user.nickname
                     LocalUserDefaults.saveNickname(user.nickname)
 
-                    // ✅ Salva a photoURL no cache, mas NÃO força o download de novo
+                
                     if let photoURL = user.photoURL {
                         LocalUserDefaults.savePhotoURL(photoURL)
                     }
@@ -44,9 +43,6 @@ extension UserProfileUpdatable where Self: UIViewController {
             }
         }
     }
-
-
-
     
     func loadProfileImage(from url: URL) {
         DispatchQueue.global().async {

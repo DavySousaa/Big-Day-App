@@ -28,7 +28,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F37B2BA22E355B7700F0DAE0 /* BigDayApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BigDayApp.xcodeproj; path = BigDayApp/BigDayApp.xcodeproj; sourceTree = SOURCE_ROOT; };
 		F3CBE2842DEE58D500D5BF2E /* BigDayApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BigDayApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3EFB30E2E32E667003299B5 /* BigDayAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BigDayAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -85,13 +84,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F37B2BA52E355B7700F0DAE0 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		F3CBE27B2DEE58D500D5BF2E = {
 			isa = PBXGroup;
 			children = (
@@ -202,12 +194,6 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F3CBE2852DEE58D500D5BF2E /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = F37B2BA52E355B7700F0DAE0 /* Products */;
-					ProjectRef = F37B2BA22E355B7700F0DAE0 /* BigDayApp.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				F3CBE2832DEE58D500D5BF2E /* BigDayApp */,
