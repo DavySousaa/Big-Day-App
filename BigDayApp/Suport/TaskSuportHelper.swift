@@ -31,8 +31,8 @@ class TaskSuportHelper {
         
         return []
     }
-
-    public func updateTask() {
-        
+    
+    func resetTasks() {
+        UserDefaults.standard.removeObject(forKey: keyTask)
     }
 }
