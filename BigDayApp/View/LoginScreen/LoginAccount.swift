@@ -158,6 +158,25 @@ class LoginAccount: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    func showButtonLoading() {
+        loginButton.setTitle("", for: .normal)
+        loadingIndicator.startAnimating()
+        loginButton.isEnabled = false
+    }
+
+    func hideButtonLoading() {
+        loginButton.setTitle("Criar Conta", for: .normal)
+        loadingIndicator.stopAnimating()
+        loginButton.isEnabled = true
+    }
+    
 }
 
 extension LoginAccount: SetupLayout {
@@ -167,6 +186,7 @@ extension LoginAccount: SetupLayout {
         addSubview(loginButton)
         addSubview(stackViewLogin)
         addSubview(forgotPassWord)
+        loginButton.addSubview(loadingIndicator)
     }
     
     func setupConstraints() {
@@ -183,6 +203,8 @@ extension LoginAccount: SetupLayout {
             loginButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50),
             loginButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -50),
             loginButton.heightAnchor.constraint(equalToConstant: 41),
+            loadingIndicator.centerXAnchor.constraint(equalTo: loginButton.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: loginButton.centerYAnchor),
             
             stackViewLogin.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 35),
             stackViewLogin.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -35),

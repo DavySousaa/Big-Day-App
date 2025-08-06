@@ -11,6 +11,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate, Create
     
     var createAccount = CreateAccount()
     var viewModel = CreateAccountViewModel()
+    var emailValidationViewModel = EmailValidationServiceViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,13 +57,34 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate, Create
                 self?.showAlert(title: "Erro", message: message)
             }
         }
+        emailValidationViewModel.onValidationResult = { [weak self] result in
+            switch result {
+            case .success:
+                self?.viewModel.register()
+                
+            case .failure(let errorMessage):
+                self?.showAlert(title: "Erro", message: errorMessage)
+            }
+        }
     }
     
     func didTapCreate() {
-        viewModel.nickname = createAccount.nickNameTextField.text ?? ""
-        viewModel.email = createAccount.emailTextField.text ?? ""
-        viewModel.password = createAccount.passwordTextField.text ?? ""
-        viewModel.register()
+        let nickname = createAccount.nickNameTextField.text ?? ""
+        let email = createAccount.emailTextField.text ?? ""
+        let password = createAccount.passwordTextField.text ?? ""
+
+        
+        if nickname.isEmpty || email.isEmpty || password.isEmpty {
+            showAlert(title: "Erro", message: "Preencha todos os campos para continuar.")
+            return
+        }
+        
+        viewModel.nickname = nickname
+        viewModel.email = email
+        viewModel.password = password
+            
+        createAccount.showButtonLoading()
+        emailValidationViewModel.checkEmail(email)
     }
     
     private func showAlert(title: String, message: String) {

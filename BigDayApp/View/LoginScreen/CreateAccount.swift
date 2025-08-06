@@ -41,7 +41,7 @@ class CreateAccount: UIView {
         let button = UIButton(type: .system)
         button.backgroundColor = ColorSuport.greenApp
         button.setTitleColor(ColorSuport.blackApp, for: .normal)
-        button.setTitle("Criar", for: .normal)
+        button.setTitle("Criar Conta", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         button.layer.cornerRadius = 41/2
         button.addTarget(self, action: #selector(didTapButtonCreate), for: .touchUpInside)
@@ -163,6 +163,25 @@ class CreateAccount: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    func showButtonLoading() {
+        createButton.setTitle("", for: .normal)
+        loadingIndicator.startAnimating()
+        createButton.isEnabled = false
+    }
+
+    func hideButtonLoading() {
+        createButton.setTitle("Criar Conta", for: .normal)
+        loadingIndicator.stopAnimating()
+        createButton.isEnabled = true
+    }
+    
 }
 
 extension CreateAccount: SetupLayout {
@@ -171,6 +190,7 @@ extension CreateAccount: SetupLayout {
         addSubview(textUp)
         addSubview(createButton)
         addSubview(stackViewLogin)
+        createButton.addSubview(loadingIndicator)
     }
     
     func setupConstraints() {
@@ -187,6 +207,8 @@ extension CreateAccount: SetupLayout {
             createButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50),
             createButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -50),
             createButton.heightAnchor.constraint(equalToConstant: 41),
+            loadingIndicator.centerXAnchor.constraint(equalTo: createButton.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: createButton.centerYAnchor),
             
             stackViewLogin.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 35),
             stackViewLogin.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -35),

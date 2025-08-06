@@ -51,6 +51,7 @@ class LoginAccountViewController: UIViewController, UITextFieldDelegate, LoginAc
     private func bindViewModel() {
         viewModel.onSuccess = { [weak self] in
             DispatchQueue.main.async {
+                self?.loginAccount.hideButtonLoading()
                 let tabBarVC = MainTabBarController()
                 if let sceneDelegate = UIApplication.shared.connectedScenes
                     .first?.delegate as? SceneDelegate {
@@ -69,6 +70,7 @@ class LoginAccountViewController: UIViewController, UITextFieldDelegate, LoginAc
     func didTapLogin() {
         viewModel.email = loginAccount.emailTextField.text ?? ""
         viewModel.password = loginAccount.passwordTextField.text ?? ""
+        loginAccount.showButtonLoading()
         viewModel.login()
     }
     

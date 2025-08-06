@@ -29,25 +29,27 @@
 
 /* Begin PBXFileReference section */
 		F37B2BA22E355B7700F0DAE0 /* BigDayApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BigDayApp.xcodeproj; path = BigDayApp/BigDayApp.xcodeproj; sourceTree = SOURCE_ROOT; };
+		F3931BE32E3654CC007D2F2F /* BigDayApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = BigDayApp.xcodeproj; sourceTree = "<group>"; };
 		F3CBE2842DEE58D500D5BF2E /* BigDayApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BigDayApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3EFB30E2E32E667003299B5 /* BigDayAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BigDayAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F3CBE2962DEE58D800D5BF2E /* Exceptions for "BigDayApp" folder in "BigDayApp" target */ = {
+		F3C876D82E42D7F10083F7BF /* Exceptions for "BigDayApp" folder in "BigDayApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				Suport/Untitled.swift,
 			);
 			target = F3CBE2832DEE58D500D5BF2E /* BigDayApp */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F3CBE2862DEE58D500D5BF2E /* BigDayApp */ = {
+		F3C876952E42D7F10083F7BF /* BigDayApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				F3CBE2962DEE58D800D5BF2E /* Exceptions for "BigDayApp" folder in "BigDayApp" target */,
+				F3C876D82E42D7F10083F7BF /* Exceptions for "BigDayApp" folder in "BigDayApp" target */,
 			);
 			path = BigDayApp;
 			sourceTree = "<group>";
@@ -92,12 +94,19 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		F3931BE82E3654CC007D2F2F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F3CBE27B2DEE58D500D5BF2E = {
 			isa = PBXGroup;
 			children = (
-				F3CBE2862DEE58D500D5BF2E /* BigDayApp */,
-				F3EFB30F2E32E667003299B5 /* BigDayAppTests */,
 				F3CBE2852DEE58D500D5BF2E /* Products */,
+				F3EFB30F2E32E667003299B5 /* BigDayAppTests */,
+				F3C876952E42D7F10083F7BF /* BigDayApp */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,7 +135,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				F3CBE2862DEE58D500D5BF2E /* BigDayApp */,
+				F3C876952E42D7F10083F7BF /* BigDayApp */,
 			);
 			name = BigDayApp;
 			packageProductDependencies = (
@@ -207,6 +216,10 @@
 					ProductGroup = F37B2BA52E355B7700F0DAE0 /* Products */;
 					ProjectRef = F37B2BA22E355B7700F0DAE0 /* BigDayApp.xcodeproj */;
 				},
+				{
+					ProductGroup = F3931BE82E3654CC007D2F2F /* Products */;
+					ProjectRef = F3931BE32E3654CC007D2F2F /* BigDayApp.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -267,12 +280,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 66TCY72KHF;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BigDayApp/Info.plist;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/BigDayApp/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Big Day App";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -281,9 +296,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.davy.BigDayApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -295,12 +314,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 66TCY72KHF;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BigDayApp/Info.plist;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/BigDayApp/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Big Day App";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -309,9 +330,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.davy.BigDayApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -447,9 +472,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.davy.BigDayAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BigDayApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BigDayApp";
 			};
 			name = Debug;
@@ -465,9 +494,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.davy.BigDayAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BigDayApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BigDayApp";
 			};
 			name = Release;

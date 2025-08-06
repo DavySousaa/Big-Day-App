@@ -40,7 +40,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         taskScreen.tasksTableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
         taskScreen.tasksTableView.delegate = self
         taskScreen.tasksTableView.dataSource = self
-        
+
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
         
