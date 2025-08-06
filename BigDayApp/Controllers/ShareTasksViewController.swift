@@ -63,6 +63,12 @@ class ShareTasksViewController: UIViewController, UserProfileUpdatable {
             self?.shareScreen.tasksTableView.reloadData()
         }
     }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
 }
 
 extension ShareTasksViewController: UITableViewDataSource {
@@ -134,7 +140,7 @@ extension ShareTasksViewController: TapButtonShareDelete {
             from: shareScreen.containerView,
             tableView: shareScreen.tasksTableView
         ) else { return }
-        
+        showAlert(title: "Sucesso", message: "Imagem copiada para área de transferência.")
         UIPasteboard.general.image = image
     }
 }

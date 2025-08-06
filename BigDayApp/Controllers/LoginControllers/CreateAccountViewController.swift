@@ -61,8 +61,8 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate, Create
             switch result {
             case .success:
                 self?.viewModel.register()
-                
             case .failure(let errorMessage):
+                self?.createAccount.hideButtonLoading()
                 self?.showAlert(title: "Erro", message: errorMessage)
             }
         }

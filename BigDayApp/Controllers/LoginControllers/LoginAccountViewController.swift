@@ -62,6 +62,7 @@ class LoginAccountViewController: UIViewController, UITextFieldDelegate, LoginAc
         
         viewModel.onError = { [weak self] message in
             DispatchQueue.main.async {
+                self?.loginAccount.hideButtonLoading()
                 self?.showAlert(title: "Erro", message: message)
             }
         }

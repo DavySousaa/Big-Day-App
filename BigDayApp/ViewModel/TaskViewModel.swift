@@ -14,6 +14,12 @@ final class TaskViewModel {
     
     var tasksChanged: (() -> Void)?
     
+    func moveTask(from sourceIndex: Int, to destinationIndex: Int) {
+        let movedTask = tasks.remove(at: sourceIndex)
+        tasks.insert(movedTask, at: destinationIndex)
+        saveTasks()
+    }
+    
     func validateTask() {
         if nameTask.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             onError?("Dê um nome para sua tarefa.")

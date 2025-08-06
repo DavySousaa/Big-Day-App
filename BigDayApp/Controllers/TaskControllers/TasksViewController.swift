@@ -11,7 +11,7 @@ import UserNotifications
 import FirebaseFirestore
 
 
-class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpdatable {
+class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpdatable, UITableViewDropDelegate, UITableViewDragDelegate {
     
     var viewModel = TaskViewModel()
     var selectedTaskID: UUID?
@@ -40,6 +40,10 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         taskScreen.tasksTableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
         taskScreen.tasksTableView.delegate = self
         taskScreen.tasksTableView.dataSource = self
+        taskScreen.tasksTableView.dragInteractionEnabled = true
+        taskScreen.tasksTableView.dragDelegate = self
+        taskScreen.tasksTableView.dropDelegate = self
+
 
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
@@ -124,6 +128,33 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         }
         present(sheetVC, animated: true)
     }
+    
+    @objc(tableView:itemsForBeginningDragSession:atIndexPath:) func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let task = viewModel.tasks[indexPath.row]
+        let itemProvider = NSItemProvider(object: task.title as NSString)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = task
+        return [dragItem]
+    }
+
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
+        
+        coordinator.items.forEach { item in
+            if let sourceIndexPath = item.sourceIndexPath,
+               let task = item.dragItem.localObject as? Task {
+                
+                tableView.performBatchUpdates({
+                    viewModel.moveTask(from: sourceIndexPath.row, to: destinationIndexPath.row)
+                    tableView.deleteRows(at: [sourceIndexPath], with: .automatic)
+                    tableView.insertRows(at: [destinationIndexPath], with: .automatic)
+                }, completion: { _ in
+                    self.viewModel.saveTasks()
+                })
+            }
+        }
+    }
+
 }
 
 extension TasksViewController: UITableViewDataSource {
@@ -195,6 +226,19 @@ extension TasksViewController: UITableViewDelegate {
         editAction.backgroundColor = ColorSuport.greenApp
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
+    
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        viewModel.moveTask(from: sourceIndexPath.row, to: destinationIndexPath.row)
+    }
+
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+
 }
 
 extension TasksViewController: TapButtonDelete {
