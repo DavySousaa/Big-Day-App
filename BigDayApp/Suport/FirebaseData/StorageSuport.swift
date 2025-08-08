@@ -22,7 +22,7 @@ final class StorageSupport {
         // 🔎 3. Confirma o bucket usado
         let storage = Storage.storage(url: "gs://big-day-app.firebasestorage.app")
 
-        let storageRef = storage.reference().child("profile_pictures/\(fileName)")
+        let storageRef = storage.reference().child("profileImages/\(fileName)")
 
         storageRef.putData(imageData, metadata: nil) { _, error in
             if let error = error {

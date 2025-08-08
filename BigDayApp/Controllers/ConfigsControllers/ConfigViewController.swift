@@ -30,8 +30,11 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
         Config(title: "Notificações", iconName: "bell.badge", action: .openNotifications),
         Config(title: "Feedback", iconName: "bubble.left.and.bubble.right", action: .sendFeedback),
         Config(title: "Sobre o app", iconName: "info.circle", action: .showAbout),
-        Config(title: "Sair da conta", iconName: "rectangle.portrait.and.arrow.right", action: .logout)
+        Config(title: "Sair da conta", iconName: "rectangle.portrait.and.arrow.right", action: .logout),
+        Config(title: "Excluir conta", iconName: "trash", action: .deleteAccount)
     ]
+    let activityIndicator = UIActivityIndicatorView(style: .large)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,11 +52,15 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
         configScreen.configTableView.delegate = self
         configScreen.configTableView.dataSource = self
         configScreen.configTableView.isScrollEnabled = false
-
+        
         updateNickNamePhotoUser()
         placeholderOne()
         navigationSetupWithLogo(title: "Configurações")
         navigationItem.backButtonTitle = "Voltar"
+        activityIndicator.center = view.center
+        activityIndicator.color = .white
+        activityIndicator.hidesWhenStopped = true
+        view.addSubview(activityIndicator)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,7 +119,7 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     
     // Quando o usuário termina de recortar a imagem
     func cropViewController(_ cropViewController: TOCropViewController, didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
-
+        
         configScreen.userPhoto.image = image
         configScreen.userPhoto.layer.cornerRadius = configScreen.userPhoto.frame.size.width / 2
         configScreen.userPhoto.clipsToBounds = true
@@ -125,7 +132,7 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
         } else {
             print("❌ Usuário NÃO autenticado")
         }
-
+        
         
         // Faz o upload da imagem pro Firebase Storage
         StorageSupport.shared.uploadProfileImageToFirebase(image) { success, downloadURL in
@@ -151,7 +158,7 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
         }
         cropViewController.dismiss(animated: true, completion: nil)
     }
-
+    
     // Se o usuário cancelar o recorte
     func cropViewController(_ cropViewController: TOCropViewController, didFinishCancelled cancelled: Bool) {
         cropViewController.dismiss(animated: true, completion: nil)
@@ -184,17 +191,16 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     func tapLogoutButton() {
         do {
             try Auth.auth().signOut()
-
+            
             // limpa dados locais
             UserDefaults.standard.removeObject(forKey: "nickname")
             UserDefaults.standard.removeObject(forKey: "photoURL")
-
-            // limpa imagem da tela (se necessário)
+            
             configScreen.userPhoto.image = nil
-
+            
             let loginVC = FirstScreenViewController()
             let navVC = UINavigationController(rootViewController: loginVC)
-
+            
             if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
                 sceneDelegate.window?.rootViewController = navVC
             }
@@ -203,6 +209,110 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
         }
     }
     
+    func reauthenticateUser(completion: @escaping (Bool) -> Void) {
+        guard let user = Auth.auth().currentUser,
+              let email = user.email else {
+            completion(false)
+            return
+        }
+
+        let alert = UIAlertController(title: "Confirme sua senha", message: "Para excluir sua conta, digite sua senha", preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.placeholder = "Senha"
+            textField.isSecureTextEntry = true
+        }
+
+        alert.addAction(UIAlertAction(title: "Cancelar", style: .cancel))
+
+        alert.addAction(UIAlertAction(title: "Confirmar", style: .destructive, handler: { _ in
+            guard let password = alert.textFields?.first?.text, !password.isEmpty else {
+                completion(false)
+                return
+            }
+
+            let credential = EmailAuthProvider.credential(withEmail: email, password: password)
+
+            user.reauthenticate(with: credential) { result, error in
+                if let error = error {
+                    print("❌ Erro ao reautenticar: \(error.localizedDescription)")
+                    
+                    DispatchQueue.main.async {
+                        let errorAlert = UIAlertController(title: "Erro", message: "Senha incorreta. Tente novamente.", preferredStyle: .alert)
+                        errorAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                        self.present(errorAlert, animated: true)
+                    }
+                    
+                    completion(false)
+                } else {
+                    completion(true)
+                }
+            }
+        }))
+
+        DispatchQueue.main.async {
+            self.present(alert, animated: true)
+        }
+    }
+
+    
+    
+    func deleteUserAccount() {
+        guard let user = Auth.auth().currentUser else { return }
+        let userID = user.uid
+        let db = Firestore.firestore()
+        let storageRef = Storage.storage().reference().child("profileImages/\(userID).jpg")
+
+        self.activityIndicator.startAnimating()
+        self.view.isUserInteractionEnabled = false
+
+        reauthenticateUser { success in
+            if !success {
+                self.activityIndicator.stopAnimating()
+                self.view.isUserInteractionEnabled = true
+                return
+            }
+
+            storageRef.delete { error in
+                if let error = error {
+                    print("⚠️ Erro ao deletar imagem: \(error.localizedDescription)")
+                }
+
+                db.collection("users").document(userID).delete { error in
+                    if let error = error {
+                        print("⚠️ Erro ao deletar Firestore: \(error.localizedDescription)")
+                    }
+
+                    user.delete { error in
+                        self.activityIndicator.stopAnimating()
+                        self.view.isUserInteractionEnabled = true
+                        
+                        if let error = error {
+                            print("❌ Erro ao deletar conta: \(error.localizedDescription)")
+                            
+                            DispatchQueue.main.async {
+                                let alert = UIAlertController(title: "Erro", message: "Não foi possível excluir sua conta. Tente novamente.", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                                self.present(alert, animated: true)
+                            }
+                            
+                        } else {
+                            print("✅ Conta excluída")
+
+                            // Limpa dados locais
+                            UserDefaults.standard.removeObject(forKey: "nickname")
+                            UserDefaults.standard.removeObject(forKey: "photoURL")
+
+                            DispatchQueue.main.async {
+                                let loginVC = FirstScreenViewController()
+                                UIApplication.shared.windows.first?.rootViewController = loginVC
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     func didTapFeedback() {
         if let url = URL(string: "https://apps.apple.com/app/id497799835?action=write-review") {
             UIApplication.shared.open(url)
@@ -253,6 +363,15 @@ extension ConfigViewController: UITableViewDelegate {
                 navigationController?.pushViewController(AboutAppViewController(), animated: true)
             case .logout:
                 showAlertConfirmation()
+            case .deleteAccount:
+                let confirmAlert = UIAlertController(title: "Tem certeza?", message: "Essa ação apagará sua conta e todos os dados.", preferredStyle: .alert)
+
+                confirmAlert.addAction(UIAlertAction(title: "Cancelar", style: .cancel))
+                confirmAlert.addAction(UIAlertAction(title: "Sim, excluir", style: .destructive, handler: { _ in
+                    self.deleteUserAccount()
+                }))
+
+                present(confirmAlert, animated: true)
             }
         }
     }

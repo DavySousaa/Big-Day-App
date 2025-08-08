@@ -4,5 +4,6 @@ enum ConfigAction {
     case sendFeedback
     case showAbout
     case logout
+    case deleteAccount
 }
 

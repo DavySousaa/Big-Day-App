@@ -14,14 +14,14 @@ class EmailValidationServiceViewModel {
         service.validate(email: email) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let response):
-                    if response.formatValid && response.isSmtpValid {
+                case .success(let data):
+                    if data.regexp && data.smtpCheck {
                         self?.onValidationResult?(.success)
                     } else {
-                        self?.onValidationResult?(.failure("E-mail inválido. Verifique se ele está digitado corretamente."))
+                        self?.onValidationResult?(.failure("E-mail inválido ou não verificável."))
                     }
                 case .failure(let error):
-                    self?.onValidationResult?(.failure("Erro ao validar: \(error.localizedDescription)"))
+                    self?.onValidationResult?(.failure("Erro ao validar e-mail: \(error.localizedDescription)"))
                 }
             }
         }

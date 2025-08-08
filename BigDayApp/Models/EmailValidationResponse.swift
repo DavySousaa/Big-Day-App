@@ -8,44 +8,40 @@
 import Foundation
 
 struct EmailValidationResponse: Decodable {
+    let data: EmailData
+}
+
+struct EmailData: Decodable {
     let email: String
-    let formatValid: Bool
-    let isMxFound: Bool
-    let isSmtpValid: Bool
-    let score: Double
+    let result: String
+    let score: Int
+    let regexp: Bool
+    let smtpCheck: Bool
     
     enum CodingKeys: String, CodingKey {
         case email
-        case formatValid = "format_valid"
-        case isMxFound = "mx_found"
-        case isSmtpValid = "smtp_check"
+        case result
         case score
+        case regexp
+        case smtpCheck = "smtp_check"
     }
-}
-
-struct Format: Decodable {
-    let value: Bool
 }
 
 class EmailValidationService {
     
-    let apiKey = APIKey.emailValidation
+    let apiKey = APIKey.emailValidation // Chave do Hunter.io
     
-    func validate(email: String, completion: @escaping(Result<EmailValidationResponse, Error>) -> Void) {
+    func validate(email: String, completion: @escaping (Result<EmailData, Error>) -> Void) {
         
         guard let encodedEmail = email.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: "https://api.apilayer.com/email_verification/check?email=\(encodedEmail)") else {
+              let url = URL(string: "https://api.hunter.io/v2/email-verifier?email=\(encodedEmail)&api_key=\(apiKey)") else {
             return
         }
-        
+                
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue(apiKey, forHTTPHeaderField: "apikey")
-        
+                
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            
-            if let httpResponse = response as? HTTPURLResponse {
-            }
             
             if let error = error {
                 completion(.failure(error))
@@ -53,25 +49,17 @@ class EmailValidationService {
             }
             
             guard let data = data else {
-                return
-            }
-            
-            print(String(data: data, encoding: .utf8) ?? "Nada")
-            
-            if let errorResponse = try? JSONDecoder().decode(EmailValidationErrorResponse.self, from: data) {
-                let errorDescription = "Erro \(errorResponse.error.code): \(errorResponse.error.type)"
-                completion(.failure(NSError(domain: "", code: errorResponse.error.code, userInfo: [NSLocalizedDescriptionKey: errorDescription])))
+                completion(.failure(NSError(domain: "Sem dados", code: -1)))
                 return
             }
             
             do {
                 let result = try JSONDecoder().decode(EmailValidationResponse.self, from: data)
-                completion(.success(result))
+                completion(.success(result.data))
             } catch {
                 completion(.failure(error))
             }
         }
         task.resume()
     }
-
 }
