@@ -47,7 +47,7 @@ Desenvolvido em **Swift** com **UIKit** e **MVVM**, o projeto aplica **boas prá
 
 | Tela Inicial | Lista de Tarefas | Compartilhar Lista | Configurações |
 |--------------|-----------------|-------------------|---------------|
-| ![Tela Inicial](https://raw.githubusercontent.com/seuusuario/BigDayApp/main/screenshots/tela-inicial.jpeg) | ![Lista de Tarefas](https://raw.githubusercontent.com/seuusuario/BigDayApp/main/screenshots/lista.jpeg) | ![Compartilhar Lista](https://raw.githubusercontent.com/seuusuario/BigDayApp/main/screenshots/compartilhar.jpeg) | ![Configurações](https://raw.githubusercontent.com/seuusuario/BigDayApp/main/screenshots/configuracoes.jpeg) |
+| ![Tela Inicial](https://raw.githubusercontent.com/DavySousaa/BigDayApp/main/screenshots/tela-inicial.jpeg) | ![Lista de Tarefas](https://raw.githubusercontent.com/DavySousaa/BigDayApp/main/screenshots/lista.jpeg) | ![Compartilhar Lista](https://raw.githubusercontent.com/DavySousaa/BigDayApp/main/screenshots/compartilhar.jpeg) | ![Configurações](https://raw.githubusercontent.com/DavySousaa/BigDayApp/main/screenshots/configuracoes.jpeg) |
 
 ---
 
