@@ -162,6 +162,7 @@ class LoginAccount: UIView {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.hidesWhenStopped = true
+        indicator.color = ColorSuport.blackApp
         return indicator
     }()
     

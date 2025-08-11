@@ -314,7 +314,7 @@ class ConfigViewController: UIViewController, UINavigationControllerDelegate, UI
     }
 
     func didTapFeedback() {
-        if let url = URL(string: "https://apps.apple.com/app/id497799835?action=write-review") {
+        if let url = URL(string: "https://apps.apple.com/br/app/big-day/id6749603507?action=write-review") {
             UIApplication.shared.open(url)
         }
     }

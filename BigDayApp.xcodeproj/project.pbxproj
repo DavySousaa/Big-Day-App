@@ -282,7 +282,7 @@
 				DEVELOPMENT_TEAM = HUUJ9GFNBF;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/BigDayApp/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Big Day App";
+				INFOPLIST_KEY_CFBundleDisplayName = "Big Day";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -316,7 +316,7 @@
 				DEVELOPMENT_TEAM = HUUJ9GFNBF;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/BigDayApp/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Big Day App";
+				INFOPLIST_KEY_CFBundleDisplayName = "Big Day";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
