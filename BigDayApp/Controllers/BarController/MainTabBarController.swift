@@ -41,6 +41,7 @@ class MainTabBarController: UITabBarController {
         }
     }
     
+
     private func setupTabBar() {
         
         let tarefasVC = UINavigationController(rootViewController: TasksViewController())
@@ -57,6 +58,7 @@ class MainTabBarController: UITabBarController {
         tabBar.backgroundColor = UIColor(named: "PrimaryColor")
         
        
+        tabBar.addSubview(indicatorView)
         tabBar.addSubview(indicatorView)
         
         let tabBarItemCount = CGFloat(tabBar.items?.count ?? 1)

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F3067FF22E4A9C5400BE5E2E /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = F3067FF12E4A9C5400BE5E2E /* FSCalendar */; };
 		F3074F052E0F455600BBE549 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F3074F042E0F455600BBE549 /* FirebaseAuth */; };
 		F3074F072E0F455600BBE549 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F3074F062E0F455600BBE549 /* FirebaseDatabase */; };
 		F3074F092E0F455600BBE549 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F3074F082E0F455600BBE549 /* FirebaseFirestore */; };
@@ -70,6 +71,7 @@
 				F3074F0B2E0F455600BBE549 /* FirebaseStorage in Frameworks */,
 				F3074F052E0F455600BBE549 /* FirebaseAuth in Frameworks */,
 				F3F58C5A2E2BFBE9001F78CE /* SDWebImage in Frameworks */,
+				F3067FF22E4A9C5400BE5E2E /* FSCalendar in Frameworks */,
 				F337DB8E2E1AD9E80044E9B2 /* CropViewController in Frameworks */,
 				F337DB902E1AD9E80044E9B2 /* TOCropViewController in Frameworks */,
 				F3F58C5C2E2BFBE9001F78CE /* SDWebImageMapKit in Frameworks */,
@@ -87,6 +89,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F3067FF02E4A9C5400BE5E2E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F37B2BA52E355B7700F0DAE0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +116,7 @@
 				F3CBE2852DEE58D500D5BF2E /* Products */,
 				F3EFB30F2E32E667003299B5 /* BigDayAppTests */,
 				F3C876952E42D7F10083F7BF /* BigDayApp */,
+				F3067FF02E4A9C5400BE5E2E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -147,6 +157,7 @@
 				F337DB8F2E1AD9E80044E9B2 /* TOCropViewController */,
 				F3F58C592E2BFBE9001F78CE /* SDWebImage */,
 				F3F58C5B2E2BFBE9001F78CE /* SDWebImageMapKit */,
+				F3067FF12E4A9C5400BE5E2E /* FSCalendar */,
 			);
 			productName = BigDayApp;
 			productReference = F3CBE2842DEE58D500D5BF2E /* BigDayApp.app */;
@@ -207,6 +218,7 @@
 				F3074F032E0F455600BBE549 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				F337DB8C2E1AD9E80044E9B2 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
 				F3F58C582E2BFBE9001F78CE /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				F3067FEF2E4A9C3700BE5E2E /* XCRemoteSwiftPackageReference "FSCalendar" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F3CBE2852DEE58D500D5BF2E /* Products */;
@@ -538,6 +550,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F3067FEF2E4A9C3700BE5E2E /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.4;
+			};
+		};
 		F3074F032E0F455600BBE549 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -565,6 +585,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F3067FF12E4A9C5400BE5E2E /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F3067FEF2E4A9C3700BE5E2E /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
+		};
 		F3074F042E0F455600BBE549 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F3074F032E0F455600BBE549 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

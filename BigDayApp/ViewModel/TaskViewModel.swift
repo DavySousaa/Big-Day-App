@@ -47,6 +47,10 @@ final class TaskViewModel {
         saveTasks()
     }
     
+    func deleteAllTask() {
+        tasks.removeAll()
+    }
+    
     func updateTask(id: UUID, title: String, time: String) {
         if let index = tasks.firstIndex(where: { $0.id == id }) {
             tasks[index].title = title

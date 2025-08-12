@@ -9,7 +9,7 @@ import UIKit
 import FirebaseAuth
 import UserNotifications
 import FirebaseFirestore
-
+import FSCalendar
 
 class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpdatable, UITableViewDropDelegate, UITableViewDragDelegate {
     
@@ -129,6 +129,20 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         present(sheetVC, animated: true)
     }
     
+    private func showDeleteAlertConfirmation() {
+        let alert = UIAlertController(title: "Excluir todas as tarefas?", message: "Isso apagará todas as tarefas do seu dia.", preferredStyle: .alert)
+        let cancelButton = UIAlertAction(title: "Cancelar", style: .cancel)
+        let confirmButton = UIAlertAction(title: "Sim", style: .destructive) { _ in
+            self.viewModel.deleteAllTask()
+            self.viewModel.saveTasks()
+            self.taskScreen.tasksTableView.reloadData()
+        }
+        
+        alert.addAction(cancelButton)
+        alert.addAction(confirmButton)
+        present(alert, animated: true)
+    }
+    
     @objc(tableView:itemsForBeginningDragSession:atIndexPath:) func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let task = viewModel.tasks[indexPath.row]
         let itemProvider = NSItemProvider(object: task.title as NSString)
@@ -242,6 +256,17 @@ extension TasksViewController: UITableViewDelegate {
 }
 
 extension TasksViewController: TapButtonDelete {
+    func didTapCalendar() {
+        let sheetVC = CalendarViewController()
+        sheetVC.taskController = self
+        sheetVC.modalPresentationStyle = .overFullScreen
+        present(sheetVC, animated: true)
+    }
+    
+    func didTapDelete() {
+        showDeleteAlertConfirmation()
+    }
+    
     func didTapCreate() {
         let sheetVC = NewTasksViewController()
         sheetVC.taskController = self

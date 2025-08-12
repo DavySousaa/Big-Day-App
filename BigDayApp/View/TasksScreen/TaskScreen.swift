@@ -11,6 +11,8 @@ import FirebaseAuth
 
 protocol TapButtonDelete: AnyObject {
     func didTapCreate()
+    func didTapDelete()
+    func didTapCalendar()
 }
 
 class TaskScreen: UIView {
@@ -75,7 +77,7 @@ class TaskScreen: UIView {
         return view
     }()
     
-    private lazy var dayLabel: UILabel = {
+    public lazy var dayLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Montserrat-Regular", size: 14)
         label.textColor = ColorSuport.blackApp
@@ -84,16 +86,31 @@ class TaskScreen: UIView {
         let date = Date()
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "pt_Br")
-        formatter.dateFormat = "EEEE',' 'dia' d 'de' MMMM"
+        formatter.dateFormat = "EEE',' 'dia' d 'de' MMMM"
         let formattedDate = formatter.string(from: date)
         label.text = formattedDate.capitalized
         
         return label
     }()
     
+    private lazy var buttonCalendar: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .clear
+        button.tintColor = .label
+        button.setImage(UIImage(systemName: "calendar"), for: .normal)
+        button.addTarget(self, action: #selector(didTapButtonCalendar), for: .touchUpInside)
+        return button
+    }()
+    @objc private func didTapButtonCalendar(){
+        delegate?.didTapCalendar()
+    }
+    
     private lazy var newTaskButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .clear
+        button.backgroundColor = ColorSuport.greenApp
+        button.layer.cornerRadius = 30/2
+        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = .label
         button.addTarget(self, action: #selector(didTapButtonCreate), for: .touchUpInside)
@@ -102,6 +119,19 @@ class TaskScreen: UIView {
     }()
     @objc private func didTapButtonCreate(){
         delegate?.didTapCreate()
+    }
+    
+    private lazy var deleteAllTasks: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .clear
+        button.setImage(UIImage(systemName: "trash"), for: .normal)
+        button.tintColor = .label
+        button.addTarget(self, action: #selector(didTapButtonDelete), for: .touchUpInside)
+        return button
+    }()
+    @objc private func didTapButtonDelete(){
+        delegate?.didTapDelete()
     }
 
     public lazy var tasksTableView: UITableView = {
@@ -129,7 +159,10 @@ extension TaskScreen: SetupLayout {
         addSubview(viewDayLabel)
         addSubview(dayLabel)
         addSubview(newTaskButton)
+        addSubview(deleteAllTasks)
+        addSubview(buttonCalendar)
         addSubview(tasksTableView)
+        
     }
     
     func setupConstraints() {
@@ -146,6 +179,13 @@ extension TaskScreen: SetupLayout {
 
             newTaskButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             newTaskButton.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
+            newTaskButton.heightAnchor.constraint(equalToConstant: 30),
+            
+            deleteAllTasks.trailingAnchor.constraint(equalTo: newTaskButton.leadingAnchor, constant: -5),
+            deleteAllTasks.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
+            
+            buttonCalendar.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
+            buttonCalendar.leadingAnchor.constraint(equalTo: viewDayLabel.trailingAnchor, constant: 5),
             
             tasksTableView.centerXAnchor.constraint(equalTo: centerXAnchor),
             tasksTableView.leadingAnchor.constraint(equalTo: leadingAnchor),
