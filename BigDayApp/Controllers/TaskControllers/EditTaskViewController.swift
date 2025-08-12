@@ -1,12 +1,5 @@
-//
-//  EditTaskViewController.swift
-//  BigDayApp
-//
-//  Created by Davy Sousa on 07/07/25.
-//
-
-
 import UIKit
+import FirebaseFirestore
 
 protocol saveEditProcol: AnyObject {
     func saveEditBt(titleEdit: String, selectedTime: String)
@@ -28,7 +21,7 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
         editTask.delegate = self
         editTask.newTaskTextField.delegate = self
         fillTaskIfNeeded() 
-        blindViewModel()
+        bindViewModel()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -40,9 +33,8 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    func blindViewModel() {
+    func bindViewModel() {
         viewModel.onSucess = { [weak self] in
-            self?.taskController?.viewModel.loadTasks()
             self?.dismiss(animated: true)
         }
         viewModel.onError = { [weak self] message in

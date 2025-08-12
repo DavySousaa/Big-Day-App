@@ -23,7 +23,7 @@ class ShareTasksViewController: UIViewController, UserProfileUpdatable {
     var shareScreen = ShareScreen()
     var nickname = ""
     var selectedTaskID: UUID?
-    var currentColor: UIColor = .white
+    var currentColor: UIColor = .label
     var viewModel = TaskShareViewModel()
     
     override func viewDidLoad() {
@@ -39,6 +39,25 @@ class ShareTasksViewController: UIViewController, UserProfileUpdatable {
         shareScreen.tasksTableView.delegate = self
         shareScreen.tasksTableView.dataSource = self
         
+        viewModel.tasksChanged = { [weak self] in
+            self?.shareScreen.tasksTableView.reloadData()
+        }
+        viewModel.onSucess = { [weak self] in
+            self?.shareScreen.tasksTableView.reloadData()
+        }
+        viewModel.onError = { msg in
+            print("❌", msg)
+        }
+       
+        if let saved = SelectedDateStore.load() {
+            viewModel.updateSelectedDate(saved)
+        } else {
+            viewModel.updateSelectedDate(Date()) // hoje
+       
+        }
+        shareScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
+        viewModel.bind()
+        
         navigationSetupWithLogo(title: "Compartilhar tarefas")
         updateNickNamePhotoUser()
         
@@ -46,21 +65,21 @@ class ShareTasksViewController: UIViewController, UserProfileUpdatable {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if let saved = SelectedDateStore.load() {
+            viewModel.updateSelectedDate(saved)
+        } else {
+            viewModel.updateSelectedDate(Date()) // hoje
+       
+        }
+        shareScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
+        viewModel.bind()
         updateNickNamePhotoUser()
-        bindViewModel()
-        viewModel.loadTasks()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
             navigationSetupWithLogo(title: "Compartilhar tarefas")
-        }
-    }
-    
-    func bindViewModel() {
-        viewModel.onSucess = {[weak self] in
-            self?.shareScreen.tasksTableView.reloadData()
         }
     }
     
@@ -113,8 +132,7 @@ extension ShareTasksViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? TaskCellShare {
-            viewModel.toggleTask(at: indexPath.row)
-            tableView.reloadRows(at: [indexPath], with: .automatic)
+            
         }
     }
 }

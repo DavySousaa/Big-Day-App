@@ -14,7 +14,7 @@ import FSCalendar
 class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpdatable, UITableViewDropDelegate, UITableViewDragDelegate {
     
     var viewModel = TaskViewModel()
-    var selectedTaskID: UUID?
+    var selectedTaskID: String?
     var taskScreen = TaskScreen()
     var nickname = ""
     var nicknameProperty: String? {
@@ -33,10 +33,9 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         self.view = taskScreen
         view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationItem.hidesBackButton = true
-        
+
         taskScreen.delegate = self
         taskScreen.tasksTableView.tintColor = .white
-        
         taskScreen.tasksTableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
         taskScreen.tasksTableView.delegate = self
         taskScreen.tasksTableView.dataSource = self
@@ -44,22 +43,41 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         taskScreen.tasksTableView.dragDelegate = self
         taskScreen.tasksTableView.dropDelegate = self
 
+        taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
+
+        viewModel.tasksChanged = { [weak self] in
+            self?.taskScreen.tasksTableView.reloadData()
+        }
+        viewModel.onSucess = { [weak self] in
+            self?.taskScreen.tasksTableView.reloadData()
+        }
+        viewModel.onError = { msg in
+            print("❌", msg)
+        }
+       
+        if let saved = SelectedDateStore.load() {
+            viewModel.updateSelectedDate(saved)
+        } else {
+            viewModel.updateSelectedDate(Date()) // hoje
+       
+        }
+        taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
+        viewModel.bind()
 
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-        
-        
+
         let manager = NotificationManager()
         manager.scheduleDailyMorningNotification()
         manager.scheduleDailyNightNotification()
     }
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        bindViewModel()
-        viewModel.loadTasks()
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
+        
         showNotificationPermition()
     }
     
@@ -67,12 +85,6 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
             navigationSetupWithLogo(title: "Tarefas")
-        }
-    }
-    
-    func bindViewModel() {
-        viewModel.onSucess = {[weak self] in
-            self?.taskScreen.tasksTableView.reloadData()
         }
     }
     
@@ -115,13 +127,15 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
     
     func editButton() {
         guard let id = selectedTaskID,
-              let task = viewModel.tasks.first(where: { $0.id == id }) else { return }
+              let task = viewModel.tasks.first(where: { $0.firebaseId == id }) else { return }
+
         let sheetVC = EditTaskViewController()
         sheetVC.delegate = self
         sheetVC.taskController = self
         sheetVC.modalPresentationStyle = .overFullScreen
         sheetVC.editTask.newTaskTextField.text = task.title
         sheetVC.viewModel.taskToEdit = task
+
         if let timeString = task.time,
            let date = DateFormatHelper.dateFromFormattedTime(timeString) {
             sheetVC.editTask.timePicker.date = date
@@ -133,8 +147,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         let alert = UIAlertController(title: "Excluir todas as tarefas?", message: "Isso apagará todas as tarefas do seu dia.", preferredStyle: .alert)
         let cancelButton = UIAlertAction(title: "Cancelar", style: .cancel)
         let confirmButton = UIAlertAction(title: "Sim", style: .destructive) { _ in
-            self.viewModel.deleteAllTask()
-            self.viewModel.saveTasks()
+            self.viewModel.deleteAllForSelectedDay()
             self.taskScreen.tasksTableView.reloadData()
         }
         
@@ -150,25 +163,21 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         dragItem.localObject = task
         return [dragItem]
     }
-
+    
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
         guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
-        
+
         coordinator.items.forEach { item in
-            if let sourceIndexPath = item.sourceIndexPath,
-               let task = item.dragItem.localObject as? Task {
-                
+            if let sourceIndexPath = item.sourceIndexPath {
                 tableView.performBatchUpdates({
                     viewModel.moveTask(from: sourceIndexPath.row, to: destinationIndexPath.row)
-                    tableView.deleteRows(at: [sourceIndexPath], with: .automatic)
-                    tableView.insertRows(at: [destinationIndexPath], with: .automatic)
-                }, completion: { _ in
-                    self.viewModel.saveTasks()
+                    // O ViewModel já persiste a nova ordem no Firestore (persistOrder)
+                    tableView.moveRow(at: sourceIndexPath, to: destinationIndexPath)
                 })
             }
         }
     }
-
+    
 }
 
 extension TasksViewController: UITableViewDataSource {
@@ -214,25 +223,24 @@ extension TasksViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? TaskCell {
-            viewModel.tasks[indexPath.row].isCompleted.toggle()
-            viewModel.saveTasks()
-            tableView.reloadRows(at: [indexPath], with: .automatic)
+            
         }
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, completion) in
             self.viewModel.deleteTask(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            completionHandler(true)
+            completion(true) // Snapshot atualiza a UI
         }
-        
-        let editAction = UIContextualAction(style: .normal, title: "Editar") { (action, view, completionHandler) in
-            self.selectedTaskID = self.viewModel.tasks[indexPath.row].id
+
+        let editAction = UIContextualAction(style: .normal, title: "Editar") { (_, _, completion) in
+            // Pegue o id do Firestore
+            let task = self.viewModel.tasks[indexPath.row]
+            self.selectedTaskID = task.firebaseId
             self.editButton()
-            completionHandler(true)
+            completion(true)
         }
-        
+
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .red
         let editIcon = UIImage(systemName: "square.and.pencil")?.withTintColor(ColorSuport.blackApp, renderingMode: .alwaysOriginal)
@@ -240,26 +248,27 @@ extension TasksViewController: UITableViewDelegate {
         editAction.backgroundColor = ColorSuport.greenApp
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
+
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-
+    
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         viewModel.moveTask(from: sourceIndexPath.row, to: destinationIndexPath.row)
     }
-
+    
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false
     }
-
+    
 }
 
 extension TasksViewController: TapButtonDelete {
     func didTapCalendar() {
         let sheetVC = CalendarViewController()
         sheetVC.taskController = self
-        sheetVC.modalPresentationStyle = .overFullScreen
+        sheetVC.modalPresentationStyle = .pageSheet
         present(sheetVC, animated: true)
     }
     
@@ -268,21 +277,17 @@ extension TasksViewController: TapButtonDelete {
     }
     
     func didTapCreate() {
-        let sheetVC = NewTasksViewController()
-        sheetVC.taskController = self
-        sheetVC.modalPresentationStyle = .overFullScreen
-        present(sheetVC, animated: true)
+        let vc = NewTasksViewController()
+        vc.taskController = self
+        vc.modalPresentationStyle = .overFullScreen // ou .overCurrentContext, etc
+        present(vc, animated: true)
     }
 }
 
 extension TasksViewController: saveEditProcol {
     func saveEditBt(titleEdit: String, selectedTime: String) {
-        guard let id = selectedTaskID else {return}
-        if let index = viewModel.tasks.firstIndex(where: { $0.id == id}) {
-            viewModel.tasks[index].title = titleEdit
-            viewModel.tasks[index].time = selectedTime ?? ""
-            viewModel.saveTasks()
-            taskScreen.tasksTableView.reloadData()
-        }
+        guard let id = selectedTaskID else { return }
+        viewModel.updateTask(id: id, title: titleEdit, timeString: selectedTime.isEmpty ? nil : selectedTime)
+        // O listener atualiza a tabela; não precisa mexer aqui.
     }
 }

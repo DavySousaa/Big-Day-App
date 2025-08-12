@@ -40,7 +40,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				Suport/Untitled.swift,
 			);
 			target = F3CBE2832DEE58D500D5BF2E /* BigDayApp */;
 		};

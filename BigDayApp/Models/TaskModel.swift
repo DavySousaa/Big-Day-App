@@ -1,21 +1,11 @@
-//
-//  TaskModel.swift
-//  BigDayApp
-//
-//  Created by Davy Sousa on 28/06/25.
-//
 import Foundation
 
-class Task: Codable {
-    var id: UUID
+struct Task: Codable {
+    var firebaseId: String?   // id do documento no Firestore
     var title: String
-    var time: String?
+    var time: String?         // opcional
     var isCompleted: Bool
-    
-    init(id: UUID, title: String, time: String?, isCompleted: Bool = false) {
-        self.id = id
-        self.title = title
-        self.time = time
-        self.isCompleted = isCompleted
-    }
+    var dueDate: Date
+    var dateKey: String       // "yyyy-MM-dd"
+    var order: Int?           // opcional
 }

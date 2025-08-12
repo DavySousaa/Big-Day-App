@@ -15,7 +15,6 @@ class TaskCellShare: UITableViewCell {
         let label = UILabel()
         label.textColor = .label
         label.font = UIFont(name: "Montserrat-Regular", size: 15)
-        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
