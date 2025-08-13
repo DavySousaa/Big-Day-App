@@ -112,7 +112,7 @@ class TaskScreen: UIView {
         button.layer.cornerRadius = 30/2
         button.widthAnchor.constraint(equalToConstant: 30).isActive = true
         button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.tintColor = .label
+        button.tintColor = ColorSuport.blackApp
         button.addTarget(self, action: #selector(didTapButtonCreate), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button

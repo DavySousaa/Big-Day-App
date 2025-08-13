@@ -121,22 +121,19 @@ class CalendarScreen: UIView {
     }
     
     public func styleCalendar() {
-        // substitui pelas tuas cores. Ex.: ColorSuport.greenApp
         let primary = ColorSuport.greenApp
         let textPrimary = UIColor.label
         let textSecondary = UIColor.secondaryLabel
 
-        // header (barra com mês/ano)
         calendar.appearance.headerDateFormat = "MMMM yyyy" // “agosto 2025”
         calendar.appearance.headerTitleAlignment = .center
         calendar.appearance.headerTitleFont = .systemFont(ofSize: 18, weight: .semibold)
         calendar.appearance.headerTitleColor = textPrimary
         calendar.appearance.headerMinimumDissolvedAlpha = 0.3 // meses adjacentes nas setas
 
-        // weekday (seg, ter, …)
         calendar.appearance.weekdayFont = .systemFont(ofSize: 12, weight: .semibold)
         calendar.appearance.weekdayTextColor = textSecondary
-        calendar.calendarWeekdayView.weekdayLabels.forEach { $0.text = $0.text?.capitalized } // "Seg", "Ter"...
+        calendar.calendarWeekdayView.weekdayLabels.forEach { $0.text = $0.text?.capitalized }
 
         // dia “hoje”
         calendar.appearance.todayColor = primary.withAlphaComponent(0.15)       // bolinha de hoje (fundo)
@@ -159,7 +156,7 @@ class CalendarScreen: UIView {
 
         // “event dots” (se usar pontinhos)
         calendar.appearance.eventDefaultColor = primary
-        calendar.appearance.eventSelectionColor = .white
+        calendar.appearance.eventSelectionColor = ColorSuport.greenApp
     }
 }
 

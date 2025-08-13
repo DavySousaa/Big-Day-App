@@ -10,11 +10,24 @@ protocol TapButtonShareDelete: AnyObject {
     func didTapCopyBtn()
     func didTapWhiteColor()
     func didTapBlackColor()
+    func didTapInfoButton()
 }
 
 class ShareScreen: UIView {
     
     weak var delegate: TapButtonShareDelete?
+    
+    public lazy var infoShareButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "info.circle"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .label
+        button.addTarget(self, action: #selector(didTapInfoShareButton), for: .touchUpInside)
+        return button
+    }()
+    @objc private func didTapInfoShareButton() {
+        delegate?.didTapInfoButton()
+    }
     
     private lazy var textUp: UILabel = {
         let label = UILabel()

@@ -19,6 +19,43 @@ final class TaskRepository {
     private func tasksRef(uid: String) -> CollectionReference {
         db.collection("users").document(uid).collection("tasks")
     }
+    
+    func fetchTasksBetween(_ start: Date,
+                           _ end: Date,
+                           completion: @escaping (Result<[Task], Error>) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(.failure(NSError(domain: "Firebase",
+                                        code: -1,
+                                        userInfo: [NSLocalizedDescriptionKey: "Usuário não logado."])))
+            return
+        }
+
+        let startKey = DateHelper.dateKey(from: start) // "yyyyMMdd"
+        let endKey   = DateHelper.dateKey(from: end)
+
+        tasksRef(uid: uid)
+            .whereField("dateKey", isGreaterThanOrEqualTo: startKey)
+            .whereField("dateKey", isLessThanOrEqualTo: endKey)
+            .order(by: "dateKey", descending: false)
+            .getDocuments { snap, err in
+                if let err = err { completion(.failure(err)); return }
+
+                let items: [Task] = snap?.documents.compactMap { doc in
+                    let d = doc.data()
+                    return Task(
+                        firebaseId: doc.documentID,
+                        title: d["title"] as? String ?? "",
+                        time: d["time"] as? String,
+                        isCompleted: d["isCompleted"] as? Bool ?? false,
+                        dueDate: (d["dueDate"] as? Timestamp)?.dateValue() ?? Date(),
+                        dateKey: d["dateKey"] as? String ?? "",
+                        order: d["order"] as? Int
+                    )
+                } ?? []
+
+                completion(.success(items))
+            }
+    }
 
     func createTask(title: String,
                     timeString: String?,

@@ -7,15 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F3067FF22E4A9C5400BE5E2E /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = F3067FF12E4A9C5400BE5E2E /* FSCalendar */; };
-		F3074F052E0F455600BBE549 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F3074F042E0F455600BBE549 /* FirebaseAuth */; };
-		F3074F072E0F455600BBE549 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F3074F062E0F455600BBE549 /* FirebaseDatabase */; };
-		F3074F092E0F455600BBE549 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F3074F082E0F455600BBE549 /* FirebaseFirestore */; };
-		F3074F0B2E0F455600BBE549 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F3074F0A2E0F455600BBE549 /* FirebaseStorage */; };
-		F337DB8E2E1AD9E80044E9B2 /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = F337DB8D2E1AD9E80044E9B2 /* CropViewController */; };
-		F337DB902E1AD9E80044E9B2 /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = F337DB8F2E1AD9E80044E9B2 /* TOCropViewController */; };
-		F3F58C5A2E2BFBE9001F78CE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = F3F58C592E2BFBE9001F78CE /* SDWebImage */; };
-		F3F58C5C2E2BFBE9001F78CE /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F3F58C5B2E2BFBE9001F78CE /* SDWebImageMapKit */; };
+		F31E23372E4D3B6200DB92D1 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = F31E23362E4D3B6200DB92D1 /* FSCalendar */; };
+		F31E233A2E4D3B7200DB92D1 /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = F31E23392E4D3B7200DB92D1 /* CropViewController */; };
+		F31E233C2E4D3B7200DB92D1 /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = F31E233B2E4D3B7200DB92D1 /* TOCropViewController */; };
+		F31E233F2E4D3BE000DB92D1 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F31E233E2E4D3BE000DB92D1 /* FirebaseAnalytics */; };
+		F31E23412E4D3BE000DB92D1 /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = F31E23402E4D3BE000DB92D1 /* FirebaseAnalyticsCore */; };
+		F31E23432E4D3BE000DB92D1 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F31E23422E4D3BE000DB92D1 /* FirebaseAuth */; };
+		F31E23452E4D3BE000DB92D1 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = F31E23442E4D3BE000DB92D1 /* FirebaseCore */; };
+		F31E23472E4D3BE000DB92D1 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F31E23462E4D3BE000DB92D1 /* FirebaseDatabase */; };
+		F31E23492E4D3BE000DB92D1 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F31E23482E4D3BE000DB92D1 /* FirebaseStorage */; };
+		F31E234B2E4D3C8600DB92D1 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F31E234A2E4D3C8600DB92D1 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,15 +67,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F3074F072E0F455600BBE549 /* FirebaseDatabase in Frameworks */,
-				F3074F0B2E0F455600BBE549 /* FirebaseStorage in Frameworks */,
-				F3074F052E0F455600BBE549 /* FirebaseAuth in Frameworks */,
-				F3F58C5A2E2BFBE9001F78CE /* SDWebImage in Frameworks */,
-				F3067FF22E4A9C5400BE5E2E /* FSCalendar in Frameworks */,
-				F337DB8E2E1AD9E80044E9B2 /* CropViewController in Frameworks */,
-				F337DB902E1AD9E80044E9B2 /* TOCropViewController in Frameworks */,
-				F3F58C5C2E2BFBE9001F78CE /* SDWebImageMapKit in Frameworks */,
-				F3074F092E0F455600BBE549 /* FirebaseFirestore in Frameworks */,
+				F31E23372E4D3B6200DB92D1 /* FSCalendar in Frameworks */,
+				F31E23432E4D3BE000DB92D1 /* FirebaseAuth in Frameworks */,
+				F31E23492E4D3BE000DB92D1 /* FirebaseStorage in Frameworks */,
+				F31E234B2E4D3C8600DB92D1 /* FirebaseFirestore in Frameworks */,
+				F31E233C2E4D3B7200DB92D1 /* TOCropViewController in Frameworks */,
+				F31E23412E4D3BE000DB92D1 /* FirebaseAnalyticsCore in Frameworks */,
+				F31E23452E4D3BE000DB92D1 /* FirebaseCore in Frameworks */,
+				F31E233F2E4D3BE000DB92D1 /* FirebaseAnalytics in Frameworks */,
+				F31E23472E4D3BE000DB92D1 /* FirebaseDatabase in Frameworks */,
+				F31E233A2E4D3B7200DB92D1 /* CropViewController in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,13 +90,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F3067FF02E4A9C5400BE5E2E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		F37B2BA52E355B7700F0DAE0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -115,7 +110,6 @@
 				F3CBE2852DEE58D500D5BF2E /* Products */,
 				F3EFB30F2E32E667003299B5 /* BigDayAppTests */,
 				F3C876952E42D7F10083F7BF /* BigDayApp */,
-				F3067FF02E4A9C5400BE5E2E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -148,15 +142,16 @@
 			);
 			name = BigDayApp;
 			packageProductDependencies = (
-				F3074F042E0F455600BBE549 /* FirebaseAuth */,
-				F3074F062E0F455600BBE549 /* FirebaseDatabase */,
-				F3074F082E0F455600BBE549 /* FirebaseFirestore */,
-				F3074F0A2E0F455600BBE549 /* FirebaseStorage */,
-				F337DB8D2E1AD9E80044E9B2 /* CropViewController */,
-				F337DB8F2E1AD9E80044E9B2 /* TOCropViewController */,
-				F3F58C592E2BFBE9001F78CE /* SDWebImage */,
-				F3F58C5B2E2BFBE9001F78CE /* SDWebImageMapKit */,
-				F3067FF12E4A9C5400BE5E2E /* FSCalendar */,
+				F31E23362E4D3B6200DB92D1 /* FSCalendar */,
+				F31E23392E4D3B7200DB92D1 /* CropViewController */,
+				F31E233B2E4D3B7200DB92D1 /* TOCropViewController */,
+				F31E233E2E4D3BE000DB92D1 /* FirebaseAnalytics */,
+				F31E23402E4D3BE000DB92D1 /* FirebaseAnalyticsCore */,
+				F31E23422E4D3BE000DB92D1 /* FirebaseAuth */,
+				F31E23442E4D3BE000DB92D1 /* FirebaseCore */,
+				F31E23462E4D3BE000DB92D1 /* FirebaseDatabase */,
+				F31E23482E4D3BE000DB92D1 /* FirebaseStorage */,
+				F31E234A2E4D3C8600DB92D1 /* FirebaseFirestore */,
 			);
 			productName = BigDayApp;
 			productReference = F3CBE2842DEE58D500D5BF2E /* BigDayApp.app */;
@@ -179,8 +174,6 @@
 				F3EFB30F2E32E667003299B5 /* BigDayAppTests */,
 			);
 			name = BigDayAppTests;
-			packageProductDependencies = (
-			);
 			productName = BigDayAppTests;
 			productReference = F3EFB30E2E32E667003299B5 /* BigDayAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -214,10 +207,9 @@
 			mainGroup = F3CBE27B2DEE58D500D5BF2E;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				F3074F032E0F455600BBE549 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				F337DB8C2E1AD9E80044E9B2 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
-				F3F58C582E2BFBE9001F78CE /* XCRemoteSwiftPackageReference "SDWebImage" */,
-				F3067FEF2E4A9C3700BE5E2E /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				F31E23352E4D3B6200DB92D1 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				F31E23382E4D3B7200DB92D1 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
+				F31E233D2E4D3BE000DB92D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F3CBE2852DEE58D500D5BF2E /* Products */;
@@ -549,7 +541,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F3067FEF2E4A9C3700BE5E2E /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+		F31E23352E4D3B6200DB92D1 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
 			requirement = {
@@ -557,15 +549,7 @@
 				minimumVersion = 2.8.4;
 			};
 		};
-		F3074F032E0F455600BBE549 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.15.0;
-			};
-		};
-		F337DB8C2E1AD9E80044E9B2 /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
+		F31E23382E4D3B7200DB92D1 /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TimOliver/TOCropViewController.git";
 			requirement = {
@@ -573,61 +557,66 @@
 				minimumVersion = 2.7.4;
 			};
 		};
-		F3F58C582E2BFBE9001F78CE /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+		F31E233D2E4D3BE000DB92D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.21.1;
+				minimumVersion = 12.1.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F3067FF12E4A9C5400BE5E2E /* FSCalendar */ = {
+		F31E23362E4D3B6200DB92D1 /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F3067FEF2E4A9C3700BE5E2E /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			package = F31E23352E4D3B6200DB92D1 /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
 		};
-		F3074F042E0F455600BBE549 /* FirebaseAuth */ = {
+		F31E23392E4D3B7200DB92D1 /* CropViewController */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F3074F032E0F455600BBE549 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
-		};
-		F3074F062E0F455600BBE549 /* FirebaseDatabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F3074F032E0F455600BBE549 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseDatabase;
-		};
-		F3074F082E0F455600BBE549 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F3074F032E0F455600BBE549 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
-		};
-		F3074F0A2E0F455600BBE549 /* FirebaseStorage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F3074F032E0F455600BBE549 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseStorage;
-		};
-		F337DB8D2E1AD9E80044E9B2 /* CropViewController */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F337DB8C2E1AD9E80044E9B2 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			package = F31E23382E4D3B7200DB92D1 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
 			productName = CropViewController;
 		};
-		F337DB8F2E1AD9E80044E9B2 /* TOCropViewController */ = {
+		F31E233B2E4D3B7200DB92D1 /* TOCropViewController */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F337DB8C2E1AD9E80044E9B2 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			package = F31E23382E4D3B7200DB92D1 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
 			productName = TOCropViewController;
 		};
-		F3F58C592E2BFBE9001F78CE /* SDWebImage */ = {
+		F31E233E2E4D3BE000DB92D1 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F3F58C582E2BFBE9001F78CE /* XCRemoteSwiftPackageReference "SDWebImage" */;
-			productName = SDWebImage;
+			package = F31E233D2E4D3BE000DB92D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
 		};
-		F3F58C5B2E2BFBE9001F78CE /* SDWebImageMapKit */ = {
+		F31E23402E4D3BE000DB92D1 /* FirebaseAnalyticsCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F3F58C582E2BFBE9001F78CE /* XCRemoteSwiftPackageReference "SDWebImage" */;
-			productName = SDWebImageMapKit;
+			package = F31E233D2E4D3BE000DB92D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsCore;
+		};
+		F31E23422E4D3BE000DB92D1 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F31E233D2E4D3BE000DB92D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		F31E23442E4D3BE000DB92D1 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F31E233D2E4D3BE000DB92D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		F31E23462E4D3BE000DB92D1 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F31E233D2E4D3BE000DB92D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		F31E23482E4D3BE000DB92D1 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F31E233D2E4D3BE000DB92D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		F31E234A2E4D3C8600DB92D1 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F31E233D2E4D3BE000DB92D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

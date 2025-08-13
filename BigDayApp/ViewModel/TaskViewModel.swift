@@ -4,33 +4,62 @@ import FSCalendar
 import FirebaseFirestore
 
 final class TaskViewModel {
-
+    
     // Saídas para a VC
     var onSucess: (() -> Void)?
     var onError: ((String) -> Void)?
     var tasksChanged: (() -> Void)?
-
+    private(set) var allTasks: [Task] = []
+    
     // Dependências
     private let repo = TaskRepository.shared
-
+    private(set) var tasksForSelectedDay: [Task] = []
+    private let cal = Calendar.current
+    
+    
+    func loadTasksForMonth(_ start: Date, _ end: Date, completion: @escaping () -> Void) {
+        repo.fetchTasksBetween(start, end) { [weak self] result in
+            switch result {
+            case .success(let items):
+                self?.allTasks = items
+                self?.filterForSelectedDay()
+                completion()
+            case .failure(let err):
+                self?.onError?("Erro ao carregar mês: \(err.localizedDescription)")
+                completion()
+            }
+        }
+    }
+    
+    func updateSelectedDateTwo(_ date: Date) {
+        selectedDate = date
+        filterForSelectedDay()
+    }
+    
+    private func filterForSelectedDay() {
+        let day = cal.startOfDay(for: selectedDate)
+        tasksForSelectedDay = allTasks.filter { cal.isDate(cal.startOfDay(for: $0.dueDate), inSameDayAs: day) }
+    }
+    
+    
     // Estado
     private(set) var tasks: [Task] = [] {
         didSet { tasksChanged?() }
     }
     private(set) var selectedDate: Date = Date()
-
+    
     // MARK: - Ciclo de vida de bindings
     /// Começa a observar o dia atual
     func bind() {
         observeDay()
     }
-
+    
     /// Troca o dia observado (chame ao sair do calendário)
     func updateSelectedDate(_ date: Date) {
         selectedDate = date
         observeDay()
     }
-
+    
     private func observeDay() {
         repo.observeDay(selectedDate) { [weak self] result in
             switch result {
@@ -45,11 +74,11 @@ final class TaskViewModel {
             }
         }
     }
-
+    
     deinit {
         repo.stopObserveDay()
     }
-
+    
     // MARK: - CRUD
     /// Cria uma task para o dia selecionado (timeString: ex. "14:30" ou nil)
     func addTask(title: String, timeString: String?) {
@@ -57,10 +86,10 @@ final class TaskViewModel {
             onError?("Dê um nome para sua tarefa.")
             return
         }
-
+        
         let due = DateHelper.combine(day: selectedDate, timeHM: timeString)
         let hasTime = (timeString?.isEmpty == false)
-
+        
         repo.createTask(title: title,
                         timeString: timeString,
                         dueDate: due,
@@ -73,7 +102,7 @@ final class TaskViewModel {
             }
         }
     }
-
+    
     func updateTask(id: String, title: String, timeString: String?) {
         var payload: [String: Any] = ["title": title]
         if let timeString, !timeString.isEmpty {
@@ -88,7 +117,7 @@ final class TaskViewModel {
             let due = DateHelper.combine(day: selectedDate, timeHM: nil)
             payload["dueDate"] = Timestamp(date: due)
         }
-
+        
         repo.update(id: id, fields: payload) { [weak self] err in
             if let err = err {
                 self?.onError?("Erro ao atualizar: \(err.localizedDescription)")
@@ -97,14 +126,14 @@ final class TaskViewModel {
             }
         }
     }
-
+    
     func toggleTask(at index: Int) {
         guard tasks.indices.contains(index),
               let id = tasks[index].firebaseId else { return }
         let newValue = !(tasks[index].isCompleted)
         repo.toggleDone(id: id, isDone: newValue)
     }
-
+    
     func deleteTask(at index: Int) {
         guard tasks.indices.contains(index),
               let id = tasks[index].firebaseId else { return }
@@ -116,12 +145,12 @@ final class TaskViewModel {
             }
         }
     }
-
+    
     /// Exclui todas as tasks do dia atualmente carregado
     func deleteAllForSelectedDay() {
         let group = DispatchGroup()
         var firstError: Error?
-
+        
         tasks.forEach { t in
             guard let id = t.firebaseId else { return }
             group.enter()
@@ -130,7 +159,7 @@ final class TaskViewModel {
                 group.leave()
             }
         }
-
+        
         group.notify(queue: .main) { [weak self] in
             if let err = firstError {
                 self?.onError?("Erro ao excluir todas: \(err.localizedDescription)")
@@ -139,18 +168,18 @@ final class TaskViewModel {
             }
         }
     }
-
+    
     // MARK: - Reordenação (persistindo campo `order`)
     func moveTask(from sourceIndex: Int, to destinationIndex: Int) {
         guard tasks.indices.contains(sourceIndex),
               tasks.indices.contains(destinationIndex) else { return }
-
+        
         let movedTask = tasks.remove(at: sourceIndex)
         tasks.insert(movedTask, at: destinationIndex)
-
+        
         persistOrder()
     }
-
+    
     /// Persiste a ordem atual do array no Firestore (order = índice)
     private func persistOrder() {
         // batch simples: atualiza `order` de todo mundo conforme posição
@@ -158,10 +187,10 @@ final class TaskViewModel {
             guard let id = t.firebaseId else { return nil }
             return (id, idx)
         }
-
+        
         let group = DispatchGroup()
         var firstError: Error?
-
+        
         updates.forEach { pair in
             group.enter()
             repo.update(id: pair.id, fields: ["order": pair.order]) { err in
@@ -169,7 +198,7 @@ final class TaskViewModel {
                 group.leave()
             }
         }
-
+        
         group.notify(queue: .main) { [weak self] in
             if let err = firstError {
                 self?.onError?("Erro ao salvar ordenação: \(err.localizedDescription)")

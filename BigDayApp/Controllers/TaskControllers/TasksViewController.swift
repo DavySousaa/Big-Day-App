@@ -33,7 +33,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         self.view = taskScreen
         view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationItem.hidesBackButton = true
-
+        
         taskScreen.delegate = self
         taskScreen.tasksTableView.tintColor = .white
         taskScreen.tasksTableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
@@ -42,9 +42,9 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         taskScreen.tasksTableView.dragInteractionEnabled = true
         taskScreen.tasksTableView.dragDelegate = self
         taskScreen.tasksTableView.dropDelegate = self
-
+        
         taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
-
+        
         viewModel.tasksChanged = { [weak self] in
             self?.taskScreen.tasksTableView.reloadData()
         }
@@ -54,30 +54,29 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         viewModel.onError = { msg in
             print("❌", msg)
         }
-       
+        
         if let saved = SelectedDateStore.load() {
             viewModel.updateSelectedDate(saved)
         } else {
-            viewModel.updateSelectedDate(Date()) // hoje
-       
+            viewModel.updateSelectedDate(Date())
         }
         taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
         viewModel.bind()
-
+        
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-
+        
         let manager = NotificationManager()
         manager.scheduleDailyMorningNotification()
         manager.scheduleDailyNightNotification()
     }
-
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-        
+        viewModel.bind()
         showNotificationPermition()
     }
     
@@ -128,14 +127,14 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
     func editButton() {
         guard let id = selectedTaskID,
               let task = viewModel.tasks.first(where: { $0.firebaseId == id }) else { return }
-
+        
         let sheetVC = EditTaskViewController()
         sheetVC.delegate = self
         sheetVC.taskController = self
         sheetVC.modalPresentationStyle = .overFullScreen
         sheetVC.editTask.newTaskTextField.text = task.title
         sheetVC.viewModel.taskToEdit = task
-
+        
         if let timeString = task.time,
            let date = DateFormatHelper.dateFromFormattedTime(timeString) {
             sheetVC.editTask.timePicker.date = date
@@ -166,7 +165,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
     
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
         guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
-
+        
         coordinator.items.forEach { item in
             if let sourceIndexPath = item.sourceIndexPath {
                 tableView.performBatchUpdates({
@@ -223,7 +222,7 @@ extension TasksViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? TaskCell {
-            
+            viewModel.toggleTask(at: indexPath.row)
         }
     }
     
@@ -232,7 +231,7 @@ extension TasksViewController: UITableViewDelegate {
             self.viewModel.deleteTask(at: indexPath.row)
             completion(true) // Snapshot atualiza a UI
         }
-
+        
         let editAction = UIContextualAction(style: .normal, title: "Editar") { (_, _, completion) in
             // Pegue o id do Firestore
             let task = self.viewModel.tasks[indexPath.row]
@@ -240,7 +239,7 @@ extension TasksViewController: UITableViewDelegate {
             self.editButton()
             completion(true)
         }
-
+        
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .red
         let editIcon = UIImage(systemName: "square.and.pencil")?.withTintColor(ColorSuport.blackApp, renderingMode: .alwaysOriginal)
@@ -248,7 +247,7 @@ extension TasksViewController: UITableViewDelegate {
         editAction.backgroundColor = ColorSuport.greenApp
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
-
+    
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
@@ -268,7 +267,7 @@ extension TasksViewController: TapButtonDelete {
     func didTapCalendar() {
         let sheetVC = CalendarViewController()
         sheetVC.taskController = self
-        sheetVC.modalPresentationStyle = .pageSheet
+        sheetVC.modalPresentationStyle = .overFullScreen
         present(sheetVC, animated: true)
     }
     
@@ -279,7 +278,7 @@ extension TasksViewController: TapButtonDelete {
     func didTapCreate() {
         let vc = NewTasksViewController()
         vc.taskController = self
-        vc.modalPresentationStyle = .overFullScreen // ou .overCurrentContext, etc
+        vc.modalPresentationStyle = .overFullScreen
         present(vc, animated: true)
     }
 }
@@ -288,6 +287,5 @@ extension TasksViewController: saveEditProcol {
     func saveEditBt(titleEdit: String, selectedTime: String) {
         guard let id = selectedTaskID else { return }
         viewModel.updateTask(id: id, title: titleEdit, timeString: selectedTime.isEmpty ? nil : selectedTime)
-        // O listener atualiza a tabela; não precisa mexer aqui.
     }
 }

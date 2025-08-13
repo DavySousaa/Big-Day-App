@@ -31,6 +31,7 @@ class ShareTasksViewController: UIViewController, UserProfileUpdatable {
         self.view = shareScreen
         view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationController?.navigationBar.tintColor = .label
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareScreen.infoShareButton)
         
         shareScreen.delegate = self
         shareScreen.tasksTableView.tintColor = .white
@@ -48,12 +49,12 @@ class ShareTasksViewController: UIViewController, UserProfileUpdatable {
         viewModel.onError = { msg in
             print("❌", msg)
         }
-       
+        
         if let saved = SelectedDateStore.load() {
             viewModel.updateSelectedDate(saved)
         } else {
             viewModel.updateSelectedDate(Date()) // hoje
-       
+            
         }
         shareScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
         viewModel.bind()
@@ -69,7 +70,7 @@ class ShareTasksViewController: UIViewController, UserProfileUpdatable {
             viewModel.updateSelectedDate(saved)
         } else {
             viewModel.updateSelectedDate(Date()) // hoje
-       
+            
         }
         shareScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
         viewModel.bind()
@@ -138,6 +139,10 @@ extension ShareTasksViewController: UITableViewDelegate {
 }
 
 extension ShareTasksViewController: TapButtonShareDelete {
+    func didTapInfoButton() {
+        showAlert(title: "Como compartilhar?", message: "Ao clicar em copiar, a imagem fica salva no copia/cola do texto. Então basta colar onde queira colocar o screenshot das tarefas.")
+    }
+    
     func didTapWhiteColor() {
         currentColor = .white
         shareScreen.nameUserLabel.textColor = .white
