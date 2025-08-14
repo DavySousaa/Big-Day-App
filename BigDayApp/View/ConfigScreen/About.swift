@@ -28,7 +28,7 @@ class AboutAppView: UIView {
         let label = UILabel()
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
-        label.text = "Versão \(version) (\(build))"
+        label.text = "Versão \(version)"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .tertiaryLabel
         label.textAlignment = .center
