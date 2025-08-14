@@ -56,7 +56,6 @@ class MainTabBarController: UITabBarController {
         viewControllers = [tarefasVC, compartilharVC, configVC]
         tabBar.tintColor = .label
         tabBar.backgroundColor = UIColor(named: "PrimaryColor")
-        
        
         tabBar.addSubview(indicatorView)
         tabBar.addSubview(indicatorView)

@@ -5,7 +5,6 @@ class NotificationManager {
     
     static let shared = NotificationManager()
     
-    
     func scheduleDailyMorningNotification() {
         var components = DateComponents()
         components.hour = 7
@@ -20,6 +19,23 @@ class NotificationManager {
         
         let request = UNNotificationRequest(identifier: "morningReminder", content: content, trigger: trigger)
 
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleWeeklyMondayMotivation() {
+        var components = DateComponents()
+        components.weekday = 2
+        components.hour = 8
+        components.minute = 0
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Nova semana, novas conquistas 🚀"
+        content.body = "Planeje seu Big Day e comece a semana com tudo!"
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: "mondayMotivation", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
     
@@ -54,6 +70,23 @@ class NotificationManager {
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleWeeklySundayMotivation() {
+        var components = DateComponents()
+        components.weekday = 1
+        components.hour = 16
+        components.minute = 0
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Hoje é dia de descanso 😴"
+        content.body = "Planeje sua semana e comece com foco!"
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: "SundayMotivation", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
 }

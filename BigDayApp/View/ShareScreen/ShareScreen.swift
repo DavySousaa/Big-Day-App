@@ -7,10 +7,11 @@
 import UIKit
 
 protocol TapButtonShareDelete: AnyObject {
-    func didTapCopyBtn()
+    func didTapCopyPhotoBtn()
     func didTapWhiteColor()
     func didTapBlackColor()
     func didTapInfoButton()
+    func didTapCopyShadowBtn()
 }
 
 class ShareScreen: UIView {
@@ -31,7 +32,7 @@ class ShareScreen: UIView {
     
     private lazy var textUp: UILabel = {
         let label = UILabel()
-        label.text = "Copie um screenshot da sua lista de tarefas!"
+        label.text = "Copie sua lista e adicione sombra para destacar as tarefas!"
         label.font = UIFont(name: "Montserrat-Regular", size: 12) ?? UIFont.systemFont(ofSize: 12)
         label.textColor = .label
         label.textAlignment = .center
@@ -42,7 +43,7 @@ class ShareScreen: UIView {
     
     public lazy var copyPhotoButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Copiar", for: .normal)
+        button.setTitle("Tarefas", for: .normal)
         button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
         button.tintColor = ColorSuport.blackApp
         button.semanticContentAttribute = .forceLeftToRight
@@ -55,7 +56,25 @@ class ShareScreen: UIView {
         return button
     }()
     @objc private func didTapCopyButton() {
-        delegate?.didTapCopyBtn()
+        delegate?.didTapCopyPhotoBtn()
+    }
+    
+    public lazy var copyShadowButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Sombra", for: .normal)
+        button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
+        button.tintColor = ColorSuport.blackApp
+        button.semanticContentAttribute = .forceLeftToRight
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 0)
+        button.backgroundColor = ColorSuport.greenApp
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 45/2
+        button.addTarget(self, action: #selector(didTapShadowButton), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    @objc private func didTapShadowButton() {
+        delegate?.didTapCopyShadowBtn()
     }
     
     public lazy var colorWhiteButton: UIButton = {
@@ -87,7 +106,7 @@ class ShareScreen: UIView {
     }
     
     private lazy var buttonsStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [copyPhotoButton, colorWhiteButton, colorBlackButton])
+        let stack = UIStackView(arrangedSubviews: [copyPhotoButton, copyShadowButton, colorWhiteButton, colorBlackButton])
         stack.axis = .horizontal
         stack.spacing = 5
         stack.distribution = .equalCentering
@@ -211,7 +230,6 @@ class ShareScreen: UIView {
 
 extension ShareScreen: SetupLayout {
     func addSubViews() {
-        addSubview(textUp)
         addSubview(buttonsStackView)
         addSubview(stackViewItems)
         containerView.addSubview(profileUserStackView)
@@ -232,8 +250,10 @@ extension ShareScreen: SetupLayout {
             stackViewItems.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             stackViewItems.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
-            copyPhotoButton.widthAnchor.constraint(equalToConstant: 300),
+            copyPhotoButton.widthAnchor.constraint(equalToConstant: 130),
             copyPhotoButton.heightAnchor.constraint(equalToConstant: 45),
+            copyShadowButton.widthAnchor.constraint(equalToConstant: 130),
+            copyShadowButton.heightAnchor.constraint(equalToConstant: 45),
             
             colorWhiteButton.widthAnchor.constraint(equalToConstant: 45),
             colorWhiteButton.heightAnchor.constraint(equalToConstant: 45),

@@ -71,7 +71,6 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         manager.scheduleDailyNightNotification()
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateNickNamePhotoUser()

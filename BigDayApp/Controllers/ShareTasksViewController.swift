@@ -61,7 +61,6 @@ class ShareTasksViewController: UIViewController, UserProfileUpdatable {
         
         navigationSetupWithLogo(title: "Compartilhar tarefas")
         updateNickNamePhotoUser()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -139,8 +138,9 @@ extension ShareTasksViewController: UITableViewDelegate {
 }
 
 extension ShareTasksViewController: TapButtonShareDelete {
+    
     func didTapInfoButton() {
-        showAlert(title: "Como compartilhar?", message: "Ao clicar em copiar, a imagem fica salva no copia/cola do texto. Então basta colar onde queira colocar o screenshot das tarefas.")
+        showAlert(title: "Como compartilhar?", message: "Ao clicar em copiar, a imagem fica salva no copia/cola do texto. Então basta colar onde queira colocar o screenshot.")
     }
     
     func didTapWhiteColor() {
@@ -157,7 +157,7 @@ extension ShareTasksViewController: TapButtonShareDelete {
         shareScreen.tasksTableView.reloadData()
     }
     
-    func didTapCopyBtn() {
+    func didTapCopyPhotoBtn() {
         let imageHelper = RenderImageHelper()
         guard let image = imageHelper.createShareImage(
             from: shareScreen.containerView,
@@ -165,5 +165,11 @@ extension ShareTasksViewController: TapButtonShareDelete {
         ) else { return }
         showAlert(title: "Sucesso", message: "Imagem copiada para área de transferência.")
         UIPasteboard.general.image = image
+    }
+    
+    func didTapCopyShadowBtn() {
+        let imageHelper = RenderImageHelper()
+        imageHelper.copyImageFromAssets(named: "Shadow")
+        showAlert(title: "Sucesso", message: "Imagem copiada para área de transferência.")
     }
 }

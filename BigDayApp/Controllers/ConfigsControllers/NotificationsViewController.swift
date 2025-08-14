@@ -1,61 +1,90 @@
-//
-//  NotificationsViewController.swift
-//  BigDayApp
-//
-//  Created by Davy Sousa on 12/07/25.
-//
-
 import UIKit
+import UserNotifications
 
 class NotificationsViewController: UIViewController {
     
-    var notifications = Notifications()
+    var notifications = Notifications() // sua view custom com o switchPicker
     var viewModel = NotificationCenterViewModel()
+    
+    private var isUpdatingSwitch = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationSetup(title: "Notificações")
-        self.view = notifications
+        view = notifications
         view.backgroundColor = UIColor(named: "PrimaryColor")
         notifications.delegate = self
-        blindViewModel()
+        bindViewModel()
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appCameBack),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
     }
     
-    private func blindViewModel() {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        syncSwitchWithSystem()
+    }
+    
+    @objc private func appCameBack() {
+        syncSwitchWithSystem()
+    }
+    
+    private func bindViewModel() {
         viewModel.onPermissionDenied = { [weak self] in
-            
+            self?.setSwitchOn(false)
         }
         viewModel.onPermissionGranted = { [weak self] in
-            self?.notifications.switchPicker.setOn(false, animated: true)
+            self?.setSwitchOn(true)
         }
         viewModel.onSettingsRequired = { [weak self] in
             self?.showAlertToOpenSettings()
         }
     }
     
-    private func showAlertToOpenSettings() {
-            let alert = UIAlertController(
-                title: "Tem certeza?",
-                message: "Se quiser desativar completamente, vá até os Ajustes do sistema.",
-                preferredStyle: .alert
-            )
-
-            alert.addAction(UIAlertAction(title: "Cancelar", style: .cancel, handler: { _ in
-                self.notifications.switchPicker.setOn(true, animated: true)
-            }))
-
-            alert.addAction(UIAlertAction(title: "Abrir Ajustes", style: .default, handler: { _ in
-                if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(settingsURL)
-                }
-            }))
-
-            present(alert, animated: true)
+    private func setSwitchOn(_ isOn: Bool, animated: Bool = true) {
+        isUpdatingSwitch = true
+        notifications.switchPicker.setOn(isOn, animated: animated)
+        isUpdatingSwitch = false
+    }
+    
+    private func syncSwitchWithSystem() {
+        UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+            let enabled = (settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional)
+                        && (settings.alertSetting == .enabled || settings.soundSetting == .enabled || settings.badgeSetting == .enabled)
+            DispatchQueue.main.async {
+                self?.setSwitchOn(enabled, animated: false)
+            }
         }
+    }
+    
+    private func showAlertToOpenSettings() {
+        let alert = UIAlertController(
+            title: "Tem certeza?",
+            message: "Para desativar completamente, vá em Ajustes > Notificações > Big Day.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancelar", style: .cancel, handler: { [weak self] _ in
+            self?.setSwitchOn(true)
+        }))
+        alert.addAction(UIAlertAction(title: "Abrir Ajustes", style: .default, handler: { _ in
+            if let url = URL(string: UIApplication.openSettingsURLString),
+               UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+            }
+        }))
+        present(alert, animated: true)
+    }
 }
 
-extension NotificationsViewController: NotificationDelete {
+extension NotificationsViewController: NotificationDelete { // talvez "NotificationDelegate"?
     func switchOff(_ sender: UISwitch) {
+        // Evita loop quando setamos programaticamente
+        if isUpdatingSwitch { return }
         viewModel.handleNotificationToggle(isOn: sender.isOn)
     }
 }
+

@@ -20,4 +20,13 @@ class RenderImageHelper {
         containerView.backgroundColor = .secondarySystemBackground
         return image
     }
+    
+    func copyImageFromAssets(named imageName: String) {
+        if let image = UIImage(named: imageName) {
+            UIPasteboard.general.image = image
+            print("Imagem '\(imageName)' copiada com sucesso!")
+        } else {
+            print("❌ Não foi possível encontrar a imagem '\(imageName)' nos Assets.")
+        }
+    }
 }
