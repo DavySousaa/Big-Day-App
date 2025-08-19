@@ -137,7 +137,7 @@ class TaskScreen: UIView {
     public lazy var tasksTableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
-        table.separatorStyle = .none
+        table.separatorStyle = .singleLine
         table.showsVerticalScrollIndicator = false
         table.backgroundColor = UIColor(named: "PrimaryColor")
         return table

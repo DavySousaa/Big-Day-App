@@ -69,6 +69,8 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         let manager = NotificationManager()
         manager.scheduleDailyMorningNotification()
         manager.scheduleDailyNightNotification()
+        manager.scheduleWeeklyMondayMotivation()
+        manager.scheduleWeeklySundayMotivation()
     }
     
     override func viewWillAppear(_ animated: Bool) {

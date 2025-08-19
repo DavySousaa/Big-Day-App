@@ -31,7 +31,7 @@ class TaskCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setup()
-        selectionStyle = .none
+        selectionStyle = .gray
         titleLabel.numberOfLines = 1
         titleLabel.lineBreakMode = .byWordWrapping // ou .byWordWrapping se quiser quebrar linha
         titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
