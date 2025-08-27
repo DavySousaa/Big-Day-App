@@ -5,7 +5,7 @@ struct Task: Codable {
     var title: String
     var time: String?         // opcional
     var isCompleted: Bool
-    var dueDate: Date
+    var dueDate: Date?
     var dateKey: String       // "yyyy-MM-dd"
     var order: Int?           // opcional
 }

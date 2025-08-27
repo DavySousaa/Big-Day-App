@@ -51,7 +51,7 @@ class CalendarViewController: UIViewController {
         taskController?.viewModel.loadTasksForMonth(startOfMonth, endOfMonth) { [weak self] in
             guard let self = self else { return }
             let todas = self.taskController?.viewModel.allTasks ?? []
-            self.daysWithTasksKeys = Set(todas.map { self.dayKey($0.dueDate) })
+            self.daysWithTasksKeys = Set(todas.map { self.dayKey($0.dueDate!) })
             self.calendarScreen.calendar.reloadData()
         }
     }
@@ -85,7 +85,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
         taskController?.viewModel.loadTasksForMonth(startOfMonth, endOfMonth) { [weak self] in
             guard let self = self else { return }
             let todas = self.taskController?.viewModel.allTasks ?? []
-            self.daysWithTasksKeys = Set(todas.map { self.dayKey($0.dueDate) })
+            self.daysWithTasksKeys = Set(todas.map { self.dayKey($0.dueDate!) })
             self.calendarScreen.calendar.reloadData()
         }
     }

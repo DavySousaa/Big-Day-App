@@ -31,7 +31,7 @@ class TaskCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setup()
-        selectionStyle = .gray
+        selectionStyle = .none
         titleLabel.numberOfLines = 1
         titleLabel.lineBreakMode = .byWordWrapping // ou .byWordWrapping se quiser quebrar linha
         titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -63,7 +63,6 @@ class TaskCell: UITableViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: circleImage.trailingAnchor, constant: 8),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: hourLabel.leadingAnchor, constant: -10),
-            
 
             hourLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             hourLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)

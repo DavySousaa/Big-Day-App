@@ -18,7 +18,7 @@ class NotificationManager {
         content.sound = .default
         
         let request = UNNotificationRequest(identifier: "morningReminder", content: content, trigger: trigger)
-
+        
         UNUserNotificationCenter.current().add(request)
     }
     
@@ -52,24 +52,51 @@ class NotificationManager {
         content.sound = .default
         
         let request = UNNotificationRequest(identifier: "nightReflection", content: content, trigger: trigger)
-
+        
         UNUserNotificationCenter.current().add(request)
     }
     
-    func scheduleTaskReminder(title: String, date: Date) {
+    func rescheduleTaskReminder(for taskID: String, title: String, dueDate: Date) {
+        UNUserNotificationCenter.current()
+            .removePendingNotificationRequests(withIdentifiers: [taskID])
+        scheduleTaskReminder(title: title, date: dueDate, identifier: taskID)
+    }
+    
+    func cancelTaskReminder(for taskID: String) {
+        UNUserNotificationCenter.current()
+            .removePendingNotificationRequests(withIdentifiers: [taskID])
+    }
+    
+    func scheduleTaskReminder(title: String, date: Date, identifier: String) {
         guard let reminderDate = Calendar.current.date(byAdding: .minute, value: -10, to: date) else { return }
+        guard reminderDate > Date() else { return }
         
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: reminderDate)
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let comps = Calendar.current.dateComponents([.year,.month,.day,.hour,.minute], from: reminderDate)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
         
         let content = UNMutableNotificationContent()
         content.title = "Alerta de tarefa ⏰"
         content.body = "Sua tarefa \"\(title)\" começa em 10 minutos!"
         content.sound = .default
         
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleWeeklyWedMotivation() {
+        var components = DateComponents()
+        components.weekday = 4
+        components.hour = 8
+        components.minute = 0
         
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Já passamos da metade! 🚀"
+        content.body = "Agora é hora de manter o gás e transformar essa semana em conquista total. Bora fechar com chave de ouro!"
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: "WedMotivation", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
     

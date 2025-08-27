@@ -138,6 +138,7 @@ class TaskScreen: UIView {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.separatorStyle = .singleLine
+        table.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         table.showsVerticalScrollIndicator = false
         table.backgroundColor = UIColor(named: "PrimaryColor")
         return table

@@ -1,10 +1,3 @@
-//
-//  TasksViewController.swift
-//  BigDayApp
-//
-//  Created by Davy Sousa on 02/06/25.
-//
-
 import UIKit
 import FirebaseAuth
 import UserNotifications
@@ -71,6 +64,8 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         manager.scheduleDailyNightNotification()
         manager.scheduleWeeklyMondayMotivation()
         manager.scheduleWeeklySundayMotivation()
+        manager.scheduleWeeklyWedMotivation()
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -230,17 +225,17 @@ extension TasksViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, completion) in
             self.viewModel.deleteTask(at: indexPath.row)
-            completion(true) // Snapshot atualiza a UI
+            completion(true) 
         }
         
         let editAction = UIContextualAction(style: .normal, title: "Editar") { (_, _, completion) in
-            // Pegue o id do Firestore
             let task = self.viewModel.tasks[indexPath.row]
             self.selectedTaskID = task.firebaseId
             self.editButton()
             completion(true)
         }
         
+    
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .red
         let editIcon = UIImage(systemName: "square.and.pencil")?.withTintColor(ColorSuport.blackApp, renderingMode: .alwaysOriginal)

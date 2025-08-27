@@ -38,7 +38,7 @@ final class TaskViewModel {
     
     private func filterForSelectedDay() {
         let day = cal.startOfDay(for: selectedDate)
-        tasksForSelectedDay = allTasks.filter { cal.isDate(cal.startOfDay(for: $0.dueDate), inSameDayAs: day) }
+        tasksForSelectedDay = allTasks.filter { cal.isDate(cal.startOfDay(for: $0.dueDate!), inSameDayAs: day) }
     }
     
     
@@ -54,7 +54,6 @@ final class TaskViewModel {
         observeDay()
     }
     
-    /// Troca o dia observado (chame ao sair do calendário)
     func updateSelectedDate(_ date: Date) {
         selectedDate = date
         observeDay()
@@ -64,7 +63,6 @@ final class TaskViewModel {
         repo.observeDay(selectedDate) { [weak self] result in
             switch result {
             case .success(let items):
-                // Ordena por 'order' (se existir), senão por createdAt lá no query
                 self?.tasks = items.sorted { (a, b) in
                     (a.order ?? Int.max) < (b.order ?? Int.max)
                 }

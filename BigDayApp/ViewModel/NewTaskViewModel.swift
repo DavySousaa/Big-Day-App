@@ -32,14 +32,13 @@ final class NewTaskViewModel {
 
         // 4) Cria no Firestore
         repo.createTask(title: trimmed,
-                        timeString: timeString,   // pode ser nil
+                        timeString: timeString,
                         dueDate: dueDate,
                         hasTime: hasTime) { [weak self] result in
             switch result {
-            case .success:
-                // 5) (Opcional) Agenda notificação local se tiver horário
+            case .success(let taskID):
                 if hasTime {
-                    NotificationManager.shared.scheduleTaskReminder(title: trimmed, date: dueDate)
+                    NotificationManager.shared.scheduleTaskReminder(title: trimmed, date: dueDate, identifier: taskID)
                 }
                 self?.onSucess?()
             case .failure(let err):
@@ -63,9 +62,9 @@ final class NewTaskViewModel {
                         dueDate: dueDate,
                         hasTime: hasTime) { [weak self] result in
             switch result {
-            case .success:
+            case .success(let taskID):
                 if hasTime {
-                    NotificationManager.shared.scheduleTaskReminder(title: trimmed, date: dueDate)
+                    NotificationManager.shared.scheduleTaskReminder(title: trimmed, date: dueDate, identifier: taskID)
                 }
                 self?.onSucess?()
             case .failure(let err):

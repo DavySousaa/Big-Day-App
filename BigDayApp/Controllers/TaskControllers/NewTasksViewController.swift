@@ -51,10 +51,8 @@ extension NewTasksViewController: NewTaskDelegate {
         let title = newTask.newTaskTextField.text ?? ""
         let shouldSchedule = newTask.switchPicker.isOn
 
-        // Dia base vem da tela principal (o dia que o usuário escolheu no calendário)
         let baseDay = taskController?.viewModel.selectedDate ?? Date()
 
-        // Se tiver horário ligado, gera "HH:mm"; senão, deixa nil
         let timeString: String? = {
             guard shouldSchedule else { return nil }
             let f = DateFormatter()
@@ -64,7 +62,6 @@ extension NewTasksViewController: NewTaskDelegate {
             return f.string(from: newTask.timePicker.date)
         }()
 
-        // Chama a sobrecarga alinhada com Firestore
         viewModel.createTask(title: title, timeString: timeString, baseDay: baseDay)
     }
 }
