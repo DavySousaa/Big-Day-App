@@ -1,3 +1,3 @@
 struct APIKey {
-    static let emailValidation = "fce02a0dc4f8ae81fe2c82dfe5ea413883d90031"
+    static let emailValidation = "678cf755f9aa830e5311bc8af9c33b09034cdfb8"
 }

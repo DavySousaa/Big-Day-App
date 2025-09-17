@@ -4,11 +4,12 @@ import UserNotifications
 import FirebaseFirestore
 import FSCalendar
 
-class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpdatable, UITableViewDropDelegate, UITableViewDragDelegate {
+class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpdatable, UITableViewDropDelegate, UITableViewDragDelegate, CircleButtonProtocool {
     
     var viewModel = TaskViewModel()
     var selectedTaskID: String?
     var taskScreen = TaskScreen()
+    var datailsController: DetailsTaskController?
     var nickname = ""
     var nicknameProperty: String? {
         get { return nickname }
@@ -25,7 +26,6 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         super.viewDidLoad()
         self.view = taskScreen
         view.backgroundColor = UIColor(named: "PrimaryColor")
-        navigationItem.hidesBackButton = true
         
         taskScreen.delegate = self
         taskScreen.tasksTableView.tintColor = .white
@@ -65,7 +65,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         manager.scheduleWeeklyMondayMotivation()
         manager.scheduleWeeklySundayMotivation()
         manager.scheduleWeeklyWedMotivation()
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -173,6 +173,17 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         }
     }
     
+    func tapCircleButton(_ cell: TaskCell) {
+        guard let indexPath = taskScreen.tasksTableView.indexPath(for: cell) else { return }
+        viewModel.toggleTask(at: indexPath.row)
+        
+        if indexPath.row < viewModel.tasks.count {
+            let updated = viewModel.tasks[indexPath.row]
+            cell.configure(with: updated)
+        } else {
+            taskScreen.tasksTableView.reloadRows(at: [indexPath], with: .none)
+        }
+    }
 }
 
 extension TasksViewController: UITableViewDataSource {
@@ -188,28 +199,8 @@ extension TasksViewController: UITableViewDataSource {
         cell.configure(with: task)
         cell.backgroundColor = UIColor(named: "PrimaryColor")
         
-        if task.isCompleted {
-            cell.circleImage.image = UIImage(systemName: "checkmark.circle.fill")
-            let attributedText = NSAttributedString(
-                string: task.title,
-                attributes: [
-                    .strikethroughStyle: NSUnderlineStyle.single.rawValue,
-                    .foregroundColor: UIColor.label
-                ]
-            )
-            cell.titleLabel.attributedText = attributedText
-        } else {
-            cell.circleImage.image = UIImage(systemName: "circle")
-            
-            let attributedText = NSAttributedString(
-                string: task.title,
-                attributes: [
-                    .strikethroughStyle: 0,
-                    .foregroundColor: UIColor.label
-                ]
-            )
-            cell.titleLabel.attributedText = attributedText
-        }
+        cell.delegate = self
+        
         return cell
     }
 }
@@ -217,15 +208,13 @@ extension TasksViewController: UITableViewDataSource {
 extension TasksViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? TaskCell {
-            viewModel.toggleTask(at: indexPath.row)
-        }
+        navigationController?.pushViewController(DetailsTaskController(), animated: true)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, completion) in
             self.viewModel.deleteTask(at: indexPath.row)
-            completion(true) 
+            completion(true)
         }
         
         let editAction = UIContextualAction(style: .normal, title: "Editar") { (_, _, completion) in
@@ -235,7 +224,7 @@ extension TasksViewController: UITableViewDelegate {
             completion(true)
         }
         
-    
+        
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .red
         let editIcon = UIImage(systemName: "square.and.pencil")?.withTintColor(ColorSuport.blackApp, renderingMode: .alwaysOriginal)
