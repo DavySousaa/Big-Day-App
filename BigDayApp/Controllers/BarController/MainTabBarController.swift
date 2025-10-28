@@ -47,13 +47,16 @@ class MainTabBarController: UITabBarController {
         let tarefasVC = UINavigationController(rootViewController: TasksViewController())
         tarefasVC.tabBarItem = UITabBarItem(title: "Tarefas", image: UIImage(systemName: "checkmark.circle"), tag: 0)
         
+        let listaVc = UINavigationController(rootViewController: ListsViewController())
+        listaVc.tabBarItem = UITabBarItem(title: "Listas", image: UIImage(systemName: "list.bullet"), tag: 1)
+        
         let compartilharVC = UINavigationController(rootViewController: ShareTasksViewController())
-        compartilharVC.tabBarItem = UITabBarItem(title: "Compartilhar", image: UIImage(systemName: "square.and.arrow.up"), tag: 1)
+        compartilharVC.tabBarItem = UITabBarItem(title: "Compartilhar", image: UIImage(systemName: "square.and.arrow.up"), tag: 2)
         
         let configVC = UINavigationController(rootViewController: ConfigViewController())
-        configVC.tabBarItem = UITabBarItem(title: "Configurações", image: UIImage(systemName: "gearshape"), tag: 2)
+        configVC.tabBarItem = UITabBarItem(title: "Configurações", image: UIImage(systemName: "gearshape"), tag: 3)
         
-        viewControllers = [tarefasVC, compartilharVC, configVC]
+        viewControllers = [tarefasVC, listaVc, compartilharVC, configVC]
         tabBar.tintColor = .label
         tabBar.backgroundColor = UIColor(named: "PrimaryColor")
        

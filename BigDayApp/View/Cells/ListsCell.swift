@@ -1,8 +1,8 @@
 import UIKit
 
-class ConfigCell: UITableViewCell {
+class ListsCell: UITableViewCell {
     
-    static let identifier = "ConfigCell"
+    static let identifier = "ListsCell"
     
     public lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -38,7 +38,7 @@ class ConfigCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with item: Config) {
+    func configure(with item: Lists) {
         titleLabel.text = item.title
         iconImageView.image = UIImage(systemName: item.iconName)
         arrowImageView.image = UIImage(systemName: "chevron.right")
@@ -64,3 +64,4 @@ class ConfigCell: UITableViewCell {
         ])
     }
 }
+

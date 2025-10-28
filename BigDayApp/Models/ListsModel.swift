@@ -1,8 +1,8 @@
 import UIKit
 import Foundation
 
-struct Config {
+struct Lists {
     let title: String
     let iconName: String
-    let action: ConfigAction
 }
+
