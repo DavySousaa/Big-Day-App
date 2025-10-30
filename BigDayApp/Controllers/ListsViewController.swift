@@ -8,21 +8,22 @@ class ListsViewController: UIViewController {
         Lists(title: "Compras", iconName: "cart"),
         Lists(title: "Aniversário", iconName: "gift.fill"),
         Lists(title: "Reforma", iconName: "hammer"),
-        Lists(title: "Compras para casa", iconName: "house.fill")
     ]
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = listsView
-        
+        navigationController?.navigationBar.tintColor = .label
         listsView.listsTableView.tintColor = .white
         
         listsView.listsTableView.register(ListsCell.self, forCellReuseIdentifier: ListsCell.identifier)
         listsView.listsTableView.delegate = self
         listsView.listsTableView.dataSource = self
+        listsView.delegate = self
         
         view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationController?.navigationBar.tintColor = .label
         navigationSetupWithLogo(title: "Listas")
+        navigationItem.backButtonTitle = "Voltar"
     }
 }
 
@@ -37,7 +38,7 @@ extension ListsViewController: UITableViewDataSource {
         }
         let list = lists[indexPath.row]
         cell.configure(with: list)
-        cell.backgroundColor = .secondarySystemGroupedBackground
+        cell.backgroundColor = .clear
         
         return cell
     }
@@ -52,3 +53,9 @@ extension ListsViewController: UITableViewDelegate {
     }
 }
 
+extension ListsViewController: ListsViewDelegate {
+    func didTapNewList() {
+        print("clicou no botão")
+        navigationController?.pushViewController(CreateListViewController(), animated: true)
+    }
+}
