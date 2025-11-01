@@ -2,48 +2,16 @@ import UIKit
 
 class CreateListViewController: UIViewController {
     
+    var viewModel = CreateListViewModel()
     var createList = CreateList()
     weak var taskController: TasksViewController?
-    let icons = [
-        // 📦 Utilitários / Compras
-        "cart", "bag.fill", "creditcard", "gift.fill", "tag.fill", "basket.fill",
-        
-        // 🏠 Casa / Rotina
-        "house.fill", "hammer", "wrench.and.screwdriver.fill", "lightbulb.fill", "sofa.fill", "paintbrush.fill",
-        
-        // 🎯 Organização / Produtividade
-        "checkmark.circle.fill", "list.bullet.rectangle", "calendar", "clock.fill", "alarm.fill", "bookmark.fill",
-        
-        // 🎉 Eventos / Festas
-        "balloon.2.fill", "party.popper.fill", "sparkles", "camera.fill", "music.note", "gift.fill",
-        
-        // 🍔 Comida / Saúde
-        "leaf.fill", "heart.fill", "fork.knife", "cup.and.saucer.fill", "takeoutbag.and.cup.and.straw.fill",
-        
-        // 🧳 Viagem / Lazer
-        "airplane", "map.fill", "tram.fill", "mappin.and.ellipse", "beach.umbrella.fill", "tent.fill",
-        
-        // 💼 Trabalho / Estudos
-        "laptopcomputer", "doc.text.fill", "book.fill", "pencil", "folder.fill", "graduationcap.fill",
-        
-        // ⚽️ Esportes / Hobbies
-        "figure.run", "figure.tennis", "soccerball", "bicycle", "dumbbell", "gamecontroller.fill",
-        
-        // 💬 Comunicação / Pessoal
-        "message.fill", "phone.fill", "envelope.fill", "person.2.fill", "hands.sparkles.fill",
-        
-        // 💰 Finanças
-        "dollarsign.circle.fill", "chart.line.uptrend.xyaxis", "wallet.pass.fill", "bag.circle.fill",
-        
-        // 🧘‍♂️ Bem-estar / Pessoal
-        "moon.fill", "sun.max.fill", "sparkle.magnifyingglass", "cross.case.fill", "heart.text.square.fill"
-    ]
-    var selectedIcon: String?
+    var selectedIcon: String = ""
+    var icons = IconList.icons
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = createList
-                
+        
         createList.iconsCollectionView.dataSource = self
         createList.iconsCollectionView.delegate = self
         createList.iconsCollectionView.register(IconCell.self, forCellWithReuseIdentifier: IconCell.identifier)
@@ -51,6 +19,7 @@ class CreateListViewController: UIViewController {
         view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationController?.navigationBar.tintColor = .label
         navigationSetup(title: "Criar Lista")
+        bindViewModel()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -61,12 +30,35 @@ class CreateListViewController: UIViewController {
         textField.resignFirstResponder()
         return true
     }
+    
+    private func bindViewModel() {
+        viewModel.onSucess = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
+        viewModel.onError = { [weak self] message in
+            self?.showAlert(message: message)
+        }
+    }
+    
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: "Atenção", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default))
+        present(alert, animated: true)
+    }
 }
 
 extension CreateListViewController: CreateListProtocol {
+    func didTapCreateList() {
+        let title = createList.titleTextField.text ?? ""
+        let iconName = selectedIcon
+        
+        viewModel.createList(title: title, iconName: iconName)
+        
+    }
+    
     func didTapChoiceIcon() {
         let isCollapsed = createList.collectionHeightConstraint.constant == 0
-        createList.collectionHeightConstraint.constant = isCollapsed ? 370 : 0
+        createList.collectionHeightConstraint.constant = isCollapsed ? 400 : 0
         
         UIView.animate(withDuration: 0.3) {
             let rotationAngle: CGFloat = isCollapsed ? .pi : 0
@@ -89,6 +81,8 @@ extension CreateListViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedIcon = icons[indexPath.item]
-        print("Ícone selecionado: \(selectedIcon!)")
+        print("Ícone selecionado: \(selectedIcon)")
     }
 }
+
+

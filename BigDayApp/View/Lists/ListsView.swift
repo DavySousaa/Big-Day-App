@@ -75,7 +75,7 @@ extension ListsView: SetupLayout {
     func setupConstraints() {
         NSLayoutConstraint.activate([
             textUp.centerXAnchor.constraint(equalTo: centerXAnchor),
-            textUp.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            textUp.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             
             newListButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             newListButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
@@ -84,8 +84,8 @@ extension ListsView: SetupLayout {
             newListButton.heightAnchor.constraint(equalToConstant: 41),
             
             listsTableView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            listsTableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 13),
-            listsTableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -13),
+            listsTableView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            listsTableView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             listsTableView.topAnchor.constraint(equalTo: textUp.bottomAnchor, constant: 20),
             listsTableView.bottomAnchor.constraint(equalTo: newListButton.topAnchor, constant: -20)
         ])

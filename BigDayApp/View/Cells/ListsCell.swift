@@ -38,7 +38,7 @@ class ListsCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with item: Lists) {
+    func configure(with item: UserList) {
         titleLabel.text = item.title
         iconImageView.image = UIImage(systemName: item.iconName)
         arrowImageView.image = UIImage(systemName: "chevron.right")

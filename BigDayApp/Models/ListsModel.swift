@@ -1,8 +1,14 @@
 import UIKit
 import Foundation
 
-struct Lists {
+struct UserList {
+    let id: String
     let title: String
     let iconName: String
 }
 
+struct ListItem {
+    let id: String
+    var title: String
+    var isCompleted: Bool
+}

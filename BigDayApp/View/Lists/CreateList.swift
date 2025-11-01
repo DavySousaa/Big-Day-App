@@ -1,7 +1,8 @@
 import UIKit
 
 protocol CreateListProtocol {
-    func didTapChoiceIcon ()
+    func didTapChoiceIcon()
+    func didTapCreateList()
 }
 
 class CreateList: UIView {
@@ -82,10 +83,13 @@ class CreateList: UIView {
         button.setTitle("Criar", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         button.layer.cornerRadius = 41/2
-        //button.addTarget(self, action: #selector(didTapButtonNewList), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapCreateListButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    @objc func didTapCreateListButton() {
+        delegate?.didTapCreateList()
+    }
     
     var collectionHeightConstraint: NSLayoutConstraint!
     
@@ -110,7 +114,6 @@ extension CreateList: SetupLayout {
         addSubview(tittleList)
         addSubview(titleTextField)
         addSubview(creatButton)
-        //addSubview(iconLabel)
         addSubview(iconSectionButton)
         addSubview(iconsCollectionView)
     }
@@ -124,10 +127,7 @@ extension CreateList: SetupLayout {
             titleTextField.centerXAnchor.constraint(equalTo: centerXAnchor),
             titleTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
             titleTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
-            titleTextField.heightAnchor.constraint(equalToConstant: 41),
-            
-            //iconLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
-            //iconLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 20),
+            titleTextField.heightAnchor.constraint(equalToConstant: 47),
             
             iconSectionButton.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 20),
             iconSectionButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
