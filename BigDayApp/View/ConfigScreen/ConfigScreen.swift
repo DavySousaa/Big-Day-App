@@ -89,7 +89,6 @@ class ConfigScreen: UIView {
         super.layoutSubviews()
         userPhoto.layer.cornerRadius = userPhoto.frame.height / 2
     }
-
     
     init() {
         super.init(frame: .zero)

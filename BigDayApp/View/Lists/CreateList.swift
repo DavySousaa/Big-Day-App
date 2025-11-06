@@ -22,7 +22,6 @@ class CreateList: UIView {
     public lazy var titleTextField: UITextField = {
         let textField = UITextField()
         textField.autocapitalizationType = .none
-        textField.keyboardType = .emailAddress
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.backgroundColor = .clear

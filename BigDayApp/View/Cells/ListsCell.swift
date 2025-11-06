@@ -15,6 +15,8 @@ class ListsCell: UITableViewCell {
     public let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
         label.font = UIFont(name: "Montserrat-Regular", size: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -56,7 +58,8 @@ class ListsCell: UITableViewCell {
             iconImageView.heightAnchor.constraint(equalToConstant: 24),
             
             titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 8),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: arrowImageView.leadingAnchor, constant: -10),
             
             arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),

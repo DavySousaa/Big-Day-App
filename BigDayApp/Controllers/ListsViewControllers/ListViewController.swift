@@ -11,9 +11,8 @@ class ListViewController: UIViewController {
         super.viewDidLoad()
         self.view = listView
         navigationController?.navigationBar.tintColor = .label
-    
         view.backgroundColor = UIColor(named: "PrimaryColor")
-        navigationController?.navigationBar.tintColor = .label
+        
         navigationSetup(title: "Lista")
         navigationItem.backButtonTitle = "Voltar"
         
@@ -97,7 +96,7 @@ extension ListViewController: UITableViewDataSource {
         
         let list = items[indexPath.row]
         cell.configure(with: list)
-        cell.backgroundColor = UIColor(named: "PrimaryColor")
+        cell.backgroundColor = .systemGray6
         
         if list.isCompleted {
             cell.circleImage.image = UIImage(systemName: "checkmark.circle.fill")
@@ -151,4 +150,5 @@ extension ListViewController: UITableViewDelegate {
         deleteAction.backgroundColor = .red
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
+    
 }

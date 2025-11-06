@@ -24,7 +24,6 @@ class ListsViewController: UIViewController {
         viewModel.listenToUserLists()
     }
     
-    
     private func setupTableView() {
         listsView.listsTableView.delegate = self
         listsView.listsTableView.dataSource = self
@@ -38,6 +37,14 @@ class ListsViewController: UIViewController {
                 self?.lists = lists
                 self?.listsView.listsTableView.reloadData()
             }
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            navigationSetupWithLogo(title: "Listas")
         }
     }
 }
