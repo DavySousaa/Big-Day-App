@@ -12,6 +12,7 @@ class ListViewController: UIViewController {
         self.view = listView
         navigationController?.navigationBar.tintColor = .label
         view.backgroundColor = UIColor(named: "PrimaryColor")
+        listView.delegate = self
         
         navigationSetup(title: "Lista")
         navigationItem.backButtonTitle = "Voltar"
@@ -22,11 +23,19 @@ class ListViewController: UIViewController {
         fillTitleList()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateTableHeight()
+    }
+    
     private func setupTableView() {
         listView.listsTableView.delegate = self
         listView.listsTableView.dataSource = self
         listView.listsTableView.register(ListCell.self, forCellReuseIdentifier: ListCell.identifier)
         listView.listsTableView.tintColor = .white
+        
+        listView.listsTableView.rowHeight = UITableView.automaticDimension
+        listView.listsTableView.estimatedRowHeight = 60
     }
     
     private func bindViewModel() {
@@ -34,8 +43,40 @@ class ListViewController: UIViewController {
             DispatchQueue.main.async {
                 self?.items = items
                 self?.listView.listsTableView.reloadData()
+                self?.updateTableHeight()
             }
         }
+    }
+    
+    private func updateTableHeight() {
+        // Garante que todos os frames já estão certos
+        view.layoutIfNeeded()
+        
+        let tableView = listView.listsTableView
+        tableView.layoutIfNeeded()
+        
+        // Altura real do conteúdo da table
+        let contentHeight = tableView.contentSize.height
+        
+        // Posição do botão e do container na MESMA coordenada (a view principal)
+        let buttonTop = listView.newItemListButton.frame.minY
+        let containerTop = listView.tableContainerView.frame.minY
+        
+        // Espaço que você quer deixar entre o fim da lista e o botão
+        let spacingToButton: CGFloat = 10   // <- PERSONALIZÁVEL
+        
+        // Altura máxima que a lista pode ter sem encostar no botão
+        let availableHeight = buttonTop - spacingToButton - containerTop
+        let maxHeight = max(0, availableHeight) // evita valor negativo
+        
+        // Altura final: o menor entre conteúdo e espaço disponível
+        let targetHeight = min(contentHeight, maxHeight)
+        listView.tableHeightConstraint.constant = targetHeight
+        
+        // Só habilita scroll se o conteúdo passar do limite
+        tableView.isScrollEnabled = contentHeight > maxHeight
+        
+        view.layoutIfNeeded()
     }
     
     func fillTitleList() {
@@ -74,21 +115,10 @@ class ListViewController: UIViewController {
 
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count + 1
+        return items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if indexPath.row == items.count {
-            let addCell = UITableViewCell(style: .default, reuseIdentifier: "addCell")
-            addCell.textLabel?.text = "Adicionar novo item"
-            addCell.textLabel?.textColor = .lightGray
-            addCell.selectionStyle = .none
-            addCell.textLabel?.textAlignment = .center
-            addCell.backgroundColor = UIColor(named: "PrimaryColor")
-            return addCell
-        }
-        
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ListCell.identifier, for: indexPath) as? ListCell else {
             return UITableViewCell()
@@ -127,15 +157,7 @@ extension ListViewController: UITableViewDataSource {
 extension ListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selecionou a célula \(indexPath.row)")
-        
-        if indexPath.row == items.count {
-            print("Clicou no botão de adicionar")
-            showAddItemField()
-        } else {
-            toggleCompletion(at: indexPath)
-        }
-        
+        toggleCompletion(at: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -151,4 +173,10 @@ extension ListViewController: UITableViewDelegate {
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
     
+}
+
+extension ListViewController: ItemListViewDelegate {
+    func didTapNewItem() {
+        showAddItemField()
+    }
 }

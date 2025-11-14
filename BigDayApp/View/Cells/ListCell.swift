@@ -38,6 +38,7 @@ class ListCell: UITableViewCell {
         
         let imageName = lists.isCompleted ? "checkmark.circle.fill" : "circle"
         circleImage.image = UIImage(systemName: imageName)
+        
     }
     
     private func setup() {
