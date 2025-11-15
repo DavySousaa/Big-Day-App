@@ -5,7 +5,8 @@ class ListsViewModel {
     
     private let db = Firestore.firestore()
     var onListsUpdate: (([UserList]) -> Void)?
-    
+    var listChanged: (() -> Void)?
+
     func listenToUserLists() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         

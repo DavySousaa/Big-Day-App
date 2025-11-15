@@ -13,7 +13,7 @@ class ListsView: UIView {
         text.numberOfLines = 0
         text.textAlignment = .center
         
-        let fullText = "Crie suas listas\ne mantenha tudo\nsob controle."
+        let fullText = "Crie suas Big Listas\ne mantenha tudo\nsob controle."
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
             .font: UIFont(name: "Montserrat-ExtraBold", size: 27)!,
             .foregroundColor: UIColor.label

@@ -2,10 +2,12 @@ import Foundation
 import UIKit
 
 class ListsViewController: UIViewController {
+    
     var viewModel = ListsViewModel()
     var listsView = ListsView()
     var lists: [UserList] = []
     var currentList: UserList!
+    var selectedListId: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,7 +17,7 @@ class ListsViewController: UIViewController {
         
         view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationController?.navigationBar.tintColor = .label
-        navigationSetupWithLogo(title: "Listas")
+        navigationSetupWithLogo(title: "Big Listas")
         navigationItem.backButtonTitle = "Voltar"
         
         
@@ -82,13 +84,22 @@ extension ListsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, completion) in
             let listToDelete = self.lists[indexPath.row]
-            self.viewModel.deleteList(listId: listToDelete.id)
+            self.viewModel.deleteList(listId: listToDelete.id ?? "")
+            completion(true)
+        }
+        
+        let editAction = UIContextualAction(style: .normal, title: "Editar") { (_, _, completion) in
+            let list = self.lists[indexPath.row]
+            self.selectedListId = list.id
             completion(true)
         }
         
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .red
-        return UISwipeActionsConfiguration(actions: [deleteAction])
+        let editIcon = UIImage(systemName: "square.and.pencil")?.withTintColor(ColorSuport.blackApp, renderingMode: .alwaysOriginal)
+        editAction.image = editIcon
+        editAction.backgroundColor = ColorSuport.greenApp
+        return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
     
 }

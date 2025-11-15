@@ -2,7 +2,7 @@ import UIKit
 import Foundation
 
 struct UserList {
-    let id: String
+    let id: String?
     let title: String
     let iconName: String
 }
