@@ -49,6 +49,24 @@ class ListsViewController: UIViewController {
             navigationSetupWithLogo(title: "Listas")
         }
     }
+    
+    func editButtonList() {
+        guard let id = selectedListId,
+              let list = lists.first(where: { $0.id == id }) else {
+            print("Não achei lista")
+            return
+        }
+        
+        let sheetVC = EditListsViewController()
+        sheetVC.delegate = self
+        sheetVC.listsController = self
+        sheetVC.modalPresentationStyle = .overFullScreen
+        sheetVC.editLists.titleTextField.text = list.title
+        sheetVC.editLists.iconLabel.text = list.iconName
+        sheetVC.viewModel.listToEdit = list
+        
+        navigationController?.pushViewController(sheetVC, animated: true)
+    }
 }
 
 extension ListsViewController: UITableViewDataSource {
@@ -66,7 +84,6 @@ extension ListsViewController: UITableViewDataSource {
         
         return cell
     }
-    
     
 }
 
@@ -91,7 +108,10 @@ extension ListsViewController: UITableViewDelegate {
         let editAction = UIContextualAction(style: .normal, title: "Editar") { (_, _, completion) in
             let list = self.lists[indexPath.row]
             self.selectedListId = list.id
+            print("cliquei no botão")
+            self.editButtonList()
             completion(true)
+            print("sai do botão")
         }
         
         deleteAction.image = UIImage(systemName: "trash")
@@ -110,3 +130,9 @@ extension ListsViewController: ListsViewDelegate {
     }
 }
 
+extension ListsViewController: SaveEditListProcol {
+    func saveEditList(titleEdit: String, iconNameEdit: String) {
+        guard let id = selectedListId else { return }
+        viewModel.saveEditList(title: titleEdit, iconName: iconNameEdit)
+    }
+}

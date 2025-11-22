@@ -1,10 +1,15 @@
 import UIKit
 
+protocol SaveEditListProcol: AnyObject {
+    func saveEditList(titleEdit: String, iconNameEdit: String)
+}
+
 class EditListsViewController: UIViewController {
     
     var viewModel = EditListViewModel()
     var editLists = EditLists()
-    weak var taskController: TasksViewController?
+    var delegate: SaveEditListProcol?
+    weak var listsController: ListsViewController?
     var selectedIcon: String = ""
     var icons = IconList.icons
     
@@ -20,10 +25,25 @@ class EditListsViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .label
         navigationSetup(title: "Editar Lista")
         bindViewModel()
+        fillEditItens()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
+    }
+    
+    func fillEditItens() {
+        if let list = viewModel.listToEdit {
+            selectedIcon = list.iconName
+            editLists.iconLabel.text = list.iconName
+            
+            if let index = icons.firstIndex(of: list.iconName) {
+                let indexPath = IndexPath(item: index, section: 0)
+                editLists.iconsCollectionView.layoutIfNeeded()
+                editLists.iconsCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: .centeredVertically)
+            }
+            editLists.collectionHeightConstraint.constant = 400
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

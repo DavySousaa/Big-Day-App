@@ -43,7 +43,7 @@ class EditLists: UIView {
         return textField
     }()
     
-    private lazy var iconLabel: UILabel = {
+    public lazy var iconLabel: UILabel = {
         let label = UILabel()
         label.text = "Escolha um ícone."
         label.textColor = .label
@@ -79,7 +79,7 @@ class EditLists: UIView {
         let button = UIButton(type: .system)
         button.backgroundColor = ColorSuport.greenApp
         button.setTitleColor(ColorSuport.blackApp, for: .normal)
-        button.setTitle("Criar", for: .normal)
+        button.setTitle("Salvar alterações", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         button.layer.cornerRadius = 41/2
         button.addTarget(self, action: #selector(didTapSaveListButton), for: .touchUpInside)

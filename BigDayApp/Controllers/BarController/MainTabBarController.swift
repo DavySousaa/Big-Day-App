@@ -8,16 +8,6 @@ import UIKit
 
 class MainTabBarController: UITabBarController {
     
-    private var indicatorLeadingConstraint: NSLayoutConstraint!
-    private var indicatorWidthConstraint: NSLayoutConstraint!
-    
-    private let indicatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = ColorSuport.greenApp
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBar()
@@ -30,51 +20,88 @@ class MainTabBarController: UITabBarController {
     }
     
     private func moveIndicator(to index: Int) {
-        let tabBarItemCount = CGFloat(tabBar.items?.count ?? 1)
+        guard let items = tabBar.items, !items.isEmpty else { return }
+        
+        let tabBarItemCount = CGFloat(items.count)
         let tabBarItemWidth = tabBar.frame.width / tabBarItemCount
-        let newLeading = tabBarItemWidth * CGFloat(index)
         
-        indicatorLeadingConstraint.constant = newLeading
-        
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.25,
+                       delay: 0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0.6,
+                       options: .curveEaseInOut,
+                       animations: {
             self.tabBar.layoutIfNeeded()
-        }
+        })
     }
     
 
     private func setupTabBar() {
-        
         let tarefasVC = UINavigationController(rootViewController: TasksViewController())
-        tarefasVC.tabBarItem = UITabBarItem(title: "Tarefas", image: UIImage(systemName: "checkmark.circle"), tag: 0)
+        tarefasVC.tabBarItem = UITabBarItem(
+            title: "Tarefas",
+            image: UIImage(systemName: "checkmark.circle"),
+            selectedImage: UIImage(systemName: "checkmark.circle.fill")
+        )
         
         let listaVc = UINavigationController(rootViewController: ListsViewController())
-        listaVc.tabBarItem = UITabBarItem(title: "Listas", image: UIImage(systemName: "list.bullet"), tag: 1)
+        listaVc.tabBarItem = UITabBarItem(
+            title: "Listas",
+            image: UIImage(systemName: "list.bullet"),
+            selectedImage: UIImage(systemName: "list.bullet.rectangle")
+        )
         
         let compartilharVC = UINavigationController(rootViewController: ShareTasksViewController())
-        compartilharVC.tabBarItem = UITabBarItem(title: "Compartilhar", image: UIImage(systemName: "square.and.arrow.up"), tag: 2)
+        compartilharVC.tabBarItem = UITabBarItem(
+            title: "Compartilhar",
+            image: UIImage(systemName: "square.and.arrow.up"),
+            selectedImage: UIImage(systemName: "square.and.arrow.up.fill")
+        )
         
         let configVC = UINavigationController(rootViewController: ConfigViewController())
-        configVC.tabBarItem = UITabBarItem(title: "Configurações", image: UIImage(systemName: "gearshape"), tag: 3)
+        configVC.tabBarItem = UITabBarItem(
+            title: "Config",
+            image: UIImage(systemName: "gearshape"),
+            selectedImage: UIImage(systemName: "gearshape.fill")
+        )
         
-        viewControllers = [tarefasVC, listaVc, compartilharVC, configVC]
-        tabBar.tintColor = .label
-        tabBar.backgroundColor = UIColor(named: "PrimaryColor")
-       
-        tabBar.addSubview(indicatorView)
-        tabBar.addSubview(indicatorView)
+        viewControllers = [tarefasVC, compartilharVC, listaVc, configVC]
         
-        let tabBarItemCount = CGFloat(tabBar.items?.count ?? 1)
-        let tabBarItemWidth = tabBar.frame.width / tabBarItemCount
+        let appearance = UITabBarAppearance()
+        appearance.configureWithTransparentBackground()
         
-        indicatorLeadingConstraint = indicatorView.leadingAnchor.constraint(equalTo: tabBar.leadingAnchor)
-        indicatorWidthConstraint = indicatorView.widthAnchor.constraint(equalToConstant: tabBarItemWidth)
+        // Fundo mais “glass”
+        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        appearance.backgroundColor = UIColor(named: "PrimaryColor")?.withAlphaComponent(0.9)
         
-        NSLayoutConstraint.activate([
-            indicatorView.bottomAnchor.constraint(equalTo: tabBar.topAnchor),
-            indicatorView.heightAnchor.constraint(equalToConstant: 2),
-            indicatorLeadingConstraint,
-            indicatorWidthConstraint
-        ])
+        // Cor dos ícones / textos
+        appearance.stackedLayoutAppearance.normal.iconColor = .secondaryLabel
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
+            .foregroundColor: UIColor.secondaryLabel,
+            .font: UIFont.systemFont(ofSize: 11, weight: .regular)
+        ]
+        
+        appearance.stackedLayoutAppearance.selected.iconColor = ColorSuport.greenApp
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+            .foregroundColor: ColorSuport.greenApp,
+            .font: UIFont.systemFont(ofSize: 11, weight: .semibold)
+        ]
+        
+        tabBar.standardAppearance = appearance
+        if #available(iOS 15.0, *) {
+            tabBar.scrollEdgeAppearance = appearance
+        }
+        
+        tabBar.tintColor = ColorSuport.greenApp
+        tabBar.unselectedItemTintColor = .secondaryLabel
+        tabBar.isTranslucent = true
+        
+        // Cantos arredondados e “card” flutuante
+        tabBar.layer.cornerRadius = 24
+        tabBar.layer.masksToBounds = true
+        tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        tabBar.layer.borderWidth = 0.5
+        tabBar.layer.borderColor = UIColor.label.withAlphaComponent(0.05).cgColor
         
     }
 }

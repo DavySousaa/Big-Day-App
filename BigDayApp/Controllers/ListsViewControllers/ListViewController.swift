@@ -14,18 +14,36 @@ class ListViewController: UIViewController {
         view.backgroundColor = UIColor(named: "PrimaryColor")
         listView.delegate = self
         
-        navigationSetup(title: "Lista")
+        navigationSetupItems(iconName: currentList.iconName)
         navigationItem.backButtonTitle = "Voltar"
         
         setupTableView()
         bindViewModel()
-        viewModel.listenItems(listId: currentList.id)
+        viewModel.listenItems(listId: currentList.id!)
         fillTitleList()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateTableHeight()
+    }
+    
+    func navigationSetupItems(iconName: String) {
+        navigationController?.navigationBar.tintColor = ColorSuport.greenApp
+        
+        let image = UIImage(systemName: iconName)
+        let imageView = UIImageView(image: image)
+        
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = ColorSuport.greenApp
+                
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.widthAnchor.constraint(equalToConstant: 24),
+            imageView.heightAnchor.constraint(equalToConstant: 24)
+        ])
+        
+        navigationItem.titleView = imageView
     }
     
     private func setupTableView() {
@@ -49,31 +67,24 @@ class ListViewController: UIViewController {
     }
     
     private func updateTableHeight() {
-        // Garante que todos os frames já estão certos
         view.layoutIfNeeded()
         
         let tableView = listView.listsTableView
         tableView.layoutIfNeeded()
         
-        // Altura real do conteúdo da table
         let contentHeight = tableView.contentSize.height
         
-        // Posição do botão e do container na MESMA coordenada (a view principal)
         let buttonTop = listView.newItemListButton.frame.minY
         let containerTop = listView.tableContainerView.frame.minY
         
-        // Espaço que você quer deixar entre o fim da lista e o botão
-        let spacingToButton: CGFloat = 10   // <- PERSONALIZÁVEL
+        let spacingToButton: CGFloat = 10
         
-        // Altura máxima que a lista pode ter sem encostar no botão
         let availableHeight = buttonTop - spacingToButton - containerTop
         let maxHeight = max(0, availableHeight) // evita valor negativo
         
-        // Altura final: o menor entre conteúdo e espaço disponível
         let targetHeight = min(contentHeight, maxHeight)
         listView.tableHeightConstraint.constant = targetHeight
         
-        // Só habilita scroll se o conteúdo passar do limite
         tableView.isScrollEnabled = contentHeight > maxHeight
         
         view.layoutIfNeeded()
@@ -101,7 +112,7 @@ class ListViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Adicionar", style: .default) { [weak self] _ in
             guard let self,
                   let text = alert.textFields?.first?.text, !text.isEmpty else { return }
-            self.viewModel.addItem(listId: currentList.id, title: text)
+            self.viewModel.addItem(listId: currentList.id!, title: text)
         })
         present(alert, animated: true)
     }
@@ -109,7 +120,7 @@ class ListViewController: UIViewController {
     func toggleCompletion(at indexPath: IndexPath) {
         var item = items[indexPath.row]
         item.isCompleted.toggle()
-        viewModel.updateCompletion(listId: currentList.id, itemId: item.id, isCompleted: item.isCompleted)
+        viewModel.updateCompletion(listId: currentList.id!, itemId: item.id, isCompleted: item.isCompleted)
     }
 }
 
@@ -164,7 +175,7 @@ extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, completion) in
             var item = self.items[indexPath.row]
-            self.viewModel.deleteItem(listId: self.currentList.id, itemId: item.id)
+            self.viewModel.deleteItem(listId: self.currentList.id!, itemId: item.id)
             completion(true)
         }
         

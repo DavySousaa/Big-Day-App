@@ -24,7 +24,7 @@ final class EditListViewModel {
             return
         }
         
-        guard iconName.isEmpty else {
+        guard !iconName.isEmpty else {
             onErorr?("Escolha o novo ícone")
             return
         }

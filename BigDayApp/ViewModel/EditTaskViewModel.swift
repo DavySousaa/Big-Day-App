@@ -4,7 +4,7 @@ import FirebaseFirestore
 final class EditTaskViewModel {
     
     var taskToEdit: Task?
-    
+
     var onSucess: (() -> Void)?
     var onError: ((String) -> Void)?
     
