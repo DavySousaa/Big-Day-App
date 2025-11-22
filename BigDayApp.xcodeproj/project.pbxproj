@@ -17,6 +17,7 @@
 		F31E23472E4D3BE000DB92D1 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F31E23462E4D3BE000DB92D1 /* FirebaseDatabase */; };
 		F31E23492E4D3BE000DB92D1 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F31E23482E4D3BE000DB92D1 /* FirebaseStorage */; };
 		F31E234B2E4D3C8600DB92D1 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F31E234A2E4D3C8600DB92D1 /* FirebaseFirestore */; };
+		F337E4732ED21FCA0001B6D7 /* NotificationBannerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F337E4722ED21FCA0001B6D7 /* NotificationBannerSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F31E23372E4D3B6200DB92D1 /* FSCalendar in Frameworks */,
+				F337E4732ED21FCA0001B6D7 /* NotificationBannerSwift in Frameworks */,
 				F31E23432E4D3BE000DB92D1 /* FirebaseAuth in Frameworks */,
 				F31E23492E4D3BE000DB92D1 /* FirebaseStorage in Frameworks */,
 				F31E234B2E4D3C8600DB92D1 /* FirebaseFirestore in Frameworks */,
@@ -90,6 +92,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F337E4712ED21FCA0001B6D7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F37B2BA52E355B7700F0DAE0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +119,7 @@
 				F3CBE2852DEE58D500D5BF2E /* Products */,
 				F3EFB30F2E32E667003299B5 /* BigDayAppTests */,
 				F3C876952E42D7F10083F7BF /* BigDayApp */,
+				F337E4712ED21FCA0001B6D7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -152,6 +162,7 @@
 				F31E23462E4D3BE000DB92D1 /* FirebaseDatabase */,
 				F31E23482E4D3BE000DB92D1 /* FirebaseStorage */,
 				F31E234A2E4D3C8600DB92D1 /* FirebaseFirestore */,
+				F337E4722ED21FCA0001B6D7 /* NotificationBannerSwift */,
 			);
 			productName = BigDayApp;
 			productReference = F3CBE2842DEE58D500D5BF2E /* BigDayApp.app */;
@@ -210,6 +221,7 @@
 				F31E23352E4D3B6200DB92D1 /* XCRemoteSwiftPackageReference "FSCalendar" */,
 				F31E23382E4D3B7200DB92D1 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
 				F31E233D2E4D3BE000DB92D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				F337E4702ED21FB10001B6D7 /* XCRemoteSwiftPackageReference "NotificationBanner" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F3CBE2852DEE58D500D5BF2E /* Products */;
@@ -565,6 +577,14 @@
 				minimumVersion = 12.1.0;
 			};
 		};
+		F337E4702ED21FB10001B6D7 /* XCRemoteSwiftPackageReference "NotificationBanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Daltron/NotificationBanner";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -617,6 +637,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F31E233D2E4D3BE000DB92D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		F337E4722ED21FCA0001B6D7 /* NotificationBannerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F337E4702ED21FB10001B6D7 /* XCRemoteSwiftPackageReference "NotificationBanner" */;
+			productName = NotificationBannerSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -5,6 +5,7 @@
 //  Created by Davy Sousa on 08/07/25.
 //
 import UIKit
+import NotificationBannerSwift
 
 class ShareTasksViewController: UIViewController, UserProfileUpdatable {
     
@@ -164,13 +165,18 @@ extension ShareTasksViewController: TapButtonShareDelete {
             from: shareScreen.containerView,
             tableView: shareScreen.tasksTableView
         ) else { return }
-        showAlert(title: "Sucesso", message: "Imagem copiada para área de transferência.")
+        
+        let banner = NotificationBanner(title: "Sucesso!", subtitle: "Imagem copiada para área de transferência.", style: .success)
+        banner.duration = 2
+        banner.show()
         UIPasteboard.general.image = image
     }
     
     func didTapCopyShadowBtn() {
         let imageHelper = RenderImageHelper()
         imageHelper.copyImageFromAssets(named: "Shadow")
-        showAlert(title: "Sucesso", message: "Imagem copiada para área de transferência.")
+        let banner = NotificationBanner(title: "Sucesso!", subtitle: "Imagem copiada para área de transferência.", style: .success)
+        banner.duration = 2
+        banner.show()
     }
 }
