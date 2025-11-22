@@ -80,21 +80,34 @@ final class TaskViewModel {
     // MARK: - CRUD
     /// Cria uma task para o dia selecionado (timeString: ex. "14:30" ou nil)
     func addTask(title: String, timeString: String?) {
+        // 1. valida título
         guard !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             onError?("Dê um nome para sua tarefa.")
             return
         }
         
+        // 2. monta a data da tarefa
         let due = DateHelper.combine(day: selectedDate, timeHM: timeString)
         let hasTime = (timeString?.isEmpty == false)
         
+        // 3. cria no Firestore
         repo.createTask(title: title,
                         timeString: timeString,
                         dueDate: due,
                         hasTime: hasTime) { [weak self] result in
             switch result {
-            case .success:
+            case .success(let id):
+                // 4. se a task tiver horário, agenda notificação
+                if hasTime {
+                    NotificationManager.shared.scheduleTaskReminder(
+                        title: title,
+                        date: due,
+                        identifier: id   // << usa o documentID do Firestore
+                    )
+                }
+                
                 self?.onSucess?()
+                
             case .failure(let err):
                 self?.onError?("Erro ao criar: \(err.localizedDescription)")
             }
@@ -135,6 +148,9 @@ final class TaskViewModel {
     func deleteTask(at index: Int) {
         guard tasks.indices.contains(index),
               let id = tasks[index].firebaseId else { return }
+        
+        NotificationManager.shared.cancelTaskReminder(for: id)
+        
         repo.delete(id: id) { [weak self] err in
             if let err = err {
                 self?.onError?("Erro ao excluir: \(err.localizedDescription)")
@@ -151,6 +167,9 @@ final class TaskViewModel {
         
         tasks.forEach { t in
             guard let id = t.firebaseId else { return }
+            
+            NotificationManager.shared.cancelTaskReminder(for: id)
+            
             group.enter()
             repo.delete(id: id) { err in
                 if firstError == nil { firstError = err }

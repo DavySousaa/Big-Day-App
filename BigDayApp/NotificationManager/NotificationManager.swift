@@ -68,7 +68,7 @@ class NotificationManager {
     }
     
     func scheduleTaskReminder(title: String, date: Date, identifier: String) {
-        guard let reminderDate = Calendar.current.date(byAdding: .minute, value: -10, to: date) else { return }
+        guard let reminderDate = Calendar.current.date(byAdding: .minute, value: -5, to: date) else { return }
         guard reminderDate > Date() else { return }
         
         let comps = Calendar.current.dateComponents([.year,.month,.day,.hour,.minute], from: reminderDate)
@@ -76,7 +76,7 @@ class NotificationManager {
         
         let content = UNMutableNotificationContent()
         content.title = "Alerta de tarefa ⏰"
-        content.body = "Sua tarefa \"\(title)\" começa em 10 minutos!"
+        content.body = "Sua tarefa \"\(title)\" começa em 5 minutos!"
         content.sound = .default
         
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
