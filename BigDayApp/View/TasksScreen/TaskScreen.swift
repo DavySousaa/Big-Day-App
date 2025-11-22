@@ -179,11 +179,11 @@ extension TaskScreen: SetupLayout {
             viewDayLabel.topAnchor.constraint(equalTo: dayLabel.topAnchor, constant: -5),
 
             newTaskButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            newTaskButton.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
+            newTaskButton.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 14),
             newTaskButton.heightAnchor.constraint(equalToConstant: 30),
             
             deleteAllTasks.trailingAnchor.constraint(equalTo: newTaskButton.leadingAnchor, constant: -5),
-            deleteAllTasks.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
+            deleteAllTasks.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 14),
             
             buttonCalendar.topAnchor.constraint(equalTo: profileUserStackView.bottomAnchor, constant: 15),
             buttonCalendar.leadingAnchor.constraint(equalTo: viewDayLabel.trailingAnchor, constant: 5),

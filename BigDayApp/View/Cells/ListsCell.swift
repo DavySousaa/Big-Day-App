@@ -1,8 +1,8 @@
 import UIKit
 
-class ConfigCell: UITableViewCell {
+class ListsCell: UITableViewCell {
     
-    static let identifier = "ConfigCell"
+    static let identifier = "ListsCell"
     
     public lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -15,6 +15,8 @@ class ConfigCell: UITableViewCell {
     public let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
         label.font = UIFont(name: "Montserrat-Regular", size: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -38,7 +40,7 @@ class ConfigCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with item: Config) {
+    func configure(with item: UserList) {
         titleLabel.text = item.title
         iconImageView.image = UIImage(systemName: item.iconName)
         arrowImageView.image = UIImage(systemName: "chevron.right")
@@ -56,7 +58,8 @@ class ConfigCell: UITableViewCell {
             iconImageView.heightAnchor.constraint(equalToConstant: 24),
             
             titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 8),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: arrowImageView.leadingAnchor, constant: -10),
             
             arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
@@ -64,3 +67,4 @@ class ConfigCell: UITableViewCell {
         ])
     }
 }
+

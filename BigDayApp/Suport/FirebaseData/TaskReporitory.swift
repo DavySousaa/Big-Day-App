@@ -1,11 +1,3 @@
-//
-//  TaskRepository.swift
-//  BigDayApp
-//
-//  Criado para salvar/ler tasks por dia no Firestore.
-//  Estrutura: users/{uid}/tasks/{taskId}
-//
-
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
@@ -57,11 +49,7 @@ final class TaskRepository {
             }
     }
     
-    func createTask(title: String,
-                    timeString: String?,
-                    dueDate: Date,
-                    hasTime: Bool,
-                    completion: @escaping (Result<String, Error>) -> Void) {
+    func createTask(title: String, timeString: String?, dueDate: Date, hasTime: Bool, completion: @escaping (Result<String, Error>) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {
             completion(.failure(NSError(domain: "Firebase",
                                         code: -1,
