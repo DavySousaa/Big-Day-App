@@ -45,9 +45,9 @@ Desenvolvido em **Swift** com **UIKit** e **MVVM**, o projeto aplica **boas prá
 
 ## 📸 Capturas de Tela
 
-| Tela Inicial | Lista de Tarefas | Compartilhar Lista | Configurações |
-|--------------|-----------------|-------------------|---------------|
-| ![Tela Inicial](https://raw.githubusercontent.com/DavySousaa/Big-Day-App/main/screenshots/tela-inicial.jpeg) | ![Lista de Tarefas](https://raw.githubusercontent.com/DavySousaa/Big-Day-App/main/screenshots/lista.jpeg) | ![Compartilhar Lista](https://raw.githubusercontent.com/DavySousaa/Big-Day-App/main/screenshots/compartilhar.jpeg) | ![Configurações](https://raw.githubusercontent.com/DavySousaa/Big-Day-App/main/screenshots/configuracoes.jpeg) |
+| Tela Inicial | Lista de Tarefas | Compartilhar Lista | Listas | Configurações |
+|--------------|-----------------|-------------------|---------------|---------------|
+| ![Tela Inicial](https://raw.githubusercontent.com/DavySousaa/Big-Day-App/main/screenshots/tela-inicial.jpeg) | ![Lista de Tarefas](https://raw.githubusercontent.com/DavySousaa/Big-Day-App/main/screenshots/lista.png) | ![Compartilhar Lista](https://raw.githubusercontent.com/DavySousaa/Big-Day-App/main/screenshots/compartilhar.png) | ![Listas](https://raw.githubusercontent.com/DavySousaa/Big-Day-App/main/screenshots/listas.png) | ![Configurações](https://raw.githubusercontent.com/DavySousaa/Big-Day-App/main/screenshots/configuracoes.png)
 
 ---
 

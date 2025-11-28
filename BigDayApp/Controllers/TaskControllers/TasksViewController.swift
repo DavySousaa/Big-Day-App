@@ -25,7 +25,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         super.viewDidLoad()
         self.view = taskScreen
         view.backgroundColor = UIColor(named: "PrimaryColor")
-        navigationItem.hidesBackButton = true
+        navigationItem.backButtonTitle = "Voltar"
         
         taskScreen.delegate = self
         taskScreen.tasksTableView.tintColor = .white
@@ -274,8 +274,7 @@ extension TasksViewController: TapButtonDelete {
     func didTapCreate() {
         let vc = NewTasksViewController()
         vc.taskController = self
-        vc.modalPresentationStyle = .overFullScreen
-        present(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
