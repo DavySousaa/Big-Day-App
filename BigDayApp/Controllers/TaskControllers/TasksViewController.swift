@@ -36,7 +36,11 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         taskScreen.tasksTableView.dragDelegate = self
         taskScreen.tasksTableView.dropDelegate = self
         
+        
+        viewModel.ensureTodaySelected()
         taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
+        //Calendar.select(viewModel.selectedDate)
+        
         
         viewModel.tasksChanged = { [weak self] in
             self?.taskScreen.tasksTableView.reloadData()

@@ -59,6 +59,14 @@ final class TaskViewModel {
         observeDay()
     }
     
+    func ensureTodaySelected() {
+        let today = Date()
+        if !cal.isDate(selectedDate, inSameDayAs: today){
+            selectedDate = today
+            observeDay()
+        }
+    }
+    
     private func observeDay() {
         repo.observeDay(selectedDate) { [weak self] result in
             switch result {

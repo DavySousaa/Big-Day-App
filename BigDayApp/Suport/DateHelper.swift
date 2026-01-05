@@ -15,7 +15,6 @@ enum DateHelper {
 
     static func dayTitle(from date: Date) -> String {
         let f = DateFormatter()
-        f.locale = Locale(identifier: "pt_BR") // <- use pt_BR (maiúsculas)
         f.timeZone = tz
         f.dateFormat = "EEE',' 'dia' d 'de' MMMM"
         return f.string(from: date).capitalized

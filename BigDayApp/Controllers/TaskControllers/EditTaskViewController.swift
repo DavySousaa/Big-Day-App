@@ -22,6 +22,7 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
         editTask.newTaskTextField.delegate = self
         fillTaskIfNeeded() 
         bindViewModel()
+        containerChangePosition()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -39,6 +40,30 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
         }
         viewModel.onError = { [weak self] message in
             self?.showAlert(message: message)
+        }
+    }
+    
+    func containerChangePosition() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {return}
+        let keyboardHeight = keyboardFrame.height
+        
+        UIView.animate(withDuration: 0.3) {
+            let bottomInset = self.view.safeAreaInsets.bottom
+            self.editTask.containerViewConstraint.constant = -keyboardHeight + bottomInset - 10
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        UIView.animate(withDuration: 0.3) {
+            let bottomInset = self.view.safeAreaLayoutGuide.bottomAnchor
+            self.editTask.containerViewConstraint.constant = -200
+            self.view.layoutIfNeeded()
         }
     }
     

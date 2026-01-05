@@ -9,8 +9,9 @@ protocol EditTaskDelegate: AnyObject {
 class EditTask: UIView {
     
     weak var delegate: EditTaskDelegate?
+    public var containerViewConstraint: NSLayoutConstraint!
     
-    private let containerView: UIView = {
+    public let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(named: "PrimaryColor")
         view.layer.cornerRadius = 20
@@ -160,11 +161,15 @@ extension EditTask: SetupLayout {
     }
     
     func setupConstraints() {
+        
+        containerViewConstraint = containerView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -200)
+        containerViewConstraint.isActive = true
+        
         NSLayoutConstraint.activate([
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            containerView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            //containerView.centerYAnchor.constraint(equalTo: centerYAnchor),
             containerView.heightAnchor.constraint(equalToConstant: 420),
             
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 25),
