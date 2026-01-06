@@ -1,6 +1,6 @@
 import UIKit
 
-class CreateListViewController: UIViewController {
+class CreateListViewController: UIViewController, UITextFieldDelegate {
     
     var viewModel = CreateListViewModel()
     var createList = CreateList()
@@ -16,6 +16,7 @@ class CreateListViewController: UIViewController {
         createList.iconsCollectionView.delegate = self
         createList.iconsCollectionView.register(IconCell.self, forCellWithReuseIdentifier: IconCell.identifier)
         createList.delegate = self
+        createList.titleTextField.delegate = self
         view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationController?.navigationBar.tintColor = .label
         navigationSetup(title: "Criar Lista")
@@ -61,7 +62,7 @@ extension CreateListViewController: CreateListProtocol {
         createList.collectionHeightConstraint.constant = isCollapsed ? 400 : 0
         
         UIView.animate(withDuration: 0.3) {
-            let rotationAngle: CGFloat = isCollapsed ? .pi : 0
+            let rotationAngle: CGFloat = .pi
             self.createList.iconSectionButton.imageView?.transform = CGAffineTransform(rotationAngle: rotationAngle)
             self.view.layoutIfNeeded()
         }

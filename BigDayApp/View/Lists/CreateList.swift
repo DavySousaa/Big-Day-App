@@ -53,7 +53,7 @@ class CreateList: UIView {
         return label
     }()
     
-    let iconSectionButton: UIButton = {
+    public let iconSectionButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Escolha um ícone", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -99,7 +99,7 @@ class CreateList: UIView {
         iconsCollectionView.backgroundColor = UIColor(named: "PrimaryColor")
         iconSectionButton.translatesAutoresizingMaskIntoConstraints = false
         
-        collectionHeightConstraint = iconsCollectionView.heightAnchor.constraint(equalToConstant: 0)
+        collectionHeightConstraint = iconsCollectionView.heightAnchor.constraint(equalToConstant: 400)
         collectionHeightConstraint.isActive = true
     }
     

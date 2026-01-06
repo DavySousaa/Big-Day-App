@@ -26,7 +26,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         self.view = taskScreen
         view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationItem.backButtonTitle = "Voltar"
-        
+
         taskScreen.delegate = self
         taskScreen.tasksTableView.tintColor = .white
         taskScreen.tasksTableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
@@ -35,34 +35,26 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         taskScreen.tasksTableView.dragInteractionEnabled = true
         taskScreen.tasksTableView.dragDelegate = self
         taskScreen.tasksTableView.dropDelegate = self
-        
-        
-        viewModel.ensureTodaySelected()
-        taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
-        //Calendar.select(viewModel.selectedDate)
-        
-        
+
         viewModel.tasksChanged = { [weak self] in
             self?.taskScreen.tasksTableView.reloadData()
+            self?.refreshDayLabel()
         }
         viewModel.onSucess = { [weak self] in
             self?.taskScreen.tasksTableView.reloadData()
+            self?.refreshDayLabel()
         }
         viewModel.onError = { msg in
             print("❌", msg)
         }
-        
-        if let saved = SelectedDateStore.load() {
-            viewModel.updateSelectedDate(saved)
-        } else {
-            viewModel.updateSelectedDate(Date())
-        }
-        taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
+
+        viewModel.updateSelectedDate(Date())
+        refreshDayLabel()
         viewModel.bind()
-        
+
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-        
+
         let manager = NotificationManager()
         manager.scheduleDailyMorningNotification()
         manager.scheduleDailyNightNotification()
@@ -70,10 +62,24 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         manager.scheduleWeeklySundayMotivation()
         manager.scheduleWeeklyWedMotivation()
 
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleSignificantTimeChange),
+            name: UIApplication.significantTimeChangeNotification,
+            object: nil
+        )
     }
+
+    @objc private func handleSignificantTimeChange() {
+        viewModel.ensureTodaySelected()
+        refreshDayLabel()
+    }
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel.ensureTodaySelected()
+        refreshDayLabel()
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
         viewModel.bind()
@@ -85,6 +91,10 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
             navigationSetupWithLogo(title: "Tarefas")
         }
+    }
+    
+    private func refreshDayLabel() {
+        taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
     }
     
     private func redirectToLogin() {

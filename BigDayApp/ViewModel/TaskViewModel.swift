@@ -151,6 +151,18 @@ final class TaskViewModel {
               let id = tasks[index].firebaseId else { return }
         let newValue = !(tasks[index].isCompleted)
         repo.toggleDone(id: id, isDone: newValue)
+        
+        if newValue {
+            NotificationManager.shared.cancelTaskReminder(for: id)
+        } else {
+            if let dueDate = tasks[index].dueDate {
+                NotificationManager.shared.rescheduleTaskReminder(
+                    for: id,
+                    title: tasks[index].title,
+                    dueDate: dueDate
+                )
+            }
+        }
     }
     
     func deleteTask(at index: Int) {

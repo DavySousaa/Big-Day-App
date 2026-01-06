@@ -6,7 +6,7 @@ final class NewTaskViewModel {
     var onError: ((String) -> Void)?
 
     private let repo = TaskRepository.shared
-
+    
     func createTask(title: String, shouldSchedule: Bool, selectedDate: Date?) {
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
@@ -46,7 +46,7 @@ final class NewTaskViewModel {
         }
         let dueDate = DateHelper.combine(day: baseDay, timeHM: timeString)
         let hasTime = (timeString?.isEmpty == false)
-
+        
         repo.createTask(title: trimmed,
                         timeString: timeString,
                         dueDate: dueDate,
