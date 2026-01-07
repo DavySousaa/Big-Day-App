@@ -206,7 +206,7 @@ class ShareScreen: UIView {
         table.separatorStyle = .none
         table.showsVerticalScrollIndicator = false
         table.separatorStyle = .none
-        table.isScrollEnabled = false            
+        table.isScrollEnabled = false
         table.isUserInteractionEnabled = false
         table.backgroundColor = .clear
         return table

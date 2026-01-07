@@ -173,7 +173,7 @@ class LoginAccount: UIView {
     }
 
     func hideButtonLoading() {
-        loginButton.setTitle("Criar Conta", for: .normal)
+        loginButton.setTitle("Entrar", for: .normal)
         loadingIndicator.stopAnimating()
         loginButton.isEnabled = true
     }

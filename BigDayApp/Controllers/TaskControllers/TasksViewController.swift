@@ -20,6 +20,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
     var imageUserView: UIImageView {
         return taskScreen.imageUser
     }
+    private let lastSeenDayKey = "lastSeenSystemDay"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,9 +49,28 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
             print("❌", msg)
         }
 
-        viewModel.updateSelectedDate(Date())
+        if let saved = SelectedDateStore.load() {
+            viewModel.updateSelectedDate(saved)
+        } else {
+            viewModel.updateSelectedDate(Date())
+        }
         refreshDayLabel()
         viewModel.bind()
+
+        saveLastSeenSystemDay()
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAppCameBackOrTimeChanged),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAppCameBackOrTimeChanged),
+            name: UIApplication.significantTimeChangeNotification,
+            object: nil
+        )
 
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
@@ -61,29 +81,25 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         manager.scheduleWeeklyMondayMotivation()
         manager.scheduleWeeklySundayMotivation()
         manager.scheduleWeeklyWedMotivation()
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleSignificantTimeChange),
-            name: UIApplication.significantTimeChangeNotification,
-            object: nil
-        )
     }
-
+    
     @objc private func handleSignificantTimeChange() {
         viewModel.ensureTodaySelected()
         refreshDayLabel()
     }
-
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.ensureTodaySelected()
-        refreshDayLabel()
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-        viewModel.bind()
         showNotificationPermition()
+        viewModel.bind()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        saveLastSeenSystemDay()
+        SelectedDateStore.save(viewModel.selectedDate)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -93,9 +109,42 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         }
     }
     
+    private func saveLastSeenSystemDay() {
+        let todayStart = Calendar.current.startOfDay(for: Date())
+        UserDefaults.standard.set(todayStart.timeIntervalSince1970, forKey: lastSeenDayKey)
+    }
+    
+    private func getLastSeenSystemDay() -> Date? {
+        let saved = UserDefaults.standard.double(forKey: lastSeenDayKey)
+        guard saved != 0 else { return nil }
+        return Date(timeIntervalSince1970: saved)
+    }
+    
     private func refreshDayLabel() {
         taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
     }
+    
+    @objc private func handleAppCameBackOrTimeChanged() {
+        guard let lastSeen = getLastSeenSystemDay() else {
+            saveLastSeenSystemDay()
+            return
+        }
+        
+        let cal = Calendar.current
+        let todayStart = cal.startOfDay(for: Date())
+        
+        guard todayStart != cal.startOfDay(for: lastSeen) else { return }
+        
+        let selectedWasOldToday = cal.isDate(viewModel.selectedDate, inSameDayAs: lastSeen)
+        
+        if selectedWasOldToday {
+            viewModel.updateSelectedDate(Date())
+            refreshDayLabel()
+        }
+        
+        saveLastSeenSystemDay()
+    }
+    
     
     private func redirectToLogin() {
         let loginVC = FirstScreenViewController()
@@ -239,7 +288,7 @@ extension TasksViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, completion) in
             self.viewModel.deleteTask(at: indexPath.row)
-            completion(true) 
+            completion(true)
         }
         
         let editAction = UIContextualAction(style: .normal, title: "Editar") { (_, _, completion) in
@@ -249,7 +298,7 @@ extension TasksViewController: UITableViewDelegate {
             completion(true)
         }
         
-    
+        
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .red
         let editIcon = UIImage(systemName: "square.and.pencil")?.withTintColor(ColorSuport.blackApp, renderingMode: .alwaysOriginal)

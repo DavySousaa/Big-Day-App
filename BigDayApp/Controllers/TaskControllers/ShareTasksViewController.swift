@@ -161,7 +161,7 @@ extension ShareTasksViewController: TapButtonShareDelete {
     
     func didTapCopyPhotoBtn() {
         let imageHelper = RenderImageHelper()
-        guard let image = imageHelper.createShareImageFullTable(
+        guard let image = imageHelper.createShareImage(
             from: shareScreen.containerView,
             tableView: shareScreen.tasksTableView
         ) else { return }

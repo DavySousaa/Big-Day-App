@@ -16,7 +16,6 @@ final class TaskViewModel {
     private(set) var tasksForSelectedDay: [Task] = []
     private let cal = Calendar.current
     
-    
     func loadTasksForMonth(_ start: Date, _ end: Date, completion: @escaping () -> Void) {
         repo.fetchTasksBetween(start, end) { [weak self] result in
             switch result {

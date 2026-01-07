@@ -63,18 +63,28 @@ class TaskCellShare: UITableViewCell {
         contentView.addSubview(hourLabel)
         
         NSLayoutConstraint.activate([
-            circleImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 20),
+            // Circle
+            circleImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             circleImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             circleImage.widthAnchor.constraint(equalToConstant: 22),
             circleImage.heightAnchor.constraint(equalToConstant: 22),
             
-            titleLabel.leadingAnchor.constraint(equalTo: circleImage.trailingAnchor, constant: 8),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: hourLabel.leadingAnchor, constant: -10),
-            hourLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-
+            // Hour
             hourLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            hourLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            hourLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            
+            // Title
+            titleLabel.leadingAnchor.constraint(equalTo: circleImage.trailingAnchor, constant: 8),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: hourLabel.leadingAnchor, constant: -10),
+            
+            // ✅ dá altura "real" pra célula
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
+            
+            // opcional (deixa hour e circle respeitarem a altura também)
+            hourLabel.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 12),
+            hourLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -12)
         ])
     }
+    
 }
