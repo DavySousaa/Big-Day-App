@@ -190,7 +190,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         let sheetVC = EditTaskViewController()
         sheetVC.delegate = self
         sheetVC.taskController = self
-        sheetVC.modalPresentationStyle = .overFullScreen
+        navigationController?.pushViewController(sheetVC, animated: true)
         sheetVC.editTask.newTaskTextField.text = task.title
         sheetVC.viewModel.taskToEdit = task
         
@@ -198,7 +198,6 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
            let date = DateFormatHelper.dateFromFormattedTime(timeString) {
             sheetVC.editTask.timePicker.date = date
         }
-        present(sheetVC, animated: true)
     }
     
     private func showDeleteAlertConfirmation() {

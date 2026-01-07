@@ -12,17 +12,31 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
     var tasks: [Task] = []
     var delegate: saveEditProcol?
     var viewModel = EditTaskViewModel()
+    private var repeatOptions: [RepeatOption] = [
+        RepeatOption(title: "não", isSelected: true),
+        RepeatOption(title: "seg", isSelected: false),
+        RepeatOption(title: "ter", isSelected: false),
+        RepeatOption(title: "qua", isSelected: false),
+        RepeatOption(title: "qui", isSelected: false),
+        RepeatOption(title: "sex", isSelected: false),
+        RepeatOption(title: "sáb", isSelected: false),
+        RepeatOption(title: "dom", isSelected: false)
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = editTask
-        view.backgroundColor = .clear
-        navigationItem.backButtonTitle = ""
+        view.backgroundColor = UIColor(named: "PrimaryColor")
+        navigationItem.backButtonTitle = "Voltar"
         editTask.delegate = self
         editTask.newTaskTextField.delegate = self
         fillTaskIfNeeded() 
         bindViewModel()
-        containerChangePosition()
+        
+        editTask.repeatCollectionView.delegate = self
+        editTask.repeatCollectionView.dataSource = self
+        editTask.repeatCollectionView.register(RepeatDayCell.self, forCellWithReuseIdentifier: RepeatDayCell.identifier)
+        editTask.repeatCollectionView.allowsMultipleSelection = true
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -40,30 +54,6 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
         }
         viewModel.onError = { [weak self] message in
             self?.showAlert(message: message)
-        }
-    }
-    
-    func containerChangePosition() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {return}
-        let keyboardHeight = keyboardFrame.height
-        
-        UIView.animate(withDuration: 0.3) {
-            let bottomInset = self.view.safeAreaInsets.bottom
-            self.editTask.containerViewConstraint.constant = -keyboardHeight + bottomInset - 10
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        UIView.animate(withDuration: 0.3) {
-            let bottomInset = self.view.safeAreaLayoutGuide.bottomAnchor
-            self.editTask.containerViewConstraint.constant = -200
-            self.view.layoutIfNeeded()
         }
     }
     
@@ -107,4 +97,97 @@ extension EditTaskViewController: EditTaskDelegate {
     }
     
     
+}
+
+extension EditTaskViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.item == 0 {
+            // Tocou em "não" → desmarca todos os outros
+            for i in 1..<repeatOptions.count {
+                repeatOptions[i].isSelected = false
+                if let cell = collectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? RepeatDayCell {
+                    cell.isSelected = false
+                }
+                collectionView.deselectItem(at: IndexPath(item: i, section: 0), animated: false)
+            }
+            repeatOptions[0].isSelected = true
+        } else {
+            // Tocou em algum dia → desmarca "não"
+            repeatOptions[0].isSelected = false
+            collectionView.deselectItem(at: IndexPath(item: 0, section: 0), animated: false)
+            if let cellZero = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? RepeatDayCell {
+                cellZero.isSelected = false
+            }
+            
+            repeatOptions[indexPath.item].isSelected = true
+        }
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? RepeatDayCell {
+            cell.isSelected = true
+        }
+        
+        printSelectedDays()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        // Só faz sentido pra índice > 0 (“não” é exclusivo)
+        if indexPath.item != 0 {
+            repeatOptions[indexPath.item].isSelected = false
+            
+            let anyDaySelected = repeatOptions[1...].contains(where: { $0.isSelected })
+            if !anyDaySelected {
+                // Se nenhum dia selecionado → volta pro "não"
+                repeatOptions[0].isSelected = true
+                collectionView.selectItem(at: IndexPath(item: 0, section: 0),
+                                          animated: true,
+                                          scrollPosition: [])
+                
+                if let cellZero = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? RepeatDayCell {
+                    cellZero.isSelected = true
+                }
+            }
+        }
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? RepeatDayCell {
+            cell.isSelected = false
+        }
+        
+        printSelectedDays()
+    }
+    
+    private func printSelectedDays() {
+        let selected = repeatOptions
+            .enumerated()
+            .filter { $0.element.isSelected }
+            .map { $0.element.title }
+        
+        print("Dias selecionados: \(selected)")
+    }
+}
+
+extension EditTaskViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        repeatOptions.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RepeatDayCell.identifier, for: indexPath) as! RepeatDayCell
+        let option = repeatOptions[indexPath.item]
+        cell.configure(with: option)
+        
+        return cell
+    }
+}
+
+extension EditTaskViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let itemsPerRow: CGFloat = 4
+        let spacing: CGFloat = 8
+        
+        let totalSpacing = (itemsPerRow - 1) * spacing
+        let contentWidth = collectionView.bounds.width - totalSpacing
+        
+        let width = floor(contentWidth / itemsPerRow)
+        return CGSize(width: width, height: 40)
+    }
 }
