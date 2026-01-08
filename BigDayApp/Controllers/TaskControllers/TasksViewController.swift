@@ -36,14 +36,12 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         taskScreen.tasksTableView.dragInteractionEnabled = true
         taskScreen.tasksTableView.dragDelegate = self
         taskScreen.tasksTableView.dropDelegate = self
-
+        
         viewModel.tasksChanged = { [weak self] in
             self?.taskScreen.tasksTableView.reloadData()
-            self?.refreshDayLabel()
         }
         viewModel.onSucess = { [weak self] in
             self?.taskScreen.tasksTableView.reloadData()
-            self?.refreshDayLabel()
         }
         viewModel.onError = { msg in
             print("❌", msg)
@@ -54,23 +52,9 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         } else {
             viewModel.updateSelectedDate(Date())
         }
-        refreshDayLabel()
+        
+        taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
         viewModel.bind()
-
-        saveLastSeenSystemDay()
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleAppCameBackOrTimeChanged),
-            name: UIApplication.willEnterForegroundNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleAppCameBackOrTimeChanged),
-            name: UIApplication.significantTimeChangeNotification,
-            object: nil
-        )
 
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
@@ -83,23 +67,12 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         manager.scheduleWeeklyWedMotivation()
     }
     
-    @objc private func handleSignificantTimeChange() {
-        viewModel.ensureTodaySelected()
-        refreshDayLabel()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
         showNotificationPermition()
         viewModel.bind()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        saveLastSeenSystemDay()
-        SelectedDateStore.save(viewModel.selectedDate)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -109,43 +82,6 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         }
     }
     
-    private func saveLastSeenSystemDay() {
-        let todayStart = Calendar.current.startOfDay(for: Date())
-        UserDefaults.standard.set(todayStart.timeIntervalSince1970, forKey: lastSeenDayKey)
-    }
-    
-    private func getLastSeenSystemDay() -> Date? {
-        let saved = UserDefaults.standard.double(forKey: lastSeenDayKey)
-        guard saved != 0 else { return nil }
-        return Date(timeIntervalSince1970: saved)
-    }
-    
-    private func refreshDayLabel() {
-        taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
-    }
-    
-    @objc private func handleAppCameBackOrTimeChanged() {
-        guard let lastSeen = getLastSeenSystemDay() else {
-            saveLastSeenSystemDay()
-            return
-        }
-        
-        let cal = Calendar.current
-        let todayStart = cal.startOfDay(for: Date())
-        
-        guard todayStart != cal.startOfDay(for: lastSeen) else { return }
-        
-        let selectedWasOldToday = cal.isDate(viewModel.selectedDate, inSameDayAs: lastSeen)
-        
-        if selectedWasOldToday {
-            viewModel.updateSelectedDate(Date())
-            refreshDayLabel()
-        }
-        
-        saveLastSeenSystemDay()
-    }
-    
-    
     private func redirectToLogin() {
         let loginVC = FirstScreenViewController()
         let navController = UINavigationController(rootViewController: loginVC)
@@ -153,6 +89,8 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
             sceneDelegate.window?.rootViewController = navController
         }
     }
+    
+    
     
     func showNotificationPermition() {
         let aceptedNotifications = UserDefaults.standard.bool(forKey: "aceptedNotifications")

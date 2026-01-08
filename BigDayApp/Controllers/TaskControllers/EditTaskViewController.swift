@@ -12,16 +12,6 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
     var tasks: [Task] = []
     var delegate: saveEditProcol?
     var viewModel = EditTaskViewModel()
-    private var repeatOptions: [RepeatOption] = [
-        RepeatOption(title: "não", isSelected: true),
-        RepeatOption(title: "seg", isSelected: false),
-        RepeatOption(title: "ter", isSelected: false),
-        RepeatOption(title: "qua", isSelected: false),
-        RepeatOption(title: "qui", isSelected: false),
-        RepeatOption(title: "sex", isSelected: false),
-        RepeatOption(title: "sáb", isSelected: false),
-        RepeatOption(title: "dom", isSelected: false)
-    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +28,14 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
         editTask.repeatCollectionView.register(RepeatDayCell.self, forCellWithReuseIdentifier: RepeatDayCell.identifier)
         editTask.repeatCollectionView.allowsMultipleSelection = true
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let index0 = IndexPath(item: 0, section: 0)
+        RepeatOptionsSuport.repeatOptions[0].isSelected = true
+        editTask.repeatCollectionView.selectItem(at: index0, animated: false, scrollPosition: [])
+    }
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
@@ -103,23 +101,23 @@ extension EditTaskViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.item == 0 {
             // Tocou em "não" → desmarca todos os outros
-            for i in 1..<repeatOptions.count {
-                repeatOptions[i].isSelected = false
+            for i in 1..<RepeatOptionsSuport.repeatOptions.count {
+                RepeatOptionsSuport.repeatOptions[i].isSelected = false
                 if let cell = collectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? RepeatDayCell {
                     cell.isSelected = false
                 }
                 collectionView.deselectItem(at: IndexPath(item: i, section: 0), animated: false)
             }
-            repeatOptions[0].isSelected = true
+            RepeatOptionsSuport.repeatOptions[0].isSelected = true
         } else {
             // Tocou em algum dia → desmarca "não"
-            repeatOptions[0].isSelected = false
+            RepeatOptionsSuport.repeatOptions[0].isSelected = false
             collectionView.deselectItem(at: IndexPath(item: 0, section: 0), animated: false)
             if let cellZero = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? RepeatDayCell {
                 cellZero.isSelected = false
             }
             
-            repeatOptions[indexPath.item].isSelected = true
+            RepeatOptionsSuport.repeatOptions[indexPath.item].isSelected = true
         }
         
         if let cell = collectionView.cellForItem(at: indexPath) as? RepeatDayCell {
@@ -132,12 +130,11 @@ extension EditTaskViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         // Só faz sentido pra índice > 0 (“não” é exclusivo)
         if indexPath.item != 0 {
-            repeatOptions[indexPath.item].isSelected = false
+            RepeatOptionsSuport.repeatOptions[indexPath.item].isSelected = false
             
-            let anyDaySelected = repeatOptions[1...].contains(where: { $0.isSelected })
+            let anyDaySelected = RepeatOptionsSuport.repeatOptions[1...].contains(where: { $0.isSelected })
             if !anyDaySelected {
-                // Se nenhum dia selecionado → volta pro "não"
-                repeatOptions[0].isSelected = true
+                RepeatOptionsSuport.repeatOptions[0].isSelected = true
                 collectionView.selectItem(at: IndexPath(item: 0, section: 0),
                                           animated: true,
                                           scrollPosition: [])
@@ -156,7 +153,7 @@ extension EditTaskViewController: UICollectionViewDelegate {
     }
     
     private func printSelectedDays() {
-        let selected = repeatOptions
+        let selected = RepeatOptionsSuport.repeatOptions
             .enumerated()
             .filter { $0.element.isSelected }
             .map { $0.element.title }
@@ -167,12 +164,12 @@ extension EditTaskViewController: UICollectionViewDelegate {
 
 extension EditTaskViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        repeatOptions.count
+        RepeatOptionsSuport.repeatOptions.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RepeatDayCell.identifier, for: indexPath) as! RepeatDayCell
-        let option = repeatOptions[indexPath.item]
+        let option = RepeatOptionsSuport.repeatOptions[indexPath.item]
         cell.configure(with: option)
         
         return cell
