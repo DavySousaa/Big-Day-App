@@ -27,7 +27,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         self.view = taskScreen
         view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationItem.backButtonTitle = "Voltar"
-
+        
         taskScreen.delegate = self
         taskScreen.tasksTableView.tintColor = .white
         taskScreen.tasksTableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.identifier)
@@ -46,7 +46,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         viewModel.onError = { msg in
             print("❌", msg)
         }
-
+        
         if let saved = SelectedDateStore.load() {
             viewModel.updateSelectedDate(saved)
         } else {
@@ -55,10 +55,10 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         
         taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
         viewModel.bind()
-
+        
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-
+        
         let manager = NotificationManager()
         manager.scheduleDailyMorningNotification()
         manager.scheduleDailyNightNotification()
@@ -128,7 +128,12 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         let sheetVC = EditTaskViewController()
         sheetVC.delegate = self
         sheetVC.taskController = self
-        navigationController?.pushViewController(sheetVC, animated: true)
+        sheetVC.modalPresentationStyle = .pageSheet
+        
+        if let sheet = sheetVC.sheetPresentationController {
+            sheet.prefersGrabberVisible = true
+            sheet.detents = [.medium()]
+        }
         sheetVC.editTask.newTaskTextField.text = task.title
         sheetVC.viewModel.taskToEdit = task
         
@@ -136,6 +141,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
            let date = DateFormatHelper.dateFromFormattedTime(timeString) {
             sheetVC.editTask.timePicker.date = date
         }
+        present(sheetVC, animated: true)
     }
     
     private func showDeleteAlertConfirmation() {
@@ -274,7 +280,14 @@ extension TasksViewController: TapButtonDelete {
     func didTapCreate() {
         let vc = NewTasksViewController()
         vc.taskController = self
-        navigationController?.pushViewController(vc, animated: true)
+        vc.modalPresentationStyle = .pageSheet
+        
+        if let sheet = vc.sheetPresentationController {
+            sheet.prefersGrabberVisible = true
+            sheet.detents = [.medium()]
+        }
+        
+        present(vc, animated: true)
     }
 }
 

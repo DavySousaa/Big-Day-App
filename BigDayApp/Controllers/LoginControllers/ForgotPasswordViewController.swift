@@ -21,6 +21,7 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate {
         forgotPassword.emailTextField.delegate = self
         navigationSetup(title: "Redefinir senha")
         blindViewModel()
+        buttonChangePosition()
     }
     
     private func blindViewModel() {
@@ -46,6 +47,37 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
+    
+    func buttonChangePosition() {
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let keyboardHeight = keyboardFrame.height
+
+        UIView.animate(withDuration: 0.3) {
+            let bottomInset = self.view.safeAreaInsets.bottom
+            self.forgotPassword.saveButtonBottomConstraint.constant = -keyboardHeight + bottomInset - 10
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        UIView.animate(withDuration: 0.3) {
+            self.forgotPassword.saveButtonBottomConstraint.constant = -10
+            self.view.layoutIfNeeded()
+        }
+    }
+
 }
 
 extension ForgotPasswordViewController: ForgotPasswordDelegate {

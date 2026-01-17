@@ -37,6 +37,7 @@ class LoginAccountViewController: UIViewController, UITextFieldDelegate, LoginAc
         loginAccount.imageLogo.image = logoImage
         
         bindViewModel()
+        buttonChangePosition()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -84,6 +85,37 @@ class LoginAccountViewController: UIViewController, UITextFieldDelegate, LoginAc
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
+    
+    func buttonChangePosition() {
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let keyboardHeight = keyboardFrame.height
+
+        UIView.animate(withDuration: 0.3) {
+            let bottomInset = self.view.safeAreaInsets.bottom
+            self.loginAccount.saveButtonBottomConstraint.constant = -keyboardHeight + bottomInset - 10
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        UIView.animate(withDuration: 0.3) {
+            self.loginAccount.saveButtonBottomConstraint.constant = -10
+            self.view.layoutIfNeeded()
+        }
+    }
+
 }
 
 

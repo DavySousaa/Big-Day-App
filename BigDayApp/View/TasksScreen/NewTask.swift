@@ -8,19 +8,19 @@ protocol NewTaskDelegate: AnyObject {
 class NewTask: UIView {
     
     weak var delegate: NewTaskDelegate?
+    public var saveButtonBottomConstraint: NSLayoutConstraint!
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        let fullText = "Nova tarefa \npara o Big Day"
-        label.numberOfLines = 0
-        label.textAlignment = .center
+        let fullText = "Crie uma nova tarefa"
         let attributedString = NSMutableAttributedString(string: fullText, attributes: [
-            .font: UIFont(name: "Montserrat-ExtraBold", size: 25)!,
+            .font: UIFont(name: "Montserrat-ExtraBold", size: 20)!,
             .foregroundColor: UIColor.label
         ])
-        
+        label.numberOfLines = 0
+        label.textAlignment = .center
         let textColor = ColorSuport.greenApp
-        let range = (fullText as NSString).range(of: "\npara o Big Day")
+        let range = (fullText as NSString).range(of: "nova tarefa")
         attributedString.addAttribute(.foregroundColor, value: textColor, range: range)
         
         label.attributedText = attributedString
@@ -55,7 +55,7 @@ class NewTask: UIView {
     
     private lazy var hourLabel: UILabel = {
         let label = UILabel()
-        label.text = "Selecione um horário"
+        label.text = "Horário"
         label.textColor = .label
         label.font = UIFont(name: "Montserrat-Regular", size: 15)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -84,33 +84,11 @@ class NewTask: UIView {
         return picker
     }()
     
-    private lazy var repeatLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Você deseja repetir esta tarefa?"
-        label.textColor = .label
-        label.font = UIFont(name: "Montserrat-Regular", size: 15)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    public lazy var repeatCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = 8
-        layout.minimumLineSpacing = 8
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.allowsMultipleSelection = true
-        return collectionView
-    }()
-    
     private var createTaskButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = ColorSuport.greenApp
         button.setTitleColor(ColorSuport.blackApp, for: .normal)
-        button.setTitle("Criar tarefa", for: .normal)
+        button.setTitle("Criar", for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-ExtraBold", size: 16)
         button.addTarget(self, action: #selector(methodCreatelButton), for: .touchUpInside)
         button.layer.cornerRadius = 44/2
@@ -121,8 +99,17 @@ class NewTask: UIView {
         delegate?.tapCreateButton()
     }
     
+    private var returnView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .secondarySystemBackground
+        view.layer.cornerRadius = 7/2
+        return view
+    }()
+    
     init() {
         super.init(frame: .zero)
+        backgroundColor = .clear
         setup()
     }
     
@@ -137,43 +124,40 @@ extension NewTask: SetupLayout {
         addSubview(hourLabel)
         addSubview(newTaskTextField)
         addSubview(timePicker)
-        addSubview(repeatLabel)
-        addSubview(repeatCollectionView)
         addSubview(createTaskButton)
         addSubview(switchPicker)
+        addSubview(returnView)
     }
     
     func setupConstraints() {
+        saveButtonBottomConstraint = createTaskButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16)
+        saveButtonBottomConstraint.isActive = true
+        
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 25),
+            
+            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 40),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            newTaskTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            newTaskTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            newTaskTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            newTaskTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            newTaskTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 25),
+            newTaskTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -25),
             newTaskTextField.heightAnchor.constraint(equalToConstant: 44),
             
             hourLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            hourLabel.topAnchor.constraint(equalTo: newTaskTextField.bottomAnchor, constant: 25),
+            hourLabel.topAnchor.constraint(equalTo: newTaskTextField.bottomAnchor, constant: 20),
             
             switchPicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            switchPicker.topAnchor.constraint(equalTo: newTaskTextField.bottomAnchor, constant: 25),
+            switchPicker.topAnchor.constraint(equalTo: newTaskTextField.bottomAnchor, constant: 20),
             
-            timePicker.topAnchor.constraint(equalTo: hourLabel.bottomAnchor, constant: 10),
+            timePicker.topAnchor.constraint(equalTo: switchPicker.bottomAnchor),
             timePicker.centerXAnchor.constraint(equalTo: centerXAnchor),
+            timePicker.bottomAnchor.constraint(equalTo: createTaskButton.topAnchor),
             
-            repeatLabel.topAnchor.constraint(equalTo: timePicker.bottomAnchor, constant: 10),
-            repeatLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            
-            repeatCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            repeatCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            repeatCollectionView.topAnchor.constraint(equalTo: repeatLabel.bottomAnchor, constant: 10),
-            repeatCollectionView.heightAnchor.constraint(equalToConstant: 120),
-            
-            createTaskButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            createTaskButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50),
-            createTaskButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -50),
+            createTaskButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 25),
+            createTaskButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -25),
             createTaskButton.heightAnchor.constraint(equalToConstant: 44),
+            
+                   
         ])
     }
     
@@ -181,4 +165,3 @@ extension NewTask: SetupLayout {
         
     }
 }
-

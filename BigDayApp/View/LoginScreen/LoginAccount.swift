@@ -9,7 +9,7 @@ protocol LoginAccountScreenDelegate: AnyObject {
 class LoginAccount: UIView {
     
     weak var delegate: LoginAccountScreenDelegate?
-    
+    public var saveButtonBottomConstraint: NSLayoutConstraint!
     public lazy var imageLogo: UIImageView = {
         let image = UIImageView()
         image.clipsToBounds = true
@@ -177,7 +177,6 @@ class LoginAccount: UIView {
         loadingIndicator.stopAnimating()
         loginButton.isEnabled = true
     }
-    
 }
 
 extension LoginAccount: SetupLayout {
@@ -191,6 +190,8 @@ extension LoginAccount: SetupLayout {
     }
     
     func setupConstraints() {
+        saveButtonBottomConstraint = loginButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        saveButtonBottomConstraint.isActive = true
         NSLayoutConstraint.activate([
             imageLogo.centerXAnchor.constraint(equalTo: centerXAnchor),
             imageLogo.heightAnchor.constraint(equalToConstant: 44),

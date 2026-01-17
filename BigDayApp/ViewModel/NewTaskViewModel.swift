@@ -7,6 +7,10 @@ final class NewTaskViewModel {
 
     private let repo = TaskRepository.shared
     
+    func createRepeatingTask (title: String, shouldSchedule: Bool, selectedDate: Date?, repeatDays: [Int]) {
+        
+    }
+    
     func createTask(title: String, shouldSchedule: Bool, selectedDate: Date?) {
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
