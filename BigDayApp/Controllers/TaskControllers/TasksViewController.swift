@@ -60,11 +60,14 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         navigationSetupWithLogo(title: "Tarefas")
         
         let manager = NotificationManager()
-        manager.scheduleDailyMorningNotification()
         manager.scheduleDailyNightNotification()
+        
         manager.scheduleWeeklyMondayMotivation()
         manager.scheduleWeeklySundayMotivation()
         manager.scheduleWeeklyWedMotivation()
+        manager.scheduleWeeklyFridayMotivation()
+        manager.scheduleWeeklyTuesdayMotivation()
+        manager.scheduleWeeklyThusMotivation()
     }
     
     override func viewWillAppear(_ animated: Bool) {
