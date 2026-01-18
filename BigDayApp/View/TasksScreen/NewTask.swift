@@ -135,19 +135,19 @@ extension NewTask: SetupLayout {
         
         NSLayoutConstraint.activate([
             
-            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 40),
+            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            newTaskTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            newTaskTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
             newTaskTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 25),
             newTaskTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -25),
             newTaskTextField.heightAnchor.constraint(equalToConstant: 44),
             
             hourLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            hourLabel.topAnchor.constraint(equalTo: newTaskTextField.bottomAnchor, constant: 20),
+            hourLabel.topAnchor.constraint(equalTo: newTaskTextField.bottomAnchor, constant: 10),
             
             switchPicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            switchPicker.topAnchor.constraint(equalTo: newTaskTextField.bottomAnchor, constant: 20),
+            switchPicker.topAnchor.constraint(equalTo: newTaskTextField.bottomAnchor, constant: 10),
             
             timePicker.topAnchor.constraint(equalTo: switchPicker.bottomAnchor),
             timePicker.centerXAnchor.constraint(equalTo: centerXAnchor),
