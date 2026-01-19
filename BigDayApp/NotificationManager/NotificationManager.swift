@@ -4,6 +4,30 @@ class NotificationManager {
     
     static let shared = NotificationManager()
     
+    func scheduleAllWeeklyAndDailyNotifications() {
+        scheduleDailyNightNotification()
+        scheduleWeeklySundayMotivation()
+        scheduleWeeklyMondayMotivation()
+        scheduleWeeklyTuesdayMotivation()
+        scheduleWeeklyWedMotivation()
+        scheduleWeeklyThusMotivation()
+        scheduleWeeklyFridayMotivation()
+    }
+
+    func removeAllBigDayNotifications() {
+        let ids = [
+            "nightReflection",
+            "sundayMotivation",
+            "mondayMotivation",
+            "tuesMotivation",
+            "wedMotivation",
+            "thuMotivation",
+            "friMotivation"
+        ]
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ids)
+    }
+    
+    
     func scheduleDailyNightNotification() {
         var components = DateComponents()
         components.hour = 22
@@ -62,7 +86,7 @@ class NotificationManager {
         content.body = "Planeje sua semana e comece com foco!"
         content.sound = .default
         
-        let request = UNNotificationRequest(identifier: "SundayMotivation", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: "sundayMotivation", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
     
@@ -96,7 +120,7 @@ class NotificationManager {
         content.body = "Passo por passo, tua rotina tá virando resultado 👊"
         content.sound = .default
         
-        let request = UNNotificationRequest(identifier: "mondayMotivation", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: "tuesMotivation", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
     
@@ -113,7 +137,7 @@ class NotificationManager {
         content.body = "Não desacelera agora — teu Big Day ainda tá acontecendo 🔥"
         content.sound = .default
         
-        let request = UNNotificationRequest(identifier: "WedMotivation", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: "wedMotivation", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
     
@@ -130,7 +154,7 @@ class NotificationManager {
         content.body = "Segue no ritmo. Quem mantém o foco, colhe diferente 🌱"
         content.sound = .default
         
-        let request = UNNotificationRequest(identifier: "WedMotivation", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: "thuMotivation", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
     
@@ -147,7 +171,7 @@ class NotificationManager {
         content.body = "Fecha forte hoje pra encerrar a semana com orgulho 💪"
         content.sound = .default
         
-        let request = UNNotificationRequest(identifier: "WedMotivation", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: "friMotivation", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
 }

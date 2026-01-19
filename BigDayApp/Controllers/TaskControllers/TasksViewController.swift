@@ -58,16 +58,7 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-        
-        let manager = NotificationManager()
-        manager.scheduleDailyNightNotification()
-        
-        manager.scheduleWeeklyMondayMotivation()
-        manager.scheduleWeeklySundayMotivation()
-        manager.scheduleWeeklyWedMotivation()
-        manager.scheduleWeeklyFridayMotivation()
-        manager.scheduleWeeklyTuesdayMotivation()
-        manager.scheduleWeeklyThusMotivation()
+    
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,13 +89,18 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
     func showNotificationPermition() {
         let aceptedNotifications = UserDefaults.standard.bool(forKey: "aceptedNotifications")
         guard !aceptedNotifications else { return }
-        
-        let alert = UIAlertController(title: "Ativar notificações?", message: "Com as notificações ativadas, o Big Day te ajuda a manter o ritmo e a motivação. Tudo no tempo certo. ⏰✨", preferredStyle: .alert)
+
+        let alert = UIAlertController(
+            title: "Ativar notificações?",
+            message: "Com as notificações ativadas, o Big Day te ajuda a manter o ritmo e a motivação. Tudo no tempo certo. ⏰✨",
+            preferredStyle: .alert
+        )
+
         alert.addAction(UIAlertAction(title: "Agora não", style: .cancel))
         alert.addAction(UIAlertAction(title: "Ativar", style: .default) { _ in
             self.pedirPermissaoNotificacao()
-            UserDefaults.standard.set(true, forKey: "aceptedNotifications")
         })
+
         present(alert, animated: true)
     }
     
@@ -112,11 +108,15 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             DispatchQueue.main.async {
                 if granted {
+                    UserDefaults.standard.set(true, forKey: "aceptedNotifications")
+
+                    NotificationManager.shared.removeAllBigDayNotifications()
+                    NotificationManager.shared.scheduleAllWeeklyAndDailyNotifications()
                     print("✅ Permissão concedida")
                 } else {
                     print("❌ Usuário recusou")
                 }
-                
+
                 if let error = error {
                     print("Erro: \(error.localizedDescription)")
                 }

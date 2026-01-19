@@ -190,8 +190,8 @@ extension CreateAccount: SetupLayout {
     func addSubViews() {
         addSubview(imageLogo)
         addSubview(textUp)
-        addSubview(createButton)
         addSubview(stackViewLogin)
+        addSubview(createButton)
         createButton.addSubview(loadingIndicator)
     }
     

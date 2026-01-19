@@ -183,9 +183,9 @@ extension LoginAccount: SetupLayout {
     func addSubViews() {
         addSubview(imageLogo)
         addSubview(textUp)
-        addSubview(loginButton)
         addSubview(stackViewLogin)
         addSubview(forgotPassWord)
+        addSubview(loginButton)
         loginButton.addSubview(loadingIndicator)
     }
     
