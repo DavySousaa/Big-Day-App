@@ -1,10 +1,3 @@
-//
-//  ForgotPassWord.swift
-//  BigDayApp
-//
-//  Created by Davy Sousa on 14/07/25.
-//
-
 import UIKit
 import Foundation
 
@@ -15,6 +8,7 @@ protocol ForgotPasswordDelegate: AnyObject {
 class ForgotPassWord: UIView {
     
     weak var delegate: ForgotPasswordDelegate?
+    public var saveButtonBottomConstraint: NSLayoutConstraint!
     
     private lazy var textUp: UILabel = {
         let text = UILabel()
@@ -95,6 +89,8 @@ extension ForgotPassWord: SetupLayout {
     }
     
     func setupConstraints() {
+        saveButtonBottomConstraint = sendButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        saveButtonBottomConstraint.isActive = true
         NSLayoutConstraint.activate([
             textUp.centerXAnchor.constraint(equalTo: centerXAnchor),
             textUp.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 30),

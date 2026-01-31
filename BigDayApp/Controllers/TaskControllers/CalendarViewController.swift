@@ -15,7 +15,6 @@ class CalendarViewController: UIViewController {
     
     var daysWithTasksKeys = Set<Int>()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = calendarScreen
@@ -25,7 +24,7 @@ class CalendarViewController: UIViewController {
         calendarScreen.calendar.dataSource = self
         calendarScreen.calendar.delegate = self
         calendarScreen.styleCalendar()
-        
+        //calendarScreen.calendar.select()
     }
     
     override func viewWillAppear(_ animated: Bool) {

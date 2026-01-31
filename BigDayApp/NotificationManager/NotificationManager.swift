@@ -1,43 +1,32 @@
 import UserNotifications
 
-
 class NotificationManager {
     
     static let shared = NotificationManager()
     
-    func scheduleDailyMorningNotification() {
-        var components = DateComponents()
-        components.hour = 7
-        components.minute = 0
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Bom dia! ☀️"
-        content.body = "Hora de transformar seu dia em um Big Day!"
-        content.sound = .default
-        
-        let request = UNNotificationRequest(identifier: "morningReminder", content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request)
+    func scheduleAllWeeklyAndDailyNotifications() {
+        scheduleDailyNightNotification()
+        scheduleWeeklySundayMotivation()
+        scheduleWeeklyMondayMotivation()
+        scheduleWeeklyTuesdayMotivation()
+        scheduleWeeklyWedMotivation()
+        scheduleWeeklyThusMotivation()
+        scheduleWeeklyFridayMotivation()
+    }
+
+    func removeAllBigDayNotifications() {
+        let ids = [
+            "nightReflection",
+            "sundayMotivation",
+            "mondayMotivation",
+            "tuesMotivation",
+            "wedMotivation",
+            "thuMotivation",
+            "friMotivation"
+        ]
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ids)
     }
     
-    func scheduleWeeklyMondayMotivation() {
-        var components = DateComponents()
-        components.weekday = 2
-        components.hour = 8
-        components.minute = 0
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Nova semana, novas conquistas 🚀"
-        content.body = "Planeje seu Big Day e comece a semana com tudo!"
-        content.sound = .default
-        
-        let request = UNNotificationRequest(identifier: "mondayMotivation", content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request)
-    }
     
     func scheduleDailyNightNotification() {
         var components = DateComponents()
@@ -82,23 +71,7 @@ class NotificationManager {
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
-    
-    func scheduleWeeklyWedMotivation() {
-        var components = DateComponents()
-        components.weekday = 4
-        components.hour = 8
-        components.minute = 0
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Já passamos da metade! 🚀"
-        content.body = "Agora é hora de manter o gás e transformar essa semana em conquista total. Bora fechar com chave de ouro!"
-        content.sound = .default
-        
-        let request = UNNotificationRequest(identifier: "WedMotivation", content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request)
-    }
+  
     
     func scheduleWeeklySundayMotivation() {
         var components = DateComponents()
@@ -113,7 +86,92 @@ class NotificationManager {
         content.body = "Planeje sua semana e comece com foco!"
         content.sound = .default
         
-        let request = UNNotificationRequest(identifier: "SundayMotivation", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: "sundayMotivation", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleWeeklyMondayMotivation() {
+        var components = DateComponents()
+        components.weekday = 2
+        components.hour = 8
+        components.minute = 0
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Planejamento define resultados 📌"
+        content.body = "Estruture seu dia e conduza a semana com clareza e foco."
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: "mondayMotivation", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleWeeklyTuesdayMotivation() {
+        var components = DateComponents()
+        components.weekday = 3
+        components.hour = 8
+        components.minute = 0
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Hoje é dia de progresso 📈"
+        content.body = "Passo por passo, tua rotina tá virando resultado 👊"
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: "tuesMotivation", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleWeeklyWedMotivation() {
+        var components = DateComponents()
+        components.weekday = 4
+        components.hour = 8
+        components.minute = 0
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Metade do caminho, mesma força 🎯"
+        content.body = "Não desacelera agora — teu Big Day ainda tá acontecendo 🔥"
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: "wedMotivation", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleWeeklyThusMotivation() {
+        var components = DateComponents()
+        components.weekday = 5
+        components.hour = 8
+        components.minute = 0
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Constância é o novo talento 🧠"
+        content.body = "Segue no ritmo. Quem mantém o foco, colhe diferente 🌱"
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: "thuMotivation", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleWeeklyFridayMotivation() {
+        var components = DateComponents()
+        components.weekday = 6
+        components.hour = 8
+        components.minute = 0
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Último Big Day da semana 🚀"
+        content.body = "Fecha forte hoje pra encerrar a semana com orgulho 💪"
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: "friMotivation", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
 }

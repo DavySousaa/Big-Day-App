@@ -16,12 +16,13 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = editTask
-        view.backgroundColor = .clear
+        view.backgroundColor = UIColor(named: "PrimaryColor")
         navigationItem.backButtonTitle = ""
         editTask.delegate = self
         editTask.newTaskTextField.delegate = self
-        fillTaskIfNeeded() 
+        fillTaskIfNeeded()
         bindViewModel()
+        buttonChangePosition()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -58,21 +59,46 @@ class EditTaskViewController: UIViewController, UITextFieldDelegate {
             editTask.switchPicker.isOn = false
         }
     }
-
     
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Atenção", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default))
         present(alert, animated: true)
     }
+    
+    func buttonChangePosition() {
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let keyboardHeight = keyboardFrame.height
+
+        UIView.animate(withDuration: 0.3) {
+            let bottomInset = self.view.safeAreaInsets.bottom
+            self.editTask.saveButtonBottomConstraint.constant = -keyboardHeight + bottomInset - 10
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        UIView.animate(withDuration: 0.3) {
+            self.editTask.saveButtonBottomConstraint.constant = -10
+            self.view.layoutIfNeeded()
+        }
+    }
  
 }
 
 extension EditTaskViewController: EditTaskDelegate {
-    func tapCancelButton() {
-        dismiss(animated: true, completion: nil)
-    }
-    
     func tapSaveButton() {
         let title = editTask.newTaskTextField.text ?? ""
         let shouldSchedule = editTask.switchPicker.isOn

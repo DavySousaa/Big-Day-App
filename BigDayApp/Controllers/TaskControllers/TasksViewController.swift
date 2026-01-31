@@ -20,12 +20,13 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
     var imageUserView: UIImageView {
         return taskScreen.imageUser
     }
+    private let lastSeenDayKey = "lastSeenSystemDay"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = taskScreen
         view.backgroundColor = UIColor(named: "PrimaryColor")
-        navigationItem.hidesBackButton = true
+        navigationItem.backButtonTitle = "Voltar"
         
         taskScreen.delegate = self
         taskScreen.tasksTableView.tintColor = .white
@@ -35,8 +36,6 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         taskScreen.tasksTableView.dragInteractionEnabled = true
         taskScreen.tasksTableView.dragDelegate = self
         taskScreen.tasksTableView.dropDelegate = self
-        
-        taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
         
         viewModel.tasksChanged = { [weak self] in
             self?.taskScreen.tasksTableView.reloadData()
@@ -53,27 +52,21 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         } else {
             viewModel.updateSelectedDate(Date())
         }
+        
         taskScreen.dayLabel.text = DateHelper.dayTitle(from: viewModel.selectedDate)
         viewModel.bind()
         
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-        
-        let manager = NotificationManager()
-        manager.scheduleDailyMorningNotification()
-        manager.scheduleDailyNightNotification()
-        manager.scheduleWeeklyMondayMotivation()
-        manager.scheduleWeeklySundayMotivation()
-        manager.scheduleWeeklyWedMotivation()
-
+    
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-        viewModel.bind()
         showNotificationPermition()
+        viewModel.bind()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -91,16 +84,23 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         }
     }
     
+    
+    
     func showNotificationPermition() {
         let aceptedNotifications = UserDefaults.standard.bool(forKey: "aceptedNotifications")
         guard !aceptedNotifications else { return }
-        
-        let alert = UIAlertController(title: "Ativar notificações?", message: "Com as notificações ativadas, o Big Day te ajuda a manter o ritmo e a motivação. Tudo no tempo certo. ⏰✨", preferredStyle: .alert)
+
+        let alert = UIAlertController(
+            title: "Ativar notificações?",
+            message: "Com as notificações ativadas, o Big Day te ajuda a manter o ritmo e a motivação. Tudo no tempo certo. ⏰✨",
+            preferredStyle: .alert
+        )
+
         alert.addAction(UIAlertAction(title: "Agora não", style: .cancel))
         alert.addAction(UIAlertAction(title: "Ativar", style: .default) { _ in
             self.pedirPermissaoNotificacao()
-            UserDefaults.standard.set(true, forKey: "aceptedNotifications")
         })
+
         present(alert, animated: true)
     }
     
@@ -108,11 +108,15 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             DispatchQueue.main.async {
                 if granted {
+                    UserDefaults.standard.set(true, forKey: "aceptedNotifications")
+
+                    NotificationManager.shared.removeAllBigDayNotifications()
+                    NotificationManager.shared.scheduleAllWeeklyAndDailyNotifications()
                     print("✅ Permissão concedida")
                 } else {
                     print("❌ Usuário recusou")
                 }
-                
+
                 if let error = error {
                     print("Erro: \(error.localizedDescription)")
                 }
@@ -127,7 +131,12 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         let sheetVC = EditTaskViewController()
         sheetVC.delegate = self
         sheetVC.taskController = self
-        sheetVC.modalPresentationStyle = .overFullScreen
+        sheetVC.modalPresentationStyle = .pageSheet
+        
+        if let sheet = sheetVC.sheetPresentationController {
+            sheet.prefersGrabberVisible = true
+            sheet.detents = [.medium()]
+        }
         sheetVC.editTask.newTaskTextField.text = task.title
         sheetVC.viewModel.taskToEdit = task
         
@@ -225,7 +234,7 @@ extension TasksViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, completion) in
             self.viewModel.deleteTask(at: indexPath.row)
-            completion(true) 
+            completion(true)
         }
         
         let editAction = UIContextualAction(style: .normal, title: "Editar") { (_, _, completion) in
@@ -235,7 +244,7 @@ extension TasksViewController: UITableViewDelegate {
             completion(true)
         }
         
-    
+        
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .red
         let editIcon = UIImage(systemName: "square.and.pencil")?.withTintColor(ColorSuport.blackApp, renderingMode: .alwaysOriginal)
@@ -274,7 +283,13 @@ extension TasksViewController: TapButtonDelete {
     func didTapCreate() {
         let vc = NewTasksViewController()
         vc.taskController = self
-        vc.modalPresentationStyle = .overFullScreen
+        vc.modalPresentationStyle = .pageSheet
+        
+        if let sheet = vc.sheetPresentationController {
+            sheet.prefersGrabberVisible = true
+            sheet.detents = [.medium()]
+        }
+        
         present(vc, animated: true)
     }
 }

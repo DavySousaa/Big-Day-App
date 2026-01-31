@@ -16,7 +16,6 @@ final class TaskViewModel {
     private(set) var tasksForSelectedDay: [Task] = []
     private let cal = Calendar.current
     
-    
     func loadTasksForMonth(_ start: Date, _ end: Date, completion: @escaping () -> Void) {
         repo.fetchTasksBetween(start, end) { [weak self] result in
             switch result {
@@ -57,6 +56,14 @@ final class TaskViewModel {
     func updateSelectedDate(_ date: Date) {
         selectedDate = date
         observeDay()
+    }
+    
+    func ensureTodaySelected() {
+        let today = Date()
+        if !cal.isDate(selectedDate, inSameDayAs: today){
+            selectedDate = today
+            observeDay()
+        }
     }
     
     private func observeDay() {
@@ -143,6 +150,18 @@ final class TaskViewModel {
               let id = tasks[index].firebaseId else { return }
         let newValue = !(tasks[index].isCompleted)
         repo.toggleDone(id: id, isDone: newValue)
+        
+        if newValue {
+            NotificationManager.shared.cancelTaskReminder(for: id)
+        } else {
+            if let dueDate = tasks[index].dueDate {
+                NotificationManager.shared.rescheduleTaskReminder(
+                    for: id,
+                    title: tasks[index].title,
+                    dueDate: dueDate
+                )
+            }
+        }
     }
     
     func deleteTask(at index: Int) {

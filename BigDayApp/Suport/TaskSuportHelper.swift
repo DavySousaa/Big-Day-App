@@ -1,9 +1,4 @@
-//
-//  taskSuportHelper.swift
-//  Big Day App
-//
-//  Created by Davy Sousa on 15/03/25.
-//
+
 import Foundation
 
 class TaskSuportHelper {

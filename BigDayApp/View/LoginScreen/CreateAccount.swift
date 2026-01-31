@@ -8,6 +8,7 @@ protocol CreateAccountScreenDelegate: AnyObject {
 class CreateAccount: UIView {
     
     weak var delegate: CreateAccountScreenDelegate?
+    public var saveButtonBottomConstraint: NSLayoutConstraint!
     
     public lazy var imageLogo: UIImageView = {
         let image = UIImageView()
@@ -189,12 +190,14 @@ extension CreateAccount: SetupLayout {
     func addSubViews() {
         addSubview(imageLogo)
         addSubview(textUp)
-        addSubview(createButton)
         addSubview(stackViewLogin)
+        addSubview(createButton)
         createButton.addSubview(loadingIndicator)
     }
     
     func setupConstraints() {
+        saveButtonBottomConstraint = createButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        saveButtonBottomConstraint.isActive = true
         NSLayoutConstraint.activate([
             imageLogo.centerXAnchor.constraint(equalTo: centerXAnchor),
             imageLogo.heightAnchor.constraint(equalToConstant: 44),
