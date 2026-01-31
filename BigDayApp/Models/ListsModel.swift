@@ -1,7 +1,7 @@
 import UIKit
 import Foundation
 
-struct UserList {
+struct UserList: Codable {
     let id: String?
     let title: String
     let iconName: String

@@ -39,7 +39,15 @@ final class EditTaskViewModelTests: XCTestCase {
     }
     
     func test_editTask_shouldUpdateTaskWithNewTitleAndTime() {
-        let originalTask = Task(id: UUID(), title: "Título antigo", time: "08:00", isCompleted: false)
+        let originalTask = Task(
+            firebaseId: nil,
+            title: "Título antigo",
+            time: "08:00",
+            isCompleted: false,
+            dueDate: nil,
+            dateKey: "",
+            order: nil
+        )
         TaskSuportHelper().addTask(lista: [originalTask])
         sut.taskToEdit = originalTask
         
