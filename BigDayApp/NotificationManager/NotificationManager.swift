@@ -22,7 +22,8 @@ class NotificationManager {
             "tuesMotivation",
             "wedMotivation",
             "thuMotivation",
-            "friMotivation"
+            "friMotivation",
+            "morningReminder"
         ]
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ids)
     }

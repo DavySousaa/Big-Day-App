@@ -58,14 +58,16 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-    
+        showNotificationPermition()
+        printAllPendingNotifications()
+        NotificationManager().scheduleAllWeeklyAndDailyNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateNickNamePhotoUser()
         navigationSetupWithLogo(title: "Tarefas")
-        showNotificationPermition()
+        printAllPendingNotifications()
         viewModel.bind()
     }
     
@@ -84,8 +86,16 @@ class TasksViewController: UIViewController, UITextFieldDelegate, UserProfileUpd
         }
     }
     
-    
-    
+    func printAllPendingNotifications() {
+        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+            print("📌 Pending: \(requests.count)")
+            for r in requests {
+                let title = (r.content.title)
+                let body = (r.content.body)
+                print("🆔 \(r.identifier) | \(title) - \(body)")
+            }
+        }
+    }
     func showNotificationPermition() {
         let aceptedNotifications = UserDefaults.standard.bool(forKey: "aceptedNotifications")
         guard !aceptedNotifications else { return }
